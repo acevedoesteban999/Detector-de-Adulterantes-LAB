@@ -15,9 +15,10 @@ class UserForm(forms.ModelForm):
             'image':forms.FileInput(attrs={'class':'form-control'})
         }
         
-    def save(self):    
-        
-        model=super().save(commit=False)
-        #model.
-        return model
+    def save(self, commit=True):
+        user = super(UserForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
         
