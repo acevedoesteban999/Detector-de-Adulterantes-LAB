@@ -1,0 +1,49 @@
+{% extends '_list.html' %}
+
+{% block columns %}
+        <th scope="col">Usuario</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Imagen</th>
+        <th scope="col">Estado</th>
+        <th scope="col"></th>
+{% endblock %}
+
+{% block rows %}
+        {% for user in object_list %}
+            <tr class="text-center">
+                <td scope="row">{{user.username}}</td>
+                <td scope="row">{{user.first_name}}</td>
+                <td scope="row">
+                    {% if user.image %} 
+                        <div class="container-fluid">
+                            <img src="{{user.image.path}}" class="img-fluid rounded-top" alt="">
+                        </div>
+                    {% endif %}
+                </td>
+                <td scope="row ">
+                    <p>
+                        <span class="badge bg-{% if user.is_active %}success{% else %}danger{% endif %}">
+                            {% if user.is_active %}
+                                Activo
+                            {% else %}
+                                Inactivo
+                            {% endif %}
+                        </span>
+                    </p>
+                </td>
+                <td>
+                    
+                    
+                <a href="{% url 'user_update' user.id %}" data-toggle="tooltip" title="Eliminar" class="btn btn-warning btn-xs btn-flat">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <a href="{% url 'user_act_desact' user.id %}" data-toggle="tooltip" title="Cambiar estado" class="btn btn-{% if user.is_active %}danger{% else %}success{% endif %} btn-xs btn-flat">
+                    <i class="fas fa-regular fa-lightbulb"></i>
+                </a>
+                    
+                </td>
+            </tr>
+        {% endfor %}
+    
+{% endblock %}
+

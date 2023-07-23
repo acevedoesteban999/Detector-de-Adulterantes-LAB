@@ -1,0 +1,89 @@
+{% extends 'adminlte/lib/_main_sidebar.html' %}
+
+{% block logo_text %}
+    <span class="brand-text font-weight-light">
+        Aplicación
+    </span>
+{% endblock %}
+
+{% block user_panel %}
+{% endblock %}
+
+{% block nav_heading %}
+    Navegación Principal
+{% endblock %}
+
+{% block nav_links %}
+    <li class="nav-item">
+        <a href="{% url 'process' %}" class="nav-link ">
+            <i class="nav-icon fas fa-house"></i>
+            <p>Principal</p>
+        </a>
+    </li>
+
+    <li class="nav-item has-tree-view {% if 'conf' in request.path %}menu-open{% endif %} ">
+        <a href="#" class="nav-link menus {% if 'conf' in request.path %}active{% endif %}">
+            <i class="nav-icon fas fa-screwdriver-wrench"></i>
+            <p>Configuración</p>
+            <p><i class="right fas fa-angle-left"></i></p>
+        </a>
+        <ul class="nav nav-treeview">
+                <li class="nav-item">
+                        <a href="{% url 'net' %}" class="nav-link {% if "conf/network" in request.path %}active{% endif %}">
+                            <i class="nav-icon fas fa-solid fa-network-wired"></i>
+                            Parámetros de red
+                        </a>
+                    </li>
+            <li class="nav-item ">
+                <a href="{% url 'date' %}" class="nav-link {% if "conf/date" in request.path %}active{% endif %}">
+                    <i class="nav-icon fas fa-regular fa-clock"></i>
+                    Fecha y hora
+                </a>
+            </li>
+        </ul>
+    </li>
+    
+    <li class="nav-item has-tree-view {% if 'user' in request.path %}menu-open{% endif %} ">
+        <a href="#" class="nav-link menus {% if 'user' in request.path %}active{% endif %}">
+            <i class="nav-icon fas fa-users"></i> 
+            <p>Usuarios</p>
+            <p><i class="right fas fa-angle-left"></i></p>
+        </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'user_list' %}" class="nav-link {% if "user/list" in request.path %}active{% endif %}">
+                    <i class="nav-icon  fas fa-solid fa-users-gear"></i>
+                    Administrar Usuarios
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'user_create' %}" class="nav-link {% if "user/create" in request.path %}active{% endif %}">
+                    <i class="nav-icon fas fa-solid fa-user-plus"></i>
+                    Añadir usuario
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    <li class="nav-item">
+        <a href="" class="nav-link">
+            <i class="nav-icon fas fa-tachometer-alt"></i> 
+            <p>Rendimiento</p>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a href="" class="nav-link">
+            <i class="nav-icon fas fa-solid fa-bug"></i>
+            <p>Bítacora de errores</p>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a href="" class="nav-link">
+            <i class="nav-icon fas fa-regular fa-address-book"></i>
+            <p>Contacto</p>
+        </a>
+    </li>
+    
+{% endblock %}

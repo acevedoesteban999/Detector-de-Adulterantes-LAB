@@ -1,0 +1,50 @@
+{% extends '_base.html' %}
+{% block content %}
+    <form class="form" method="post" action="." autocomplete="off">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-info-circle"></i>
+                    {{ title }}
+                </h3>
+            </div>
+            <div class="card-body" style="display: block;">
+                <div class="container-fluid">
+                    {% csrf_token %}
+                    {% block text %}
+                    <p class="text-center font-weight-bold mt-3">
+                        <i class="fas fa-trash fa-3x"></i><br><br>
+                        ¿Estas seguro de eliminar el registro N° {{ object.id }}?
+                    </p>
+                    {% endblock  %}
+                </div>
+            </div>
+            <div class="card-footer">
+                {% block buttons %}
+                    <button type="submit" class="btn btn-primary btn-flat">
+                        <i class="fas fa-check-circle"></i> Si, Aceptar
+                    </button>
+                    <a href="{{ list_url }}" class="btn btn-danger btn-flat">
+                        <i class="fas fa-times"></i> Cancelar
+                    </a>
+                {% endblock %}
+            </div>
+        </div>
+    </form>
+    <script type="application/javascript">
+        $(function () {
+            $('form').on('submit', function (event) {
+                event.preventDefault();
+                var params = new FormData(this);
+                var args = {
+                    'params': params,
+                    'content': '¿Estas seguro de eliminar el registro?',
+                    'success': function () {
+                        location.href = '{{ list_url }}';
+                    }
+                };
+                submit_with_formdata(args);
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends '_base.html' %}
+
+{% block content %}
+    <form class="form" method="post" action="." enctype="multipart/form-data" id="frmForm" autocomplete="off">
+        <div class="card {{ dashboard.card }}">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-edit"></i>
+                    {{ title }}
+                </h3>
+            </div>
+            <div class="card-body" style="display: block;">
+                <div class="container-fluid">
+                    {% comment %} <input type="hidden" name="action" id="action" value="{{ action }}"> {% endcomment %}
+                    {% csrf_token %}
+                    {% for field in form.visible_fields %}
+                        <div class="form-group">
+                            <label>{{ field.label }}:</label>
+                                <br>
+                                {{ field }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+                <div class="card-footer">
+                    {% block btn_save %}
+                        <button type="submit" class="btn btn-primary">
+                            Guardar
+                        </button>
+                    {% endblock  %}
+                    {% block  btn_cancel %}
+                        {% if url_cancel %}
+                            <a href="{{url_cancel}}" class="btn btn-danger">
+                                Cancelar
+                            </a>
+                        {% endif %}
+                    {% endblock  %}
+            </div>
+        </div>
+    </form>
+{% endblock %}
