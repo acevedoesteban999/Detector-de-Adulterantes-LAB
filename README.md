@@ -1,1 +1,1 @@
-## Djagno-Adminlte Windows Tests
+## Djagno-Adminlte Windows
