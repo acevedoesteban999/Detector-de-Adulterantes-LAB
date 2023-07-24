@@ -1,0 +1,10 @@
+{% extends 'adminlte/login.html' %}
+{% load static %}
+
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/_styles.css' %}">
+{% endblock %}
+
+{% block body_class %}login-page dark{% endblock %}
+
+{% block logo_text %}{{title}}{% endblock %}
