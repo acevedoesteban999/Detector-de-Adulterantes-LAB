@@ -1,7 +1,7 @@
 # Djagno-Adminlte Raspberry
 
 
-## Configuraciones de respberry para desplegar django-adaminlte-3 en apache2
+## Configuraciones de raspberry para desplegar django-adaminlte-3 en apache2
 
 * `sudo apt-get update`
 * `sudo apt-get install apache2`
