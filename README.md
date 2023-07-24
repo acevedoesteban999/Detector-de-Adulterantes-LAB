@@ -1,24 +1,25 @@
-# Tesis Esteban 
+# Djagno-Adminlte Raspberry
 
 
 ## Configuracion de repsberry para desplegar django-adaminlte3 en apache2
 
-> sudo apt-get update
-> sudo apt-get install apache2
-> sudo apt-get install libapache2-mod-wsgi-py3
+`sudo apt-get update`
+`sudo apt-get install apache2`
+`sudo apt-get install libapache2-mod-wsgi-py3`
 
 ### venv
-> sudo apt-get install python3-pip
-> sudo pip install virtualenv
-> pip install virutalenv
-> virtualenv .venv
-> source .venv/bin/activate
-> pip install -r requirements.txt
+`sudo apt-get install python3-pip`
+`sudo pip install virtualenv`
+`pip install virutalenv`
+`virtualenv .venv`
+`source .venv/bin/activate`
+`pip install -r requirements.txt`
 
 
-## apache2
-sudo nano /etc/apache2/sites-available/000-default.conf
+### apache2
+`sudo nano /etc/apache2/sites-available/000-default.conf`
 
+```
 <VirtualHost *:80>
     #...
 </VirtualHost>
@@ -44,8 +45,9 @@ WSGIPythonPath /project
         Require all granted
     </Files>
 </Directory>
+```
 
-chmod 664 ~/project/db.sqlite3
-sudo chown :www-data ~/project/db.sqlite3
-sudo chown :www-data ~/project
-sudo service apache2 restart
+`chmod 664 ~/project/db.sqlite3`
+`sudo chown :www-data ~/project/db.sqlite3`
+`sudo chown :www-data ~/project`
+`sudo service apache2 restart`
