@@ -47,7 +47,6 @@ class UserUpdateView(MyLoginRequiredMixin,UpdateView):
     form_class=UserForm
     permission_required="user.change_user"
     def dispatch(self, request, *args, **kwargs):
-        kwargs['pk'] = self.request.user.id
         self.object = self.get_object()
         return super().dispatch(request, *args, **kwargs)
     
@@ -55,7 +54,7 @@ class UserUpdateView(MyLoginRequiredMixin,UpdateView):
         form = self.get_form()
         if form.is_valid():
             #form=self.get_form()
-            form.update()
+            form.update(kwargs.get('pk'))
             messages.success(self.request,'Actualizado  usuario {} correctamente'.format(form.data.get('username')))
         else:
             messages.error(request,'Error al Actualizar')

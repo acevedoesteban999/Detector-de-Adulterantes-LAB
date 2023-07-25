@@ -1,7 +1,7 @@
 from django import forms
 from core.user.models import User
 from django.contrib.auth.models import Group
-
+from django.contrib.auth.hashers import check_password ,make_password ,mask_hash
 def get_list_groups():
     list=[]
     for group in Group.objects.all():
@@ -14,7 +14,7 @@ class UserForm(forms.ModelForm):
         widget=forms.Select(attrs={'class':'form-control'}),
         choices=get_list_groups(),
     )
-    #first_name=forms.CharField(required=True)
+    
     class Meta:
         model=User
         fields = 'first_name','username','email', 'password', 'image','groups'
@@ -25,18 +25,21 @@ class UserForm(forms.ModelForm):
             'password': forms.PasswordInput(render_value=True,attrs={'class':'form-control','placeholder': 'Ingrese la contraseña'}),
             'image':forms.FileInput(attrs={'class':'form-control'}),
         }
+    def update(self,pk):
         
+        user : User= super(UserForm, self).save(commit=False)
+        if User.objects.get(pk=pk).password != user.password:
+            user.set_password(self.cleaned_data["password"])    
+        user.save()
+        user.groups.clear()
+        g=Group.objects.get(name=self.cleaned_data.get('groups'))
+        user.groups.add(g)
+        return user
+    
     def save(self, commit=True):
-        try:
-            user = super(UserForm, self).save(commit=False)
-            user.set_password(self.cleaned_data["password"])
-            user.save()
-            user.groups.clear()
-            g=Group.objects.get(name=self.cleaned_data.get('groups'))
-            user.groups.add(g)
-            
-        except:
-            pass
-        
+        user : User= super(UserForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        user.save()
+        user.groups.add(Group.objects.get(name=self.cleaned_data.get('groups')))
         return user
         
