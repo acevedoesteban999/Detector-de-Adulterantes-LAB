@@ -46,6 +46,10 @@
                 <a href="{% url 'user_act_desact' user.id %}" data-toggle="tooltip" title="Cambiar estado" class="m-1 btn btn-primary btn-xs btn-flat">
                     <i class="fas fa-regular fa-lightbulb"></i>
                 </a>
+
+                <a href="{% url 'delete_user' user.id %}" data-toggle="tooltip" title="Eliminar" class="m-1 btn btn-danger btn-xs btn-flat">
+                    <i class="fas fa-regular fa-trash"></i>
+                </a>
                     
                 </td>
             </tr>
