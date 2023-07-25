@@ -11,13 +11,13 @@
 
 {% block rows %}
         {% for user in object_list %}
-            <tr class="text-center">
+            <tr class="text-center align-items-center">
                 <td scope="row">{{user.username}}</td>
                 <td scope="row">{{user.first_name}}</td>
                 <td scope="row">
                     {% if user.image %} 
-                        <div class="container-fluid">
-                            <img src="{{user.image.path}}" class="img-fluid rounded-top" alt="">
+                        <div class="container">
+                            <img src="{% if user.image %}{{ user.image.url }}{% endif %}" class="img-circle elevation-2 img-size-50 mr-3"  alt="Image">
                         </div>
                     {% endif %}
                 </td>

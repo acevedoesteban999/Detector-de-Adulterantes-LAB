@@ -15,7 +15,7 @@
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <a href="#" class="dropdown-item">
                     <div class="media">
-                        <img src="" alt="" class="img-size-50 mr-3 img-circle">
+                        <img src="{% if request.user.image %}{{ request.user.image.url }}{% endif %}" alt="" class="img-size-50 mr-3 img-circle">
                         <div class="media-body">
                             <h3 class="dropdown-item-title">
                                     {% firstof request.user.get_short_name request.user.get_username %}

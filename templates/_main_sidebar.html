@@ -1,5 +1,5 @@
 {% extends 'adminlte/lib/_main_sidebar.html' %}
-
+{% load static %}
 {% block logo_text %}
     <span class="brand-text font-weight-light">
         {{request.user.groups.first}}
@@ -8,9 +8,10 @@
 
 {% block user_panel %}
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        {% comment %} <div class="image">
-        <img src="{% avatar_url size=90 %}" class="img-circle elevation-2" alt="User Image">
-        </div> {% endcomment %}
+        <div class="image">
+        <img src="{% if request.user.image %}{{ request.user.image.url }}{% endif %}" class="img-circle elevation-2" alt="Image">
+        {% comment %} <img src="{% avatar_url size=90 %}" class="img-circle elevation-2" alt="User Image"> {% endcomment %}
+        </div>
         <div class="info">
             <a href="#" class="d-block">{% firstof request.user.get_full_name request.user.username %}</a>
         </div>

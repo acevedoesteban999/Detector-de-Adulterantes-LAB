@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.urls import path
 from .views import UserUpdateView,UserListView,UserCreateView,UserActDesactView,UserDeleteView
+
+
 urlpatterns = [
     path('list/',UserListView.as_view(),name='user_list'),
     path('create/',UserCreateView.as_view(),name='user_create'),
@@ -23,3 +25,4 @@ urlpatterns = [
     path('delete/<int:pk>/',UserDeleteView.as_view(),name='delete_user'),
     path('act_desact/<int:pk>/',UserActDesactView.as_view(),name='user_act_desact'),
 ]
+
