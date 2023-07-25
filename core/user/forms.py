@@ -1,11 +1,13 @@
 from django import forms
 from core.user.models import User
 from django.contrib.auth.models import Group
-from django.contrib.auth.hashers import check_password ,make_password ,mask_hash
 def get_list_groups():
     list=[]
-    for group in Group.objects.all():
-        list.append((group.name,group.name))
+    try:
+        for group in Group.objects.all():
+            list.append((group.name,group.name))
+    except:
+        pass
     return list
 
 class UserForm(forms.ModelForm):

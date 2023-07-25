@@ -16,16 +16,45 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-# from config.model import AccessPermission
+from django.contrib.auth.hashers import make_password 
 
-# def init_group_and_permissions():
-#     list=[
-#         'permission1',
-#         'permission2',
-#     ]
-#     for permission in list:
-#         AccessPermission.objects.get_or_create()
-# init_group_and_permissions()
+from core.user.models import User
+from django.contrib.auth.models import Group,Permission
+
+
+def init():
+    try:
+        if not Group.objects.all().exists():
+            l={
+                'Developer':[
+                    'is_development',
+                ],
+                'Admin':[
+                    'is_admin',
+                ],
+                'Guest':[
+                    'is_guest',
+                ]
+            }
+            for gn,pl in l.items():
+                try:
+                    g=Group.objects.get_or_create(name=gn)[0]
+                    for pn in pl: 
+                        p=Permission.objects.get(codename=pn)
+                        g.permissions.add(p)
+                except Exception as e:
+                    print("E:",e)
+            u=User.objects.get_or_create(
+                first_name="Super User",
+                username="superuser",
+                is_superuser=True,
+                #is_staff=True,
+            )[0]
+            u.set_password('superuser')
+            u.save()
+            u.groups.add(Group.objects.first())
+    except:
+        pass
 
 
 urlpatterns = [
