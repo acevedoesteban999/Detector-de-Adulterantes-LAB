@@ -16,18 +16,28 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from django.contrib.auth.hashers import make_password 
-
+from django.shortcuts import render,HttpResponse
+from django.views.generic import TemplateView
+from core.log.utils import MyLoginRequiredMixin
 from core.user.models import User
 from django.contrib.auth.models import Group,Permission
 
-
-def init():
+def init_groups_permission_sueruser(init=False):
+    context=""
     try:
-        if not Group.objects.all().exists():
+        bool=True
+        
+        bool= not (init==True and Group.objects.all().exists()) 
+        
+        if bool==True:
             l={
                 'Developer':[
                     'is_development',
+                    'view_user',
+                    'add_user',
+                    'change_user',
+                    'delete_user',
+                    'act_desact_user',
                 ],
                 'Admin':[
                     'is_admin',
@@ -39,26 +49,48 @@ def init():
             for gn,pl in l.items():
                 try:
                     g=Group.objects.get_or_create(name=gn)[0]
+                    print(gn)
+                    context+="{}<br>".format(gn)
                     for pn in pl: 
-                        p=Permission.objects.get(codename=pn)
-                        g.permissions.add(p)
+                        try:
+                            p=Permission.objects.get(codename=pn)
+                            print("\t",pn)
+                            context+="<dd>{}</dd><br>".format(pn)
+                            g.permissions.add(p)
+                        except Exception as e:
+                            print("E!:",e,":",pn)
+                            context+="<br>Error:{}:    {}<br><br>".format(e,pn)
                 except Exception as e:
-                    print("E:",e)
+                    print("E!:",e,":",gn)
+                    context+="<br>Error:{}:    {}<br><br>".format(e,gn)
             u=User.objects.get_or_create(
                 first_name="Super User",
                 username="superuser",
                 is_superuser=True,
-                #is_staff=True,
+                is_staff=True,
             )[0]
             u.set_password('superuser')
             u.save()
             u.groups.add(Group.objects.first())
+            print('superuser')
+            context+="Created Super User<br>".format(gn)
+        
     except:
         pass
+    return context
+    
+init_groups_permission_sueruser(True)
 
+
+class InitView(MyLoginRequiredMixin,TemplateView):
+    def get(self,request):
+        if request.user.is_superuser:
+            return HttpResponse(init_groups_permission_sueruser())
+        return render(request,'403.html')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('init/',InitView.as_view()),
     path('',include('core.process.urls')),
     path('log/',include('core.log.urls')),
     path('user/',include('core.user.urls')),

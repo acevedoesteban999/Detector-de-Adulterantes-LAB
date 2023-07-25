@@ -9,4 +9,5 @@ class User(AbstractUser):
             ("is_development", "can access to development options"),
             ("is_admin", "can access to admin options"),
             ("is_guest ", "can access to guest options"),
+            ("act_desact_user","can active or desactive users"),
             )
