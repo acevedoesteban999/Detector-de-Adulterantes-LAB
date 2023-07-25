@@ -1,2 +1,7 @@
 __pycache__/
 Proyecto/
+migrations/
+db.sqlite3
+media/users/
+
+

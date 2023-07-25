@@ -16,6 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+# from config.model import AccessPermission
+
+# def init_group_and_permissions():
+#     list=[
+#         'permission1',
+#         'permission2',
+#     ]
+#     for permission in list:
+#         AccessPermission.objects.get_or_create()
+# init_group_and_permissions()
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,3 +36,7 @@ urlpatterns = [
     path('conf/',include('core.conf.urls')),
     #path('process/',include('core.process.urls')),
 ]
+
+from django.conf import settings
+from django.conf.urls.static import static
+urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
