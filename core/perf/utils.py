@@ -13,9 +13,10 @@ def get_temp():
     return random.randint(0,100)
 
 def get_storage():
-    dict={
-        'data1': random.randint(0,1000)/1000,
-        'data2': 1,
-    }
-    dict.update({'porc':dict.get('data1')/dict.get('data2')})
-    return dict
+    # dict={
+    #     'data1': random.randint(0,1000)/1000,
+    #     'data2': 1,
+    # }
+    # dict.update({'porc':dict.get('data1')/dict.get('data2')})
+    # return dict
+    return random.randint(0,1000)

@@ -6,8 +6,10 @@ class User(AbstractUser):
     image=models.ImageField(upload_to='users',verbose_name="Imagen",default='no_user_imagen.jpg',null=True, height_field=None, width_field=None, max_length=None)
     class Meta:
         permissions = (
-            ("is_development", "can access to development options"),
-            ("is_admin", "can access to admin options"),
-            ("is_guest ", "can access to guest options"),
-            ("act_desact_user","can active or desactive users"),
+            ("is_development", "is_development"),
+            ("is_admin", "is_admin"),
+            ("is_guest ", "is_guest"),
+            ("act_desact_user","act_desact_user"),
+            ("view_binnacle","view_binnacle"),
+            ("view_performance","view_performance"),
             )

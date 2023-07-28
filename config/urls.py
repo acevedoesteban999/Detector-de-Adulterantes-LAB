@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path,include,reverse_lazy
 from django.shortcuts import render,HttpResponse
 from django.views.generic import TemplateView
 from core.log.utils import MyLoginRequiredMixin
@@ -38,6 +38,8 @@ def init_groups_permission_sueruser(init=False):
                     'change_user',
                     'delete_user',
                     'act_desact_user',
+                    'view_performance',
+                    'view_binnacle',
                 ],
                 'Admin':[
                     'is_admin',
@@ -68,13 +70,16 @@ def init_groups_permission_sueruser(init=False):
                 username="superuser",
                 is_superuser=True,
                 is_staff=True,
-            )[0]
-            u.set_password('superuser')
-            u.save()
-            u.groups.add(Group.objects.first())
+            )
+            uu=u[1]
+            u=u[0]
+            if uu==True:
+                u.set_password('superuser')
+                u.save()
+            u.groups.add(Group.objects.get(name="Developer"))
             print('superuser')
-            context+="Created Super User<br>".format(gn)
-        
+            context+="{} Super User<br>".format("Created" if uu==True else "See",gn)
+            context+="<br><a href='{}' role='btn'>Volver</a>".format(reverse_lazy('process'))
     except:
         pass
     return context
@@ -95,7 +100,8 @@ urlpatterns = [
     path('log/',include('core.log.urls')),
     path('user/',include('core.user.urls')),
     path('conf/',include('core.conf.urls')),
-     path('perf/',include('core.perf.urls')),
+    path('perf/',include('core.perf.urls')),
+    path('binn/',include('core.binn.urls')),
 ]
 
 from django.conf import settings

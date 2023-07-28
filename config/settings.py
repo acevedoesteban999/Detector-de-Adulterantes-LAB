@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'core.process',
     'core.conf',
     'core.perf',
+    'core.binn',
 ]
 
 MIDDLEWARE = [
