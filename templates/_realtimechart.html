@@ -6,7 +6,7 @@
         <div class="card card-primary card-outline">
             <div class="card-header">
             <h3 class="card-title">
-                <i class="far fa-chart-bar"></i>
+                <i class="{{icon}}"></i>
                 {{text}}
             </h3>
             <div class="card-tools">
@@ -68,7 +68,7 @@
         }
     }
 
-    function addData(chart, label, data, max = 25) {
+    function addData(chart, label, data, max = 20) {
         if (chart.data.datasets[0].data.length >= max) {
             chart.data.datasets[0].data.shift();
             chart.data.labels.shift();

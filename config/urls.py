@@ -95,7 +95,7 @@ urlpatterns = [
     path('log/',include('core.log.urls')),
     path('user/',include('core.user.urls')),
     path('conf/',include('core.conf.urls')),
-    #path('process/',include('core.process.urls')),
+     path('perf/',include('core.perf.urls')),
 ]
 
 from django.conf import settings

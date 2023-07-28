@@ -1,0 +1,43 @@
+{% extends '_base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                {% include '_realtimechart.html' with prfx="_1" url=url text="CPU" icon='fas fa-tachometer-alt' time=2500 action="cpu"  backgroundColor="" borderColor="" height=200 %}
+  
+            </div>
+            <div class="col-6">
+                {% include '_realtimechart.html' with prfx="_2" url=url text="RAM" icon='fas fa-memory'  time=2500 action="ram"  backgroundColor="" borderColor="" height=200 %}
+  
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                {% include '_realtimechart.html' with prfx="_3" url=url text="Ethernet" icon='fas fa-network-wired'  time=2500 action="ethernet"  backgroundColor="" borderColor="" height=200 %}
+  
+            </div>
+            <div class="col-6">
+                {% include '_realtimechart.html' with prfx="_4" url=url text="Temperatura" icon='fas fa-temperature-three-quarters'  time=2500 action="temp"  backgroundColor="" borderColor="" height=200 %}
+  
+            </div>
+        </div>
+        <div class="row ">
+            <div class="card w-100 p-2">
+                <div class="progress-group ">
+                    Almacenamiento
+                    <span class="float-right">
+                        <b>8</b>
+                        /16 gb
+                    </span>
+                    <div class="progress progress-sm">
+                        <div class="progress-bar bg-warning" id="barr" style="width: 50%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    
+    
+{% endblock %}

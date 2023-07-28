@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'core.user',
     'core.process',
     'core.conf',
+    'core.perf',
 ]
 
 MIDDLEWARE = [
