@@ -1,4 +1,5 @@
 __pycache__/
 Proyecto/
-
-
+static/admin
+static/admin-lte
+db.sqlite3

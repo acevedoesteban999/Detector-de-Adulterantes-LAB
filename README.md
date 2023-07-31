@@ -61,4 +61,3 @@ WSGIPythonPath /project
 * `sudo chown :www-data ~/project/db.sqlite3`
 * `sudo chown :www-data ~/project`
 * `sudo service apache2 restart`
-
