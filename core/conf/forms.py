@@ -3,6 +3,7 @@ import ipaddress
 import socket   
 from django.core.validators import validate_ipv4_address
 from datetime import date,datetime
+
 class NetWorkForm(forms.Form):
     ip=forms.GenericIPAddressField(initial=socket.gethostbyname(socket.gethostname()),widget=forms.TextInput(attrs={'class':'form-control'}))
     mak=forms.GenericIPAddressField(initial="0.0.0.0",widget=forms.TextInput(attrs={'class':'form-control'}))

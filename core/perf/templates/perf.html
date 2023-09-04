@@ -7,10 +7,10 @@
                 {% include '_realtimechart.html' with prfx="_1" url=url text="CPU" icon='fas fa-tachometer-alt' time=2500 action="cpu"  backgroundColor="" borderColor="" height=200 %}
   
             </div>
-            <div class="col-6">
+             <div class="col-6">
                 {% include '_realtimechart.html' with prfx="_2" url=url text="RAM" icon='fas fa-memory'  time=2500 action="ram"  backgroundColor="" borderColor="" height=200 %}
   
-            </div>
+            </div> 
         </div>
         <div class="row">
             <div class="col-6">
@@ -20,15 +20,15 @@
             <div class="col-6">
                 {% include '_realtimechart.html' with prfx="_4" url=url text="Temperatura" icon='fas fa-temperature-three-quarters'  time=2500 action="temp"  backgroundColor="" borderColor="" height=200 %}
   
-            </div>
+            </div> 
         </div>
         <div class="row ">
             <div class="card w-100 p-2">
                 <div class="progress-group ">
-                    Almacenamiento
+                    <span id="div_storage">Almacenamiento: ?</span> 
                     <span class="float-right">
-                        <b>8</b>
-                        /16 gb
+                        <b><span id="div_used_space">?</span></b>
+                        /<span id="div_total_space">?</span> GB
                     </span>
                     <div class="progress progress-sm">
                         <div class="progress-bar bg-warning" id="barr" style="width: 50%"></div>
@@ -37,7 +37,50 @@
                 </div>
             </div>
         </div>
-        
+        <script>
+            document.addEventListener("DOMContentLoaded", function(event){
+                
+                $.ajax({
+                    url: {% url 'perf' %},
+                    data: {
+                        'action': 'storage',
+                    },
+                    type: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    dataType: 'json',
+                    success: function (request) {
+                        document.getElementById("div_total_space").innerHTML=request.response.total_space
+                        document.getElementById("div_used_space").innerHTML=request.response.used_space
+                        document.getElementById("div_storage").innerHTML="Almacenamiento: "+String(request.response.porc)+"%"
+                        document.getElementById("barr").setAttribute("style","width: "+String(request.response.porc)+"%")
+                        
+                        
+                        if(request.response.porc > 90)
+                        {
+                            document.getElementById("barr").setAttribute("class","progress-bar bg-danger")
+                            
+                        }
+                        else if (request.response.porc > 70)
+                        {
+                            document.getElementById("barr").setAttribute("class","progress-bar bg-warning")
+                        }
+                        else if (request.response.porc > 50)
+                        {
+                            document.getElementById("barr").setAttribute("class","progress-bar bg-info")
+                        }
+                        else
+                        {
+                            document.getElementById("barr").setAttribute("class","progress-bar bg-success")
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                    }
+                })
+              })
+
+        </script>
     
     
 {% endblock %}
