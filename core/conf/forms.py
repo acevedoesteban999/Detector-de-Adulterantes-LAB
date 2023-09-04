@@ -17,4 +17,15 @@ class DateForm(forms.Form):
     time=forms.TimeField(initial=datetime.now().strftime("%H:%M"),widget=forms.TimeInput(attrs={'type':'time','class':'form-control'}))
         
     def save(self):
+
+        # Obtener la fecha y hora actual
+        # now = datetime.datetime.now()
+
+        # # Crear una cadena con el formato de fecha y hora deseado
+        # date_string = now.strftime("%Y-%m-%d")
+        # time_string = now.strftime("%H:%M:%S")
+
+        # # Ejecutar el comando 'date' de Linux para configurar la fecha y hora
+        # subprocess.call(["sudo", "date", "-s", date_string])
+        # subprocess.call(["sudo", "date", "-s", time_string])
         print(self.data.get('date'),self.data.get('time'))
