@@ -8,7 +8,7 @@ from core.log.utils import MyLoginRequiredMixin
 class NetWorkView(MyLoginRequiredMixin,FormView):
     form_class=NetWorkForm
     template_name='conf.html'
-    
+    permission_required="is_development"
     
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -36,6 +36,7 @@ class NetWorkView(MyLoginRequiredMixin,FormView):
 class DateView(MyLoginRequiredMixin,FormView):
     form_class=DateForm
     template_name='conf.html'
+    permission_required="is_development"
     
     def post(self, request, *args, **kwargs):
         form = self.get_form()

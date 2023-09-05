@@ -1,12 +1,22 @@
 {% extends 'adminlte/lib/_main_sidebar.html' %}
-
+{% load static %}
 {% block logo_text %}
     <span class="brand-text font-weight-light">
-        Aplicación
+        {{request.user.groups.first}}
     </span>
 {% endblock %}
 
 {% block user_panel %}
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+        <img src="{% if request.user.image %}{{ request.user.image.url }}{% endif %}" class="img-circle elevation-2" alt="Image">
+        {% comment %} <img src="{% avatar_url size=90 %}" class="img-circle elevation-2" alt="User Image"> {% endcomment %}
+        </div>
+        <div class="info">
+            <a href="#" class="d-block">{% firstof request.user.get_full_name request.user.username %}</a>
+        </div>
+        
+    </div>
 {% endblock %}
 
 {% block nav_heading %}
@@ -20,29 +30,29 @@
             <p>Principal</p>
         </a>
     </li>
-
-    <li class="nav-item has-tree-view {% if 'conf' in request.path %}menu-open{% endif %} ">
-        <a href="#" class="nav-link menus {% if 'conf' in request.path %}active{% endif %}">
-            <i class="nav-icon fas fa-screwdriver-wrench"></i>
-            <p>Configuración</p>
-            <p><i class="right fas fa-angle-left"></i></p>
-        </a>
-        <ul class="nav nav-treeview">
-                <li class="nav-item">
-                        <a href="{% url 'net' %}" class="nav-link {% if "conf/network" in request.path %}active{% endif %}">
-                            <i class="nav-icon fas fa-solid fa-network-wired"></i>
-                            Parámetros de red
-                        </a>
-                    </li>
-            <li class="nav-item ">
-                <a href="{% url 'date' %}" class="nav-link {% if "conf/date" in request.path %}active{% endif %}">
-                    <i class="nav-icon fas fa-regular fa-clock"></i>
-                    Fecha y hora
-                </a>
-            </li>
-        </ul>
-    </li>
-    
+    {% if perms.user.is_development %}
+        <li class="nav-item has-tree-view {% if 'conf' in request.path %}menu-open{% endif %} ">
+            <a href="#" class="nav-link menus {% if 'conf' in request.path %}active{% endif %}">
+                <i class="nav-icon fas fa-screwdriver-wrench"></i>
+                <p>Configuración</p>
+                <p><i class="right fas fa-angle-left"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                            <a href="{% url 'net' %}" class="nav-link {% if "conf/network" in request.path %}active{% endif %}">
+                                <i class="nav-icon fas fa-solid fa-network-wired"></i>
+                                Parámetros de red
+                            </a>
+                        </li>
+                <li class="nav-item ">
+                    <a href="{% url 'date' %}" class="nav-link {% if "conf/date" in request.path %}active{% endif %}">
+                        <i class="nav-icon fas fa-regular fa-clock"></i>
+                        Fecha y hora
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% endif %}
     <li class="nav-item has-tree-view {% if 'user' in request.path %}menu-open{% endif %} ">
         <a href="#" class="nav-link menus {% if 'user' in request.path %}active{% endif %}">
             <i class="nav-icon fas fa-users"></i> 
@@ -66,14 +76,14 @@
     </li>
 
     <li class="nav-item">
-        <a href="" class="nav-link">
+        <a href="{% url 'perf' %}" class="nav-link">
             <i class="nav-icon fas fa-tachometer-alt"></i> 
             <p>Rendimiento</p>
         </a>
     </li>
 
     <li class="nav-item">
-        <a href="" class="nav-link">
+        <a href="{% url 'binn' %}" class="nav-link">
             <i class="nav-icon fas fa-solid fa-bug"></i>
             <p>Bítacora de errores</p>
         </a>

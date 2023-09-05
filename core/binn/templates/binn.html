@@ -1,0 +1,94 @@
+{% extends '_list.html' %}
+
+{% block content_before %}
+    <div class="container">
+        <div class="h2 mb-4">Bitácora</div>
+        <div class="row">
+            <div class="col-3">
+                <div class="small-box bg-{% if not iden or iden == "I"  %}info{% else %}dark{% endif %}">
+                    <div class="inner">
+                    <h3>{{i_count}}</h3>
+                    <p>Información</p>
+                    </div>
+                    <div class="icon">
+                    <i class="fas fa-solid fa-circle-info"></i>
+                    </div>
+                    <a href="{% url 'binn_s' 'I' %}" class="small-box-footer">Más Información  <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="small-box bg-{% if not iden or iden == "R"  %}success{% else %}dark{% endif %}">
+                    <div class="inner">
+                    <h3>{{r_count}}</h3>
+                    <p>Reportes</p>
+                    </div>
+                    <div class="icon">
+                    <i class="fas fa-regular fa-clipboard"></i>
+                    </div>
+                    <a href="{% url 'binn_s' 'R' %}" class="small-box-footer">Más Información  <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="small-box bg-{% if not iden or iden == "A"  %}warning{% else %}dark{% endif %}">
+                    <div class="inner">
+                    <h3>{{a_count}}</h3>
+                    <p>Advertencias</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-solid fa-circle-exclamation"></i>
+                    </div>
+                    <a href="{% url 'binn_s' 'A' %}" class="small-box-footer">Más Información  <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="small-box bg-{% if not iden or iden == "E"  %}danger{% else %}dark{% endif %}">
+                    <div class="inner">
+                    <h3>{{e_count}}</h3>
+                    <p>Errores</p>
+                    </div>
+                    <div class="icon">
+                    <i class="fas fa-solid fa-triangle-exclamation"></i>
+                    {% comment %} <i class="ion ion-bag"></i> {% endcomment %}
+                    </div>
+                    <a href="{% url 'binn_s' 'E' %}" class="small-box-footer">Más Información  <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+{% endblock %}
+
+{% block columns %}
+        <th scope="col">Tipo</th>
+        <th scope="col">Identificación</th>
+        <th scope="col">Motivo</th>
+        <th scope="col">Fecha y Hora</th>
+{% endblock %}
+
+{% block rows %}
+    {% for binnacle in object_list %}
+        <tr class="text-center align-items-center">
+            <td scope="row">
+                <span class=" badge bg-{% if binnacle.identifier == 'I' %}info{% elif binnacle.identifier == 'R' %}success{% elif binnacle.identifier == 'A' %}warning{% else %}danger{% endif %}">
+                    <div class="h6 m-0 ">
+                        {{binnacle.get_identifier_display}}
+                    </div>
+                </span>
+            </td>
+            <td scope="row">{{binnacle.identifier_message}}</td>
+            <td scope="row">{{binnacle.reason}}</td>
+            <td scope="row">{{binnacle.timedate}}</td>
+        </tr>
+    {% endfor %}
+
+{% endblock %}
+
+    {% block box_footer_buttons %}
+        {% if iden %}
+            <a href="{% url 'binn' %}" class="btn btn-{% if iden == "I" %}info{% elif iden == "R" %}success{% elif iden == "A" %}warning{% else %}danger{% endif %} btn-flat">
+                <i class="fas fa-sync-alt"></i> Quitar Filtro
+            </a>
+        {% else %}
+            {{ block.super }}
+        {% endif %}
+    {% endblock %}

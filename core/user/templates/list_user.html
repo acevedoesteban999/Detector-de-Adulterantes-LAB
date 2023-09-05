@@ -4,21 +4,27 @@
         <th scope="col">Usuario</th>
         <th scope="col">Nombre</th>
         <th scope="col">Imagen</th>
+        <th scope="col">Grupo</th>
         <th scope="col">Estado</th>
         <th scope="col"></th>
 {% endblock %}
 
 {% block rows %}
         {% for user in object_list %}
-            <tr class="text-center">
+            <tr class="text-center align-items-center">
                 <td scope="row">{{user.username}}</td>
                 <td scope="row">{{user.first_name}}</td>
                 <td scope="row">
                     {% if user.image %} 
-                        <div class="container-fluid">
-                            <img src="{{user.image.path}}" class="img-fluid rounded-top" alt="">
+                        <div class="container">
+                            <img src="{% if user.image %}{{ user.image.url }}{% endif %}" class="img-circle elevation-2 img-size-50 mr-3"  alt="Image">
                         </div>
                     {% endif %}
+                </td>
+                <td scope="row">
+                    <span class="badge bg-{% if "Developer" == user.groups.first.name  %}success{% elif "Admin" == user.groups.first.name %}info{% elif 'Guest' == user.groups.first.name %}warning{% else %}danger{% endif %}">
+                        {{user.groups.first}}
+                    </span>
                 </td>
                 <td scope="row ">
                     <p>
@@ -34,11 +40,15 @@
                 <td>
                     
                     
-                <a href="{% url 'user_update' user.id %}" data-toggle="tooltip" title="Eliminar" class="btn btn-warning btn-xs btn-flat">
+                <a href="{% url 'user_update' user.id %}" data-toggle="tooltip" title="Eliminar" class="m-1 btn btn-warning btn-xs btn-flat">
                     <i class="fas fa-edit"></i>
                 </a>
-                <a href="{% url 'user_act_desact' user.id %}" data-toggle="tooltip" title="Cambiar estado" class="btn btn-{% if user.is_active %}danger{% else %}success{% endif %} btn-xs btn-flat">
+                <a href="{% url 'user_act_desact' user.id %}" data-toggle="tooltip" title="Cambiar estado" class="m-1 btn btn-primary btn-xs btn-flat">
                     <i class="fas fa-regular fa-lightbulb"></i>
+                </a>
+
+                <a href="{% url 'delete_user' user.id %}" data-toggle="tooltip" title="Eliminar" class="m-1 btn btn-danger btn-xs btn-flat">
+                    <i class="fas fa-regular fa-trash"></i>
                 </a>
                     
                 </td>
