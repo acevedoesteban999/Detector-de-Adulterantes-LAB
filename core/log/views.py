@@ -9,7 +9,7 @@ from django.views.generic import RedirectView
 class Login(LoginView):
     template_name = 'login.html'
     form_class = AuthenticationForm
-    success_url=reverse_lazy('process')
+    success_url=reverse_lazy('main')
     
     def get_form(self, form_class=None):
         form = super(Login, self).get_form(form_class)

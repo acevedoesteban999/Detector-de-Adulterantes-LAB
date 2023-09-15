@@ -25,7 +25,7 @@ class NetWorkView(MyLoginRequiredMixin,FormView):
         form=self.get_form()
         form.save()
         messages.success(request,'Actualizados fecha y hora correctamente')
-        return redirect('process')
+        return redirect('main')
         
         
     def get_context_data(self, **kwargs):
@@ -53,7 +53,7 @@ class DateView(MyLoginRequiredMixin,FormView):
         form=self.get_form()
         form.save()
         messages.success(request,'Actualizados fecha y hora correctamente')
-        return redirect('process')
+        return redirect('main')
         
         
     def get_context_data(self, **kwargs):
