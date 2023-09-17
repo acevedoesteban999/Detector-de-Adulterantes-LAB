@@ -1,7 +1,8 @@
 {% extends '_list.html' %}
 
 {% block content_before %}
-    <div class="container">
+    
+    {% comment %} <div class="container">
         <div class="h2 mb-4">Bitácora</div>
         <div class="row">
             <div class="col-3">
@@ -48,47 +49,27 @@
                     </div>
                     <div class="icon">
                     <i class="fas fa-solid fa-triangle-exclamation"></i>
-                    {% comment %} <i class="ion ion-bag"></i> {% endcomment %}
+                    
                     </div>
                     <a href="{% url 'binn_s' 'E' %}" class="small-box-footer">Más Información  <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             
         </div>
-    </div>
+    </div> {% endcomment %}
 {% endblock %}
 
 {% block columns %}
-        <th scope="col">Tipo</th>
-        <th scope="col">Identificación</th>
-        <th scope="col">Motivo</th>
+        <th scope="col">Nombre</th>
         <th scope="col">Fecha y Hora</th>
 {% endblock %}
 
 {% block rows %}
-    {% for binnacle in object_list %}
+    {% for measuring in object_list %}
         <tr class="text-center align-items-center">
-            <td scope="row">
-                <span class=" badge bg-{% if binnacle.identifier == 'I' %}info{% elif binnacle.identifier == 'R' %}success{% elif binnacle.identifier == 'A' %}warning{% else %}danger{% endif %}">
-                    <div class="h6 m-0 ">
-                        {{binnacle.get_identifier_display}}
-                    </div>
-                </span>
-            </td>
-            <td scope="row">{{binnacle.identifier_message}}</td>
-            <td scope="row">{{binnacle.reason}}</td>
-            <td scope="row">{{binnacle.timedate}}</td>
+            <td scope="row">{{measuring.name}}</td>
+            <td scope="row">{{measuring.timedate}}</td>
         </tr>
     {% endfor %}
 
 {% endblock %}
-
-    {% block box_footer_buttons %}
-        {% if iden %}
-            <a href="{% url 'binn' %}" class="btn btn-{% if iden == "I" %}info{% elif iden == "R" %}success{% elif iden == "A" %}warning{% else %}danger{% endif %} btn-flat">
-                <i class="fas fa-sync-alt"></i> Quitar Filtro
-            </a>
-        {% else %}
-            {{ block.super }}
-        {% endif %}
-    {% endblock %}
