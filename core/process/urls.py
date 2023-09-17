@@ -15,9 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from .views import ProcessView
+from .views import *
 from django.views.generic import RedirectView
 urlpatterns = [
-    path('',RedirectView.as_view(url='process')),
-    path('process/',ProcessView.as_view(),name='process'),
+    path('',RedirectView.as_view(url='process/main')),
+    path('process/main/',MainView.as_view(),name='main'),
+    path('process/measuring/',MeasuringView.as_view(),name='meas'),
+    path('process/registers/',RegistersView.as_view(),name='reg'),
+    path('process/charts/',ChartsView.as_view(),name='cha'),
+    path('process/train/',TrainView.as_view(),name='tra'),
 ]

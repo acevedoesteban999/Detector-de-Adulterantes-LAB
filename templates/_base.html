@@ -2,14 +2,20 @@
 
 {% load static %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
-    <link rel="stylesheet" href="{% static 'admin-lte/plugins/fontawesome-free/css/all.min.css' %}">
+{% comment %} {% block stylesheets %}
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'admin-lte/dist/css/adminlte.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-{% endblock  %}
+    
+
+{% endblock  %} {% endcomment %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin-lte/plugins/fontawesome-free/css/all.min.css' %}">
+    {% include 'adminlte/lib/_scripts.html' %}
+{% endblock %}
 
 {% block nav_header %}
     {% include '_main_header.html' %}
@@ -17,6 +23,10 @@
 
 {% block nav_sidebar %}
     {% include '_main_sidebar.html' %}
+{% endblock %}
+
+{% block javascript %}
+{% comment %} include at extra_head for load jquey at init  {% endcomment %}
 {% endblock %}
 
 {% block extra_js %}

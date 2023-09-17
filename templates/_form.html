@@ -13,6 +13,8 @@
                 <div class="container-fluid">
                     {% comment %} <input type="hidden" name="action" id="action" value="{{ action }}"> {% endcomment %}
                     {% csrf_token %}
+                    {% block extra_field_b %}
+                    {% endblock  %}
                     {% for field in form.visible_fields %}
                         <div class="form-group">
                             <label>{{ field.label }}:</label>
@@ -20,20 +22,24 @@
                                 {{ field }}
                         </div>
                     {% endfor %}
+                    {% block extra_field_a %}
+                    {% endblock  %}
                 </div>
             </div>
                 <div class="card-footer">
-                    {% block btn_save %}
-                        <button type="submit" class="btn btn-primary">
-                            Guardar
-                        </button>
-                    {% endblock  %}
-                    {% block  btn_cancel %}
-                        {% if url_cancel %}
-                            <a href="{{url_cancel}}" class="btn btn-danger">
-                                Cancelar
-                            </a>
-                        {% endif %}
+                    {% block footer %}
+                        {% block btn_save %}
+                            <button type="submit" class="btn btn-primary">
+                                Guardar
+                            </button>
+                        {% endblock  %}
+                        {% block  btn_cancel %}
+                            {% if url_cancel %}
+                                <a href="{{url_cancel}}" class="btn btn-danger">
+                                    Cancelar
+                                </a>
+                            {% endif %}
+                        {% endblock  %}
                     {% endblock  %}
             </div>
         </div>

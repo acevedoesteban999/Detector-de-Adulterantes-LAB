@@ -24,11 +24,52 @@
 {% endblock %}
 
 {% block nav_links %}
-    <li class="nav-item">
-        <a href="{% url 'process' %}" class="nav-link ">
+    <li class="nav-item has-tree-view {% if 'process' in request.path %}menu-open{% endif %} ">
+        <a href="#" class="nav-link menus {% if 'process' in request.path %}active{% endif %}">
             <i class="nav-icon fas fa-house"></i>
             <p>Principal</p>
+            <p><i class="right fas fa-angle-left"></i></p>
         </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'main' %}" class="nav-link {% if "process/main" in request.path %}active{% endif %}">
+                    <i class="nav-icon fas fa-house"></i>
+                    Home
+                </a>
+            </li>
+        </ul>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'meas' %}" class="nav-link {% if "process/measuring" in request.path %}active{% endif %}">
+                    <i class="nav-icon fa-solid fas fa-plus"></i>
+                    Nueva Medición
+                </a>
+            </li>
+        </ul>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'reg' %}" class="nav-link {% if "process/registers" in request.path %}active{% endif %}">
+                    <i class="nav-icon fas fa-solid fa-folder"></i>
+                    Registros
+                </a>
+            </li>
+        </ul>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'cha' %}" class="nav-link {% if "process/charts" in request.path %}active{% endif %}">
+                    <i class="nav-icon fas fa-solid fa-chart-line"></i>
+                    Gráficos
+                </a>
+            </li>
+        </ul>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'tra' %}" class="nav-link {% if "process/train" in request.path %}active{% endif %}">
+                    <i class="nav-icon fas fa-solid fa-graduation-cap"></i>
+                    Entrenar
+                </a>
+            </li>
+        </ul>
     </li>
     {% if perms.user.is_development %}
         <li class="nav-item has-tree-view {% if 'conf' in request.path %}menu-open{% endif %} ">
@@ -38,12 +79,12 @@
                 <p><i class="right fas fa-angle-left"></i></p>
             </a>
             <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                            <a href="{% url 'net' %}" class="nav-link {% if "conf/network" in request.path %}active{% endif %}">
-                                <i class="nav-icon fas fa-solid fa-network-wired"></i>
-                                Parámetros de red
-                            </a>
-                        </li>
+                <li class="nav-item">
+                    <a href="{% url 'net' %}" class="nav-link {% if "conf/network" in request.path %}active{% endif %}">
+                        <i class="nav-icon fas fa-solid fa-network-wired"></i>
+                        Parámetros de red
+                    </a>
+                </li>
                 <li class="nav-item ">
                     <a href="{% url 'date' %}" class="nav-link {% if "conf/date" in request.path %}active{% endif %}">
                         <i class="nav-icon fas fa-regular fa-clock"></i>
