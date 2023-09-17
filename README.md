@@ -56,8 +56,8 @@ WSGIPythonPath /project
 ```
 
 ### permisos
-* `sudo chmod 664 ~/project/db.sqlite3`
-* `sudo chmod 777 ~/project`
-* `sudo chown :www-data ~/project/db.sqlite3`
-* `sudo chown :www-data ~/project`
+* `sudo chmod 664 ./db.sqlite3`
+* `sudo chmod 777 ./`
+* `sudo chown :www-data ./db.sqlite3`
+* `sudo chown :www-data ./`
 * `sudo service apache2 restart`

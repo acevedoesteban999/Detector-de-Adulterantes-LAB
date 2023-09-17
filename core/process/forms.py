@@ -1,11 +1,11 @@
 from django import forms
 from .models import Measuring
-
+from config.utils import is_at_migrations
 class MeasuringForm(forms.ModelForm):
     def initial():
-        last=Measuring.objects.order_by('-id').first()
-        return last.id + 1 if last else 0     
-    
+        if not is_at_migrations():
+            last=Measuring.objects.order_by('-id').first()
+            return last.id + 1 if last else 0     
     id=forms.FloatField(required=True,disabled=True,initial=initial(),widget=forms.NumberInput(attrs={'class':'form-control'}))
     class Meta:
         model =Measuring
