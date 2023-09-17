@@ -28,12 +28,13 @@
         <a href="#" class="nav-link menus {% if 'process' in request.path %}active{% endif %}">
             <i class="nav-icon fas fa-house"></i>
             <p>Principal</p>
+            <p><i class="right fas fa-angle-left"></i></p>
         </a>
         <ul class="nav nav-treeview">
             <li class="nav-item">
                 <a href="{% url 'main' %}" class="nav-link {% if "process/main" in request.path %}active{% endif %}">
                     <i class="nav-icon fas fa-house"></i>
-                    Home
+                    <p>Home</p>
                 </a>
             </li>
         </ul>
@@ -41,7 +42,7 @@
             <li class="nav-item">
                 <a href="{% url 'meas_add' %}" class="nav-link {% if "process/measuring/add" in request.path %}active{% endif %}">
                     <i class="nav-icon fa-solid fas fa-plus"></i>
-                    Nueva Medición
+                    <p>Nueva Medición</p>
                 </a>
             </li>
         </ul>
@@ -49,7 +50,7 @@
             <li class="nav-item">
                 <a href="{% url 'meas_list' %}" class="nav-link {% if "process/measuring/list" in request.path %}active{% endif %}">
                     <i class="nav-icon fas fa-solid fa-folder"></i>
-                    Registros
+                    <p>Registros</p>
                 </a>
             </li>
         </ul>
@@ -57,7 +58,7 @@
             <li class="nav-item">
                 <a href="{% url 'cha' %}" class="nav-link {% if "process/measuring/charts" in request.path %}active{% endif %}">
                     <i class="nav-icon fas fa-solid fa-chart-line"></i>
-                    Gráficos
+                    <p>Gráficos</p>
                 </a>
             </li>
         </ul>
@@ -65,7 +66,7 @@
             <li class="nav-item">
                 <a href="{% url 'tra' %}" class="nav-link {% if "process/measuring/train" in request.path %}active{% endif %}">
                     <i class="nav-icon fas fa-solid fa-graduation-cap"></i>
-                    Entrenar
+                    <p>Entrenar</p>
                 </a>
             </li>
         </ul>
@@ -81,13 +82,13 @@
                 <li class="nav-item">
                     <a href="{% url 'net' %}" class="nav-link {% if "conf/network" in request.path %}active{% endif %}">
                         <i class="nav-icon fas fa-solid fa-network-wired"></i>
-                        Parámetros de red
+                        <p>Parámetros de red</p>
                     </a>
                 </li>
                 <li class="nav-item ">
                     <a href="{% url 'date' %}" class="nav-link {% if "conf/date" in request.path %}active{% endif %}">
                         <i class="nav-icon fas fa-regular fa-clock"></i>
-                        Fecha y hora
+                        <p>Fecha y hora</p>
                     </a>
                 </li>
             </ul>
@@ -103,13 +104,13 @@
             <li class="nav-item">
                 <a href="{% url 'user_list' %}" class="nav-link {% if "user/list" in request.path %}active{% endif %}">
                     <i class="nav-icon  fas fa-solid fa-users-gear"></i>
-                    Administrar Usuarios
+                    <p>Administrar Usuarios</p>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="{% url 'user_create' %}" class="nav-link {% if "user/create" in request.path %}active{% endif %}">
                     <i class="nav-icon fas fa-solid fa-user-plus"></i>
-                    Añadir usuario
+                    <p>Añadir usuario</p>
                 </a>
             </li>
         </ul>
