@@ -61,14 +61,27 @@
 
 {% block columns %}
         <th scope="col">Nombre</th>
-        <th scope="col">Fecha y Hora</th>
+        <th scope="col">Hora y Fecha</th>
+        <th scope="col">Opciones</th>
 {% endblock %}
 
 {% block rows %}
     {% for measuring in object_list %}
         <tr class="text-center align-items-center">
             <td scope="row">{{measuring.name}}</td>
-            <td scope="row">{{measuring.timedate}}</td>
+            <td scope="row">{{measuring.datetime}}</td>
+            <td scope="row">
+                <a href="{% url 'meas_update' measuring.id %}" data-toggle="tooltip" title="Editar" class="m-1 btn btn-warning btn-xs btn-flat">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <a href="{% url 'meas_data' measuring.id %}" data-toggle="tooltip" title="Data" class="m-1 btn btn-primary btn-xs btn-flat">
+                    <i class="fas fa-database"></i>
+                </a>
+                <a href="{% url 'delete_meas' measuring.id %}" data-toggle="tooltip" title="Eliminar" class="m-1 btn btn-danger btn-xs btn-flat">
+                    <i class="fas fa-regular fa-trash"></i>
+                </a>
+
+            </td>
         </tr>
     {% endfor %}
 

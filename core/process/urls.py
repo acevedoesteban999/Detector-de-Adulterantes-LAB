@@ -20,8 +20,11 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('',RedirectView.as_view(url='process/main')),
     path('process/main/',MainView.as_view(),name='main'),
-    path('process/measuring/',MeasuringView.as_view(),name='meas'),
-    path('process/registers/',RegistersView.as_view(),name='reg'),
+    path('process/measuring/add/',MeasuringCreateView.as_view(),name='meas_add'),
+    path('process/measuring/list/',MeasuringListView.as_view(),name='meas_list'),
+    path('process/measuring/update/<int:pk>/',MeasuringUpdateView.as_view(),name='meas_update'),
+    path('process/measuring/delete/<int:pk>/',MeasuringDeleteView.as_view(),name='delete_meas'),
+    path('process/measuring/<int:pk>/',MeasuringDataView.as_view(),name='meas_data'),
     path('process/charts/',ChartsView.as_view(),name='cha'),
     path('process/train/',TrainView.as_view(),name='tra'),
 ]

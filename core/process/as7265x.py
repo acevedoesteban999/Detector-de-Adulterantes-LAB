@@ -1,6 +1,6 @@
 import time
 import struct
-from smbus import SMBus
+
 
 I2C_ADDR = 0x49
 
@@ -77,8 +77,8 @@ MEASUREMENT_MODE_6CHAN_ONE_SHOT = 0b11
 
 
 class AS7265X():
-    def __init__(self):
-        self._bus = SMBus(1)
+    def __init__(self, i2c_bus):
+        self._bus = i2c_bus
 
     def begin(self):
         if not self.isConnected():

@@ -28,7 +28,6 @@
         <a href="#" class="nav-link menus {% if 'process' in request.path %}active{% endif %}">
             <i class="nav-icon fas fa-house"></i>
             <p>Principal</p>
-            <p><i class="right fas fa-angle-left"></i></p>
         </a>
         <ul class="nav nav-treeview">
             <li class="nav-item">
@@ -40,7 +39,7 @@
         </ul>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="{% url 'meas' %}" class="nav-link {% if "process/measuring" in request.path %}active{% endif %}">
+                <a href="{% url 'meas_add' %}" class="nav-link {% if "process/measuring/add" in request.path %}active{% endif %}">
                     <i class="nav-icon fa-solid fas fa-plus"></i>
                     Nueva Medición
                 </a>
@@ -48,7 +47,7 @@
         </ul>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="{% url 'reg' %}" class="nav-link {% if "process/registers" in request.path %}active{% endif %}">
+                <a href="{% url 'meas_list' %}" class="nav-link {% if "process/measuring/list" in request.path %}active{% endif %}">
                     <i class="nav-icon fas fa-solid fa-folder"></i>
                     Registros
                 </a>
@@ -56,7 +55,7 @@
         </ul>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="{% url 'cha' %}" class="nav-link {% if "process/charts" in request.path %}active{% endif %}">
+                <a href="{% url 'cha' %}" class="nav-link {% if "process/measuring/charts" in request.path %}active{% endif %}">
                     <i class="nav-icon fas fa-solid fa-chart-line"></i>
                     Gráficos
                 </a>
@@ -64,7 +63,7 @@
         </ul>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="{% url 'tra' %}" class="nav-link {% if "process/train" in request.path %}active{% endif %}">
+                <a href="{% url 'tra' %}" class="nav-link {% if "process/measuring/train" in request.path %}active{% endif %}">
                     <i class="nav-icon fas fa-solid fa-graduation-cap"></i>
                     Entrenar
                 </a>
