@@ -23,9 +23,42 @@
 
 
 ### apache2
+z
+## WSGIDaemonProcess en nuevo puerto
+
+### Cambiar Puerto en 'ports.conf'
+
+# Deshabilitar sitio(en caso de querer usar puertos ya creados)
+* `sudo a2dissite file.conf`
+
+* `Listen ##`
+### Crear fichero 'file.conf' en 'sities-available'
+``` 
+<VirtualHost *:##>
+	Alias /static/ /path/static/
+	<Directory /path/static>
+		Require all granted
+	</Directory>
+
+	WSGIScriptAlias / /path/config/wsgi.py
+	WSGIDaemonProcess django python-path=/path python-home=/path/.venv
+	WSGIProcessGroup django
+	WSGIScriptAlias / /path/config/wsgi.py
+
+	<Directory /path/config>
+		<Files wsgi.py>
+			Require all granted
+		</Files>
+	</Directory>
+</VirtualHost>
+```
+* `sudo a2ensite file.conf`
+* `sudo systemctl reload apache2`
+
+
+## WSGIPythonHome en puerto default apache
+
 * `sudo nano /etc/apache2/sites-available/000-default.conf`
-
-
 ```
 <VirtualHost *:80>
     #...
@@ -54,6 +87,11 @@ WSGIPythonPath /project
     </Files>
 </Directory>
 ```
+* `sudo service apache2 restart`
+
+### i2c permiso
+* `sudo usermod -aG i2c www-data`
+* `sudo systemctl restart apache2`
 
 ### permisos
 * `sudo chmod 664 ./db.sqlite3`
@@ -61,3 +99,5 @@ WSGIPythonPath /project
 * `sudo chown :www-data ./db.sqlite3`
 * `sudo chown :www-data ./`
 * `sudo service apache2 restart`
+
+
