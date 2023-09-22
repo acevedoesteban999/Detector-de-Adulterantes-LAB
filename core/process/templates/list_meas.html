@@ -58,7 +58,6 @@
         </div>
     </div> {% endcomment %}
 {% endblock %}
-
 {% block columns %}
         <th scope="col">Nombre</th>
         <th scope="col">Hora y Fecha</th>
@@ -77,7 +76,7 @@
                 <a href="{% url 'meas_data' measuring.id %}" data-toggle="tooltip" title="Data" class="m-1 btn btn-primary btn-xs btn-flat">
                     <i class="fas fa-database"></i>
                 </a>
-                <a href="{% url 'delete_meas' measuring.id %}" data-toggle="tooltip" title="Eliminar" class="m-1 btn btn-danger btn-xs btn-flat">
+                <a href="{% url 'meas_delete' measuring.id %}" data-toggle="tooltip" title="Eliminar" class="m-1 btn btn-danger btn-xs btn-flat">
                     <i class="fas fa-regular fa-trash"></i>
                 </a>
 

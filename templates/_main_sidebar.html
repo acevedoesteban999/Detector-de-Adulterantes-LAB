@@ -48,7 +48,15 @@
         </ul>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="{% url 'meas_list' %}" class="nav-link {% if "process/measuring/list" in request.path %}active{% endif %}">
+                <a href="{% url 'tra_add' %}" class="nav-link {% if "process/tra/add" in request.path %}active{% endif %}">
+                    <i class="nav-icon fas fa-solid fa-graduation-cap"></i>
+                    <p>Nuevo Entrenamiento</p>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'reg' %}" class="nav-link {% if "process/reg" in request.path %}active{% endif %}">
                     <i class="nav-icon fas fa-solid fa-folder"></i>
                     <p>Registros</p>
                 </a>
@@ -62,14 +70,7 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav nav-treeview">
-            <li class="nav-item">
-                <a href="{% url 'tra' %}" class="nav-link {% if "process/measuring/train" in request.path %}active{% endif %}">
-                    <i class="nav-icon fas fa-solid fa-graduation-cap"></i>
-                    <p>Entrenar</p>
-                </a>
-            </li>
-        </ul>
+        
     </li>
     {% if perms.user.is_development %}
         <li class="nav-item has-tree-view {% if 'conf' in request.path %}menu-open{% endif %} ">

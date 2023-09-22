@@ -4,9 +4,11 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
 
 class MyLoginRequiredMixin(LoginRequiredMixin,PermissionRequiredMixin):
+    paginate_by = 5
     login_url = reverse_lazy('login')
     permission_required=None
     permission_denied_message="Permisos insuficientes para acceder a esta zona"
+    
     
     def is_ajax(self):
         return self.request.headers.get('x-requested-with') == 'XMLHttpRequest'
