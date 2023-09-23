@@ -24,9 +24,9 @@
                     <i class="fas fa-database"></i>
                 </a>
 
-                <a href="{% url 'tra_data' training.id %}" data-toggle="tooltip" title="Datos" class="m-1 btn btn-success btn-xs btn-flat">
+                {% comment %} <a href="{% url 'tra_data' training.id %}" data-toggle="tooltip" title="Datos" class="m-1 btn btn-success btn-xs btn-flat">
                     <i class="fas fa-line-chart"></i>
-                </a>
+                </a> {% endcomment %}
 
                 <a href="{% url 'tra_delete' training.id %}" data-toggle="tooltip" title="Eliminar" class="m-1 btn btn-danger btn-xs btn-flat">
                     <i class="fas fa-regular fa-trash"></i>

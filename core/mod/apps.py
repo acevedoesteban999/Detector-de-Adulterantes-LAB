@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ProcessConfig(AppConfig):
+class ModConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'core.process'
+    name = 'core.mod'

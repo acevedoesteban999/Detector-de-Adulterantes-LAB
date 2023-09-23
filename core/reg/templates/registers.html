@@ -6,8 +6,8 @@
         <div class="col-4 mt-5">
             <div class="small-box bg-info">
                 <div class="inner">
-                <h3>{{count_meas}}</h3>
-                <p>Muestras</p>
+                <h3>{{count_pred}}</h3>
+                <p>Predicciones</p>
                 </div>
                 <div class="icon">
                 <i class="fas fa-solid fa-circle-info"></i>
@@ -26,6 +26,20 @@
                 <i class="fas fa-solid fa-circle-info"></i>
                 </div>
                 <a href="{% url 'tra_list' %}" class="small-box-footer">Más Información  <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="col-4 mt-5">
+            <div class="small-box bg-purple">
+                <div class="inner">
+                <h3>{{count_mod}}</h3>
+                <p>Modelos</p>
+                </div>
+                <div class="icon">
+                <i class="fas fa-solid fa-circle-info"></i>
+                </div>
+                <a href="{% url 'mod_list' %}" class="small-box-footer">Más Información  <i class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
     </div>

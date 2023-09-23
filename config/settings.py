@@ -34,10 +34,15 @@ INSTALLED_APPS = [
     'adminlte3_theme',
     'core.log',
     'core.user',
-    'core.process',
+    #'core.process',
     'core.conf',
     'core.perf',
     'core.binn',
+    'core.meas',
+    'core.tra',
+    'core.reg',
+    'core.mod',
+    
 ]
 
 MIDDLEWARE = [
