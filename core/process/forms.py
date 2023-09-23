@@ -13,7 +13,7 @@ class TrainingingForm(forms.ModelForm):
         }
         
     def save(self):
-        Datas.getTrainData(self.cleaned_data.get('name'),self.cleaned_data.get('count'))
+        Datas.TrainData(self.cleaned_data.get('name'),self.cleaned_data.get('count'))
         
 class TrainingingUpdateForm(forms.ModelForm):
     class Meta:
@@ -46,7 +46,7 @@ class MeasuringForm(forms.ModelForm):
         obj.save()
         
     def save(self):
-        Datas.getData(self.cleaned_data.get('name'))
+        Datas.MeasuringData(self.cleaned_data.get('name'))
         # try:
         #     from smbus import SMBus    
         #     _as7265x=AS7265X(SMBus(1))
