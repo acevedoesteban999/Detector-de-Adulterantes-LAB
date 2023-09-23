@@ -2,7 +2,8 @@
 
 {% block content %}
     {% block content_before %}{% endblock  %}
-    <div class="card">
+    <div class="row p-1"></div>
+    <div class="card m-5">
         <div class="card-header">
             <h3 class="card-title">
                 <i class="fas fa-search"></i>
@@ -18,7 +19,7 @@
                         <br>
                     {% endblock %}
                     <!--Table-->
-                    <table style="width:100%;" class="table table-bordered" id="data">
+                    <table style="width:100%;" class="table table-responsive-sm table-bordered" id="data">
                         <thead>
                         <tr class="text-center">
                             <!--Columns-->
@@ -38,12 +39,56 @@
             <div class="card-footer">
                 <!--Block box footer buttons-->
                 {% block box_footer_buttons %}
+                    <div class="row justify-content-end text-center" >
+                        <div class="col-3">
+                            <div class="pagination">
+                                <span class="step-links">
+                                    
+                                    {% if page_obj.has_previous %}
+                                        
+                                        <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                                        
+                                    {% endif %}
+                                    {% if page_obj.has_previous and page_obj.has_next %}
+                                        |
+                                    {% endif %}
+                                    {% if page_obj.has_next %}
+                                        
+                                        <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                                        
+                                    {% endif %}
+                                    
+                                    <br>
+                                    <span class="current">
+                                        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+                                    </span>
+                                    <br>
+                                    {% if page_obj.has_previous %}
+                                        <a href="?page=1">&laquo; Primera</a>
+                                        
+                                    {% endif %}
+                                    {% if page_obj.has_previous and page_obj.has_next %}
+                                        |
+                                    {% endif %}
+                                    {% if page_obj.has_next %}
+                                        <a href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+                                    {% endif %}
+                                    
+                                    
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                
                     {% comment %} <a href="{{ create_url }}" class="btn btn-primary btn-flat">
                         <i class="fas fa-plus"></i> Nuevo Registro
                     </a> {% endcomment %}
-                    <a href="" class="btn btn-success btn-flat">
-                        <i class="fas fa-sync-alt"></i> Actualizar
-                    </a>
+                    {% block buttons_footer %}
+                        <a href="" class="btn btn-success btn-flat">
+                            <i class="fas fa-sync-alt"></i> Actualizar
+                        </a>
+                    {% endblock  %}
                 {% endblock %}
             </div>
         {% endblock %}

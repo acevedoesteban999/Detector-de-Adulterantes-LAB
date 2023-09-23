@@ -1,0 +1,72 @@
+{% load static %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-solid fa-chart-line"></i>
+                Gráfico
+            </h3>
+            </div>
+            <div class="card-body">
+            <canvas id="Chart{{prfx}}" width="400" height="400"></canvas>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="{% static 'js/chart/chart.js' %}"></script>
+
+<script>
+    _labels=[
+    {% for measuringData in object_list %}
+        {{measuringData.lamda}},
+    {% endfor %}
+    ];
+    _data=[
+    {% for measuringData in object_list %}
+        {{measuringData.value}},
+    {% endfor %}
+    ];
+    const ctx{{prfx}} = document.getElementById("Chart{{prfx}}");
+    ctx{{prfx}}.height = 200;
+    const myChart{{prfx}} = new Chart(ctx{{prfx}}, {
+        type: "line",
+        data: {
+            labels: _labels,
+            datasets: [
+                {
+                label: "{{title}}",
+                backgroundColor: "",
+                tension: 0.1,
+                borderColor: "",
+                fill: false,
+                data: _data,
+                },
+            ],
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            scales: {
+                y: {
+                  stacked: true,
+                  grid: {
+                    display: true,
+                    color: "rgba(255,99,132,0.2)"
+                  }
+                },
+                x: {
+                  grid: {
+                    display: false
+                  }
+                }
+              }
+        },
+    }); 
+    
+</script>
