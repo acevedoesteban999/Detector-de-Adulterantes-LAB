@@ -161,7 +161,7 @@ class TrainingCreateView(MyLoginRequiredMixin,FormView):
 class TrainingUpdateView(MyLoginRequiredMixin,UpdateView):
     model=Training
     template_name = '_form.html'
-    form_class=TrainingingForm
+    form_class=TrainingingUpdateForm
     #permission_required="user.change_user"
     
     def post(self, request, *args, **kwargs):
