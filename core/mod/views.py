@@ -55,7 +55,7 @@ class ModelCreateView(MyLoginRequiredMixin,FormView):
         except Exception as e:
             return self.form_invalid(request,form,e)
         messages.success(request,'Creada nuevo modelo correctamente')
-        return redirect('tra_list')
+        return redirect('mod_list')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -76,7 +76,7 @@ class ModelUpdateView(MyLoginRequiredMixin,UpdateView):
         else:
             messages.error(request,'Error al Actualizar')
 
-        return redirect('tra_list')
+        return redirect('mod_list')
         
     
     
@@ -95,7 +95,7 @@ class ModelDeleteView(MyLoginRequiredMixin,DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['title'] = "Eliminar Entrenamiento"
-        context['url_cancel']=reverse_lazy('tra_list')   
+        context['url_cancel']=reverse_lazy('mod_list')   
         context['name']=self.object.name
         return context
 
