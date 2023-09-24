@@ -1,20 +1,21 @@
 from django.db import models
-
+from core.tra.models import Training
 
 # Create your models here.
-class Training(models.Model):
-    name=models.CharField(verbose_name="Nombre",unique=True,max_length=15)
-    datetime=models.DateTimeField(auto_now_add=True)
-    count=models.IntegerField(verbose_name="Cantidad")
-    def __str__(self):
-        return  self.name
 class Measuring(models.Model):
     name=models.CharField(verbose_name="Nombre",unique=True,max_length=15)
     datetime=models.DateTimeField(auto_now_add=True)
-    prediction=models.FloatField(default=None,null=True)
+    #prediction=models.FloatField(default=None,null=True)
     training=models.ForeignKey(Training,null=True, on_delete=models.CASCADE)
     def __str__(self):
         return  self.name
+
+class Prediction(models.Model):
+    measuring=models.OneToOneField(Measuring, on_delete=models.CASCADE)
+    prediction=models.CharField(max_length=1)
+    def __str__(self):
+        return  self.pk    
+
 class MeasuringData(models.Model):
     chanel=models.CharField(verbose_name="Canal",max_length=1)
     value=models.FloatField(verbose_name="Valor",default=0)

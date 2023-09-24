@@ -1,0 +1,33 @@
+{% extends '_list.html' %}
+{% block columns %}
+        <th scope="col">Nombre</th>
+        <th scope="col">Hora y Fecha</th>
+        <th scope="col">Opciones</th>
+{% endblock %}
+
+{% block rows %}
+    {% for model in object_list %}
+        <tr class="text-center align-items-center">
+            <td scope="row">{{model.name}}</td>
+            <td scope="row">{{model.datetime}}</td>
+            <td scope="row">
+                <a href="{% url 'mod_update' model.id %}" data-toggle="tooltip" title="Editar" class="m-1 btn btn-warning btn-xs btn-flat">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <a href="{% url 'mod_data' model.id %}" data-toggle="tooltip" title="Data" class="m-1 btn btn-primary btn-xs btn-flat">
+                    <i class="fas fa-database"></i>
+                </a>
+
+                <a href="" data-toggle="tooltip" title="Datos" class="m-1 btn btn-success btn-xs btn-flat">
+                    <i class="fas fa-line-chart"></i>
+                </a>
+
+                <a href="{% url 'mod_delete' model.id %}" data-toggle="tooltip" title="Eliminar" class="m-1 btn btn-danger btn-xs btn-flat">
+                    <i class="fas fa-regular fa-trash"></i>
+                </a>
+
+            </td>
+        </tr>
+    {% endfor %}
+
+{% endblock %}
