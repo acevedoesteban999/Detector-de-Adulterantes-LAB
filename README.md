@@ -23,7 +23,7 @@
 
 
 ### apache2
-z
+
 ## WSGIDaemonProcess en nuevo puerto
 
 ### Cambiar Puerto en 'ports.conf'
