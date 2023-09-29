@@ -1,11 +1,14 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView,FormView,ListView,UpdateView,DeleteView,DetailView
+from django.views.generic import TemplateView,FormView,ListView,UpdateView,DeleteView,DetailView,View,ArchiveIndexView
 from core.log.utils import MyLoginRequiredMixin
 from .forms import *
 from core.meas.models import Measuring,MeasuringData
 from django.contrib import messages
+from django.http import HttpResponse
+import pandas as pd
+        
 # Create your views here.
 
 class TrainingListView(MyLoginRequiredMixin,ListView):
@@ -46,6 +49,7 @@ class TrainingCreateView(MyLoginRequiredMixin,FormView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
+        print(context)
         context['title'] = "Nuevo entrenamiento"
         return context
        
@@ -99,7 +103,52 @@ class TrainingDataView(MyLoginRequiredMixin,ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = Training.objects.get(pk=self.pk).name
-        
-        context['back_url']=reverse_lazy('reg')
+        context['training_save_exel']=True
+        context['pk']=self.pk
+        context['back_url']=reverse_lazy('tra_list')
         return context
 
+class TrainingMultiDataView(MyLoginRequiredMixin,DetailView):
+    template_name='data_tra.html'
+    model=Training
+    def dispatch(self, request, *args, **kwargs):
+        self.pk = kwargs['pk']
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = Training.objects.get(pk=self.pk).name
+        context['objects_meas']=Measuring.objects.filter(training=self.pk)
+        context['objects_label']=Measuring.lamdas()
+        context['back_url']=reverse_lazy('tra_list')
+        return context
+
+class TrainingDownloadCSVDataView(MyLoginRequiredMixin,View):
+    # def dispatch(self, request, *args, **kwargs):
+    #     self.pk=kwargs.get('pk')
+    #     return super().dispatch(request, *args, **kwargs)
+    
+    def get(self,request,*args, **kwargs):
+        measuring=Training.objects.get(pk=kwargs.get('pk')).measuring_trainig.all()
+        l1=[]
+        for m in measuring:
+            l2=[]
+            for md in m.measuring_data.all():
+                l2.append(md.value)
+            l2.append([PredictionChoices.index(item)+1 for item in PredictionChoices if item[0] == m.predict][0])
+            l1.append(l2)
+        labels=Measuring.chanels()
+        labels.append("label")
+        df = pd.DataFrame( l1 ,columns = labels )
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] ='attachment; filename=export.csv'  
+        df.to_csv(path_or_buf=response,index=False)  
+        return response
+
+class TrainingCSVView(MyLoginRequiredMixin,FormView):
+    template_name='csv_tra.html'
+    success_url=reverse_lazy('tra_list')
+    form_class=CSVForm
+    def form_valid(self, form) :
+        form.save()
+        return super().form_valid(form)

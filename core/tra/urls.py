@@ -18,9 +18,12 @@ from django.urls import path
 from .views import *
 from django.views.generic import RedirectView
 urlpatterns = [
-    path('list/',TrainingListView.as_view(),name='tra_list'),
+    path('reg/list/',TrainingListView.as_view(),name='tra_list'),
     path('add/',TrainingCreateView.as_view(),name='tra_add'),
-    path('data/<int:pk>/',TrainingDataView.as_view(),name='tra_data'),
-    path('update/<int:pk>/',TrainingUpdateView.as_view(),name='tra_update'),
-    path('delete/<int:pk>/',TrainingDeleteView.as_view(),name='tra_delete'),
+    path('reg/data/<int:pk>/',TrainingDataView.as_view(),name='tra_data'),
+    path('reg/update/<int:pk>/',TrainingUpdateView.as_view(),name='tra_update'),
+    path('reg/delete/<int:pk>/',TrainingDeleteView.as_view(),name='tra_delete'),
+    path('csv/',TrainingCSVView.as_view(),name='tra_csv'),
+    path('reg/multidata/<int:pk>/',TrainingMultiDataView.as_view(),name='tra_multidata'),
+     path('downlaod_csv/<int:pk>/',TrainingDownloadCSVDataView.as_view(),name='tra_downl_csv'),
 ]

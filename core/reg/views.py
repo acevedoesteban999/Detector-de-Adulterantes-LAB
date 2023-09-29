@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView
 from core.log.utils import MyLoginRequiredMixin
-from core.meas.models import Prediction
+from core.pred.models import Prediction
 from core.tra.models import Training,Model
 # Create your views here.
 class RegistersView(MyLoginRequiredMixin,TemplateView):

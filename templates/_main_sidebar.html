@@ -48,6 +48,22 @@
         </ul> {% endcomment %}
         <ul class="nav nav-treeview">
             <li class="nav-item">
+                <a href="{% url 'reg' %}" class="nav-link {% if "reg/" in request.path %}active{% endif %}">
+                    <i class="nav-icon fas fa-solid fa-folder"></i>
+                    <p>Registros</p>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'pred_add' %}" class="nav-link {% if "pred/add" in request.path %}active{% endif %}">
+                    <i class="nav-icon fas fa-solid fa-tablets"></i>
+                    <p>Nueva Predicción</p>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
                 <a href="{% url 'tra_add' %}" class="nav-link {% if "tra/add" in request.path %}active{% endif %}">
                     <i class="nav-icon fas fa-solid fa-vial"></i>
                     <p>Nuevo Entrenamiento</p>
@@ -62,14 +78,7 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav nav-treeview">
-            <li class="nav-item">
-                <a href="{% url 'reg' %}" class="nav-link {% if "reg/" in request.path %}active{% endif %}">
-                    <i class="nav-icon fas fa-solid fa-folder"></i>
-                    <p>Registros</p>
-                </a>
-            </li>
-        </ul>
+
         {% comment %} <ul class="nav nav-treeview">
             <li class="nav-item">
                 <a href="" class="nav-link {% if "" in request.path %}active{% endif %}">

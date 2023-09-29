@@ -19,8 +19,8 @@ from .views import *
 from django.views.generic import RedirectView
 urlpatterns = [
     # path('meas/add/',MeasuringCreateView.as_view(),name='meas_add'),
-    path('list/',MeasuringListView.as_view(),name='meas_list'),
-    path('update/<int:pk>/',MeasuringUpdateView.as_view(),name='meas_update'),
-    path('delete/<int:pk>/',MeasuringDeleteView.as_view(),name='meas_delete'),
-    path('<int:pk>/',MeasuringDataView.as_view(),name='meas_data'),
+    path('reg/list/',MeasuringListView.as_view(),name='meas_list'),
+    path('reg/update/<int:pk>/',MeasuringUpdateView.as_view(),name='meas_update'),
+    path('reg/delete/<int:pk>/',MeasuringDeleteView.as_view(),name='meas_delete'),
+    path('reg/<int:pk>/',MeasuringDataView.as_view(),name='meas_data'),
 ]

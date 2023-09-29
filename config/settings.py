@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'core.tra',
     'core.reg',
     'core.mod',
+    'core.pred',
     
 ]
 

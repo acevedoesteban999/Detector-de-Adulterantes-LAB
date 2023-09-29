@@ -2,7 +2,7 @@ from core.as7265x import AS7265X
 from .models import Measuring,MeasuringData,Training
 import time
 
-def MeasuringI2C(name,training=None):
+def MeasuringI2C(name,training=None,prediction="N"):
     try:
         from smbus import SMBus    
         _as7265x=AS7265X(SMBus(1))
@@ -12,6 +12,7 @@ def MeasuringI2C(name,training=None):
         measuring=Measuring.objects.create(
             name=name,
             training=training,
+            predict=prediction,
         )
         for l in _l:
             MeasuringData.objects.create(
@@ -19,6 +20,7 @@ def MeasuringI2C(name,training=None):
                 value=eval(f"_as7265x.getCalibrated{l}()"),
                 measuring=measuring,
             )
+        
     except ModuleNotFoundError:
         import random
         _l=['A','B','C','D','E','F','G','H','I','J','K','L','R','S','T','U','V','W']
@@ -26,6 +28,7 @@ def MeasuringI2C(name,training=None):
         measuring=Measuring.objects.create(
             name=name,
             training=training,
+            predict=prediction,
         )
         for l in _l:
             MeasuringData.objects.create(
@@ -33,3 +36,4 @@ def MeasuringI2C(name,training=None):
                 value=random.randint(0,10000/100),
                 measuring=measuring,
             )
+    return measuring
