@@ -15,12 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from .views import *
-from django.views.generic import RedirectView
+from . import views
 urlpatterns = [
-    path('reg/list/',ModelListView.as_view(),name='mod_list'),
-    path('add/',ModelCreateView.as_view(),name='mod_add'),
-    path('reg/data/<int:pk>/',ModelDataView.as_view(),name='mod_data'),
-    path('reg/update/<int:pk>/',ModelUpdateView.as_view(),name='mod_update'),
-    path('reg/delete/<int:pk>/',ModelDeleteView.as_view(),name='mod_delete'),
+    #path("", views.room, name="room"),
+    #path("a/", views.asd),
 ]

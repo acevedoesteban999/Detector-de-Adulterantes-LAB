@@ -1,4 +1,4 @@
-config/config.py
+config/_config.py
 __pycache__/
 Proyecto/
 **/migrations/*

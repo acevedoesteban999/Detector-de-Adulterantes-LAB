@@ -18,9 +18,7 @@ from django.urls import path
 from .views import *
 from django.views.generic import RedirectView
 urlpatterns = [
-    path('reg/list/',ModelListView.as_view(),name='mod_list'),
-    path('add/',ModelCreateView.as_view(),name='mod_add'),
-    path('reg/data/<int:pk>/',ModelDataView.as_view(),name='mod_data'),
-    path('reg/update/<int:pk>/',ModelUpdateView.as_view(),name='mod_update'),
-    path('reg/delete/<int:pk>/',ModelDeleteView.as_view(),name='mod_delete'),
+    path('add/',PredictionCreateView.as_view(),name='pred_add'),
+    path('reg/list/',PredictionListView.as_view(),name='pred_list'),
+    path('reg/delete/<int:pk>/',PredictionDeleteView.as_view(),name='pred_delete'),
 ]

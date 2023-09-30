@@ -60,6 +60,7 @@
 {% endblock %}
 {% block columns %}
         <th scope="col">Nombre</th>
+        <th scope="col">Predicción</th>
         <th scope="col">Hora y Fecha</th>
         <th scope="col">Opciones</th>
 {% endblock %}
@@ -68,6 +69,11 @@
     {% for measuring in object_list %}
         <tr class="text-center align-items-center">
             <td scope="row">{{measuring.name}}</td>
+            <td scope="row">
+                <div class="badge  bg-{% if measuring.predict == "C" %}indigo{% elif measuring.predict == "1" %}success{% elif measuring.predict == "7" %}olive{% elif measuring.predict == "5" %}warning{% elif measuring.predict == "2" %}orange{% elif measuring.predict == "0" %}danger{% else %}secondary{% endif %}">
+                    <h5 class="m-0">{{measuring.get_predict_display}}</h5>
+                </div>
+            </td>
             <td scope="row">{{measuring.datetime}}</td>
             <td scope="row">
                 <a href="{% url 'meas_update' measuring.id %}" data-toggle="tooltip" title="Editar" class="m-1 btn btn-warning btn-xs btn-flat">
@@ -85,3 +91,15 @@
     {% endfor %}
 
 {% endblock %}
+
+{% block buttons_footer %}
+    
+    <a href="" class="btn btn-success btn-flat">
+        <i class="fas fa-sync-alt"></i> Actualizar
+    </a>
+    {% if training_save_exel %}
+        <a target='_blank' href="{% url 'tra_downl_csv' pk %}" class="btn btn-info btn-flat">
+            Descargar CSV
+        </a>
+    {% endif %}
+{% endblock  %}
