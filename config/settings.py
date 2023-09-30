@@ -11,10 +11,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from .config import SECRET_KEY,ENVIRONMENT
+from ._config import SECRET_KEY,ENVIRONMENT
+#from .config import MQTT_SERVER,MQTT_PORT,MQTT_KEEPALIVE,MQTT_USER,MQTT_PASSWORD
 import os
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+ASGI_APPLICATION = "config.asgi.application"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -24,6 +27,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    #'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +47,7 @@ INSTALLED_APPS = [
     'core.reg',
     'core.mod',
     'core.pred',
+    'core.chann',
     
 ]
 
@@ -141,3 +146,5 @@ MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'user.User'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
