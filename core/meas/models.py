@@ -9,6 +9,10 @@ class Measuring(models.Model):
     predict=models.CharField(max_length=1,choices=PredictionChoices,default="N")
     def __str__(self):
         return  self.name
+    def get_predict_index(self):
+        return [PredictionChoices.index(item)+1 for item in PredictionChoices if item[0] == self.predict][0]
+    def get_list_data(self):
+        return [md.value for md in self.measuring_data.all()]
     @staticmethod
     def chanels():
         return ["A","B","C","D","E","F","G","H","I","J","K","L","R","S","T","U","V","W"]

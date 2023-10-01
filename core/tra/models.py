@@ -10,7 +10,7 @@ class Training(models.Model):
     datetime=models.DateTimeField(auto_now_add=True)
     count=models.IntegerField(default=0,verbose_name="Cantidad")
     predict=models.CharField(max_length=1,choices=PredictionChoices,default="N")
-    models=models.ManyToManyField(Model)
+    models=models.ManyToManyField(Model,related_name="training_model")
     
     def __str__(self):
         return  self.name

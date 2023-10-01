@@ -26,7 +26,6 @@ class ModelCreateView(MyLoginRequiredMixin,FormView):
     form_class=ModelForm
     
     def post(self, request, *args, **kwargs):
-        print(request.POST)
         if self.is_ajax():
             if request.POST.get('action')=="search_trining":
                 search=request.POST.get('data')

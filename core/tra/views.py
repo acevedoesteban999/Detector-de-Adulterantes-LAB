@@ -6,8 +6,10 @@ from core.log.utils import MyLoginRequiredMixin
 from .forms import *
 from core.meas.models import Measuring,MeasuringData
 from django.contrib import messages
-from django.http import HttpResponse
-import pandas as pd
+from django.http import HttpResponse,FileResponse
+#import pandas as pd
+from io import StringIO
+import csv
         
 # Create your views here.
 
@@ -124,11 +126,25 @@ class TrainingMultiDataView(MyLoginRequiredMixin,DetailView):
         return context
 
 class TrainingDownloadCSVDataView(MyLoginRequiredMixin,View):
-    # def dispatch(self, request, *args, **kwargs):
-    #     self.pk=kwargs.get('pk')
-    #     return super().dispatch(request, *args, **kwargs)
     
     def get(self,request,*args, **kwargs):
+        def newcsv(data, fieldnames):
+            """
+            Create a new csv file that represents generated data.
+            """
+            new_csvfile = StringIO()
+            wr = csv.writer(new_csvfile, quoting=csv.QUOTE_ALL)
+            wr = csv.DictWriter(new_csvfile, fieldnames = fieldnames)
+            l=[]
+            for _d in data:
+                d={}
+                for count in range(len(fieldnames)):
+                    d.update({fieldnames[count]:_d[count]})
+                l.append(d)
+            wr.writeheader()
+            for _l in l:
+                wr.writerow(_l)
+            return new_csvfile
         measuring=Training.objects.get(pk=kwargs.get('pk')).measuring_trainig.all()
         l1=[]
         for m in measuring:
@@ -139,12 +155,28 @@ class TrainingDownloadCSVDataView(MyLoginRequiredMixin,View):
             l1.append(l2)
         labels=Measuring.chanels()
         labels.append("label")
-        df = pd.DataFrame( l1 ,columns = labels )
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] ='attachment; filename=export.csv'  
-        df.to_csv(path_or_buf=response,index=False)  
+        csvfile = newcsv(l1, labels)
+        response = HttpResponse(csvfile.getvalue(), content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename=a.csv'
         return response
-
+    
+    # def get_pandas(self,request,*args, **kwargs):
+        #     measuring=Training.objects.get(pk=kwargs.get('pk')).measuring_trainig.all()
+        #     l1=[]
+        #     for m in measuring:
+        #         l2=[]
+        #         for md in m.measuring_data.all():
+        #             l2.append(md.value)
+        #         l2.append([PredictionChoices.index(item)+1 for item in PredictionChoices if item[0] == m.predict][0])
+        #         l1.append(l2)
+        #     labels=Measuring.chanels()
+        #     labels.append("label")
+        #     df = pd.DataFrame( l1 ,columns = labels )
+        #     response = HttpResponse(content_type='text/csv')
+        #     response['Content-Disposition'] ='attachment; filename=export.csv'  
+        #     df.to_csv(path_or_buf=response,index=False)  
+        #     return response
+        
 class TrainingCSVView(MyLoginRequiredMixin,FormView):
     template_name='csv_tra.html'
     success_url=reverse_lazy('tra_list')
