@@ -15,11 +15,22 @@ class ModelForm(forms.ModelForm):
         }
         
     def save(self,_list):
+
         m=Model.objects.create(
             name=self.cleaned_data.get('name'),
+            #file_model=f"{self.cleaned_data.get('name')}.txt"
         )
         for l in _list:
             Training.objects.get(pk=l).models.add(m)
+        d=[]
+        l=[]
+        for t in m.training_model.all():
+            for measuring in t.measuring_trainig.all():
+                d.append(measuring.get_list_data()) 
+                l.append(measuring.get_predict_index())
+        print(d)
+        print(l)
+        
         
 class ModelUpdateForm(forms.ModelForm):
     class Meta:
