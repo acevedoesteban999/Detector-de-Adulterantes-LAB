@@ -157,7 +157,7 @@ class TrainingDownloadCSVDataView(MyLoginRequiredMixin,View):
         labels.append("label")
         csvfile = newcsv(l1, labels)
         response = HttpResponse(csvfile.getvalue(), content_type='text/csv')
-        response['Content-Disposition'] = f'attachment; filename=a.csv'
+        response['Content-Disposition'] = f"attachment; filename={Training.objects.get(pk=kwargs.get('pk')).name}.csv"
         return response
     
     # def get_pandas(self,request,*args, **kwargs):
