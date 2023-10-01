@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'adminlte3_theme',
     'core.log',
     'core.user',
-    #'core.process',
     'core.conf',
     'core.perf',
     'core.binn',
@@ -47,7 +46,7 @@ INSTALLED_APPS = [
     'core.reg',
     'core.mod',
     'core.pred',
-    'core.chann',
+    #'core.chann',
     
 ]
 
