@@ -17,6 +17,8 @@
 #include <EloquentTinyML.h>
 // copy the printed code from tinymlgen into this file
 #include "_model_.h"
+#include <WiFi.h>
+#include ""
 #define LED_PIN 2
 #define NUMBER_OF_INPUTS 1
 #define NUMBER_OF_OUTPUTS 1
@@ -24,16 +26,63 @@
 AS7265X as7265x;
 //Eloquent::TinyML::TfLite<NUMBER_OF_INPUTS, NUMBER_OF_OUTPUTS, TENSOR_ARENA_SIZE> tf;
 void setup() {
+    ////////////////////////AP//////////////////////////
+    //WiFi.mode(WIFI_AP)
+    //WiFi.softAP("ESP32", "ESP32");
+
+
+    
+    ////////////////////////SCAN//////////////////////////
+    // Serial.println("scan start");
+    // WiFi.scanNetworks will return the number of networks found
+    //   int n = WiFi.scanNetworks();
+    //   Serial.println("scan done");
+    //   if (n == 0) {
+    //       Serial.println("no networks found");
+    //   } else {
+    //     Serial.print(n);
+    //     Serial.println(" networks found");
+    //     for (int i = 0; i < n; ++i) {
+    //       // Print SSID and RSSI for each network found
+    //       Serial.print(i + 1);
+    //       Serial.print(": ");
+    //       Serial.print(WiFi.SSID(i));
+    //       Serial.print(" (");
+    //       Serial.print(WiFi.RSSI(i));
+    //       Serial.print(")");
+    //       Serial.println((WiFi.encryptionType(i) == WIFI_AUTH_OPEN)?" ":"*");
+    //       delay(10);
+    //     }
+    //   }
+    //   Serial.println("");
+
+    //   // Wait a bit before scanning again
+    //   delay(5000);
+    /////////////////////////CONNECT///////////////////////
+    WiFi.mode(WIFI_STA);
+    WiFi.disconnect();
+    WiFi.begin("iPhone 6 Plus", "melon123445");
+    Serial.print("Connecting to WiFi ..");
+    while (WiFi.status() != WL_CONNECTED)
+    {
+        Serial.print('.');  
+        delay(1000);
+    }
+    Serial.println(WiFi.localIP());
+    //WiFi.disconnect()
     Serial.begin(9600);
     pinMode(LED_PIN, OUTPUT);
     //tf.begin(digits_model);
 }
 
 void loop() {
-    Serial.println(String(as7265x.isConnected()).c_str());
-    as7265x.begin();
-    as7265x.takeMeasurementsWithBulb();
-    Serial.println(as7265x.getCalibratedA());
+    ////////////////////////AS7265X///////////////////////////
+    // Serial.println(String(as7265x.isConnected()).c_str());
+    // as7265x.begin();
+    // as7265x.takeMeasurementsWithBulb();
+    // Serial.println(as7265x.getCalibratedA());
+    
+    ////////////////////////MLP///////////////////////////
     // // a random sample from the MNIST dataset (precisely the last one)
     // float x_test[NUMBER_OF_INPUTS] = { 5 };
     // // the output vector for the model predictions
@@ -73,6 +122,7 @@ void loop() {
     // Serial.println(tf.predictClass(x_test));
 
     // delay(5000);
+
     digitalWrite(LED_PIN,HIGH);
     delay(1000);
     digitalWrite(LED_PIN,LOW);
