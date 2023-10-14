@@ -89,13 +89,16 @@ WSGIPythonPath /project
 ```
 * `sudo service apache2 restart`
 
-### i2c permiso
+### i2c permisos
 * `sudo usermod -aG i2c www-data`
 * `sudo systemctl restart apache2`
+#### agregar o descomentar en '/boot/config.txt'
+* `dtparam=i2c_arm=on`
 
 ### permisos
 * `sudo chmod 664 ./db.sqlite3`
 * `sudo chmod 777 ./`
+* `sudo chmod 777 /home/<user>` 
 * `sudo chown :www-data ./db.sqlite3`
 * `sudo chown :www-data ./`
 * `sudo service apache2 restart`
