@@ -7,7 +7,7 @@
 * `sudo apt-get install apache2`
 * `sudo apt-get install libapache2-mod-wsgi-py3`
 
-## venv
+## Venv
 * `sudo apt-get install python3-pip`
 * `sudo pip install virtualenv`
 * `pip install virutalenv`
@@ -15,14 +15,14 @@
 * `source .venv/bin/activate`
 * `pip install -r requirements.txt`
 
-## django
+## Django
 * `python manage.py makemigrations`
 * `python manage.py migrate`
 * `python manage.py collectstatic`
 
 
 
-## apache2
+## Apache2
 
 ### WSGIDaemonProcess en nuevo puerto
 
@@ -89,13 +89,13 @@ WSGIPythonPath /project
 ```
 * `sudo service apache2 restart`
 
-### i2c permisos
+### I2c permisos
 * `sudo usermod -aG i2c www-data`
 * `sudo systemctl restart apache2`
-#### agregar o descomentar en '/boot/config.txt'
+#### Agregar o descomentar en '/boot/config.txt'
 * `dtparam=i2c_arm=on`
 
-### permisos
+### Permisos
 * `sudo chmod 664 ./db.sqlite3`
 * `sudo chmod 777 ./`
 * `sudo chmod 777 /home/<user>` 
