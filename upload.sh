@@ -1,5 +1,7 @@
 #!/bin/bash
-git add . ;
-git commit -m "auto_commit";
-git push origin raspberry;
-echo "Done";
+git add . 
+echo "a"
+git commit -m "auto_commit"
+echo "b"
+git push origin raspberry
+echo "Done"
