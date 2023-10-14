@@ -25,21 +25,23 @@ class ModelForm(forms.ModelForm):
             #from tensorflow.keras.models import load_model
             from config.settings import BASE_DIR
             import os
-            m=Model.objects.create(
-                name=self.cleaned_data.get('name'),
-            )
-            for l in _list:
-                Training.objects.get(pk=l).models.add(m)
-            d=[]
-            l=[]
-            for t in m.training_model.all():
-                for measuring in t.measuring_trainig.all():
-                    d.append(measuring.get_list_data()) 
-                    l.append(measuring.get_predict_index())
-            print(d)
-            print(l)
-            _in=np.array(d,dtype=float)
-            _out=np.array(l,dtype=int)
+            # m=Model.objects.create(
+            #     name=self.cleaned_data.get('name'),
+            # )
+            # for l in _list:
+            #     Training.objects.get(pk=l).models.add(m)
+            # d=[]
+            # l=[]
+            # for t in m.training_model.all():
+            #     for measuring in t.measuring_trainig.all():
+            #         d.append(measuring.get_list_data()) 
+            #         l.append(measuring.get_predict_index())
+            #print(d)
+            #print(l)
+            #_in=np.array(d,dtype=float)
+            #_out=np.array(l,dtype=int)
+            _in=np.array([1,6,30,7,70,45,503,291,99],dtype=float)
+            _out=np.array([0.254,0.1524,0.762,0.1778,1.778,1.0922,12.776,5.1054,2.514],dtype=float)
             model=tf.keras.Sequential()
             model.add(tf.keras.layers.Dense(units=1,input_shape=[1]))
             model.compile(
@@ -53,8 +55,8 @@ class ModelForm(forms.ModelForm):
                 epochs=500,
             )
 
-            model.save(os.path.join(BASE_DIR,f"media/_{self.cleaned_data.get('name')}.h5"))
-            model.save_weights(os.path.join(BASE_DIR,f"media/_w_{self.cleaned_data.get('name')}.h5"))
+            model.save(os.path.join(BASE_DIR,f"media/models/_{self.cleaned_data.get('name')}.h5"))
+            model.save_weights(os.path.join(BASE_DIR,f"media/models/_w_{self.cleaned_data.get('name')}.h5"))
             
         except:
             pass
