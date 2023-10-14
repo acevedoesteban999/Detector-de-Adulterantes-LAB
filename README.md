@@ -99,6 +99,7 @@ WSGIPythonPath /project
 * `sudo chmod 664 ./db.sqlite3`
 * `sudo chmod 777 ./`
 * `sudo chmod 777 /home/<user>` 
+* `sudo chmod 777 ./media` 
 * `sudo chown :www-data ./db.sqlite3`
 * `sudo chown :www-data ./`
 * `sudo service apache2 restart`

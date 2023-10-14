@@ -1,6 +1,7 @@
 from core.mod.models import Model
 def trin_model_thread(name,_list):
         try:
+            import time
             m=Model.objects.create(
                 name=name,
             )
@@ -32,17 +33,18 @@ def trin_model_thread(name,_list):
                 optimizer=tf.keras.optimizers.Adam(0.1),
                 loss='mean_squared_error',
             )
-
+            t=time.time()
             train=model.fit(
                 _in,
                 _out,
                 epochs=500,
             )
-
+            print("T:",time.time()-t)
             model.save(os.path.join(BASE_DIR,f"media/models/_{name}.h5"))
             model.save_weights(os.path.join(BASE_DIR,f"media/models/_{name}_W.h5"))
             m.state=True
-        except:
+        except Exception as e:
+            print("Error:",e)
             m.state=False
             
         m.save()
