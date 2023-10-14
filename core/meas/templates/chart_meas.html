@@ -23,12 +23,12 @@
 
 <script>
     _labels=[
-    {% for measuringData in object_list %}
+    {% for measuringData in object.measuring_data.all %}
         {{measuringData.lamda}},
     {% endfor %}
     ];
     _data=[
-    {% for measuringData in object_list %}
+    {% for measuringData in object.measuring_data.all %}
         {{measuringData.value}},
     {% endfor %}
     ];

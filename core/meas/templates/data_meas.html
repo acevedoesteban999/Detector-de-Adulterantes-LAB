@@ -1,6 +1,17 @@
 {% extends '_list.html' %}
 {% block content_before %}
+    
     {% include 'chart_meas.html' with prfx='_1' text='AA' icon='' %}
+    
+    <div class="container my-2">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <div class="badge  bg-{% if object.predict == "C" %}indigo{% elif object.predict == "1" %}success{% elif object.predict == "7" %}olive{% elif object.predict == "5" %}warning{% elif object.predict == "2" %}orange{% elif object.predict == "0" %}danger{% else %}secondary{% endif %}">
+                    <h5 class="m-0">{{object.get_predict_display}}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 {% block columns %}
         <th scope="col">Canal</th>
@@ -9,7 +20,7 @@
 {% endblock %}
 
 {% block rows %}
-    {% for measuringData in object_list %}
+    {% for measuringData in object.measuring_data.all %}
         <tr class="text-center align-items-center">
             <td scope="row">{{measuringData.chanel}}</td>
             <td scope="row">{{measuringData.lamda}}</td>

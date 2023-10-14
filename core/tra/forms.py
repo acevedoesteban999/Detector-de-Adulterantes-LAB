@@ -5,7 +5,12 @@ import time
 
 from .utils import TrainingI2C
 from core.meas.models import PredictionChoices
-#import pandas as pd
+
+try:
+    import pandas as pd
+    W=True
+except:
+    W=False
 import csv
 class TrainingingForm(forms.ModelForm):
     prediction = forms.ChoiceField(widget=forms.Select(attrs={'class':'form-control'}),choices=PredictionChoices,)
@@ -17,8 +22,12 @@ class TrainingingForm(forms.ModelForm):
             'count': forms.TextInput(attrs={'class':'form-control','placeholder': 'Ingrese cantidad de muestras'}),
         }
         
-    def save(self):
-        TrainingI2C(self.cleaned_data.get('name'),self.cleaned_data.get('count'),self.cleaned_data.get('prediction'))
+    def save(self,multi=False):
+        if multi==False:
+            name=self.cleaned_data.get('name')
+        else:
+            name=self.data.get('name')
+        TrainingI2C(name,self.cleaned_data.get('count'),self.cleaned_data.get('prediction'))
         
 class TrainingingUpdateForm(forms.ModelForm):
     class Meta:
@@ -39,6 +48,9 @@ class CSVForm(forms.Form):
     count=forms.IntegerField(required=False,label="Cantidad",widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'Ingrese cantidad datos a cargar '}))
     _1f=forms.BooleanField(required=False,widget=forms.CheckboxInput(),label="Primer Formato")
     def save(self):
+        global W
+        if W==True:
+            return self.save_pandas()
         if self.cleaned_data.get('_1f')==True:
             return self.save1()
         _count=self.cleaned_data.get('count')
@@ -97,51 +109,53 @@ class CSVForm(forms.Form):
                     measuring=m
                 )
         t.save() 
-    # def save_pandas(self):
-    #     _count=self.cleaned_data.get('count')
-    #     csv=pd.read_csv(self.cleaned_data.get('csv'))[0:_count]
-    #     t=Training.objects.create(
-    #         name=self.cleaned_data.get('name'),
-    #         predict="C",
-    #         )
-    #     for count in range(csv.shape[0]):
-    #         prediction=PredictionChoices[csv.iloc[count,18]-1][0]    
-    #         m=Measuring.objects.create(
-    #             name=f"T~{self.cleaned_data.get('name')}~{count}",
-    #             training=t,
-    #             predict=prediction
-    #         )
-    #         t.count+=1
-    #         for c,d in enumerate(csv.iloc[count]):
-    #             if c==18:
-    #                 break
-    #             MeasuringData.objects.create(
-    #                 chanel= Measuring.chanels()[c],
-    #                 value=d,
-    #                 measuring=m
-    #             )
-    #     t.save()  
-    # def save1_pandas(self):
-    #     _count=self.cleaned_data.get('count')
-    #     csv=pd.read_csv(self.cleaned_data.get('csv'))[0:_count]
-    #     t=Training.objects.create(
-    #         name=self.cleaned_data.get('name'),
-    #         predict="C",
-    #         )
-    #     for count in range(csv.shape[0]):
-    #         prediction=PredictionChoices[csv.iloc[count,1]][0]
-    #         m=Measuring.objects.create(
-    #             name=f"T~{self.cleaned_data.get('name')}~{count}",
-    #             training=t,
-    #             predict=prediction
-    #         )
-    #         t.count+=1
-    #         for c,d in enumerate(csv.iloc[count],start=-2):
-    #             if c<0:
-    #                 continue
-    #             MeasuringData.objects.create(
-    #                 chanel= Measuring.chanels()[c],
-    #                 value=d,
-    #                 measuring=m
-    #             )
-    #     t.save() 
+    def save_pandas(self):
+        if self.cleaned_data.get('_1f')==True:
+            return self.save1_pandas()
+        _count=self.cleaned_data.get('count')
+        csv=pd.read_csv(self.cleaned_data.get('csv'))[0:_count]
+        t=Training.objects.create(
+            name=self.cleaned_data.get('name'),
+            predict="C",
+            )
+        for count in range(csv.shape[0]):
+            prediction=PredictionChoices[csv.iloc[count,18]-1][0]    
+            m=Measuring.objects.create(
+                name=f"T~{self.cleaned_data.get('name')}~{count}",
+                training=t,
+                predict=prediction
+            )
+            t.count+=1
+            for c,d in enumerate(csv.iloc[count]):
+                if c==18:
+                    break
+                MeasuringData.objects.create(
+                    chanel= Measuring.chanels()[c],
+                    value=d,
+                    measuring=m
+                )
+        t.save()  
+    def save1_pandas(self):
+        _count=self.cleaned_data.get('count')
+        csv=pd.read_csv(self.cleaned_data.get('csv'))[0:_count]
+        t=Training.objects.create(
+            name=self.cleaned_data.get('name'),
+            predict="C",
+            )
+        for count in range(csv.shape[0]):
+            prediction=PredictionChoices[csv.iloc[count,1]][0]
+            m=Measuring.objects.create(
+                name=f"T~{self.cleaned_data.get('name')}~{count}",
+                training=t,
+                predict=prediction
+            )
+            t.count+=1
+            for c,d in enumerate(csv.iloc[count],start=-2):
+                if c<0:
+                    continue
+                MeasuringData.objects.create(
+                    chanel= Measuring.chanels()[c],
+                    value=d,
+                    measuring=m
+                )
+        t.save() 

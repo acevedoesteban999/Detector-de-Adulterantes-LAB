@@ -4,11 +4,20 @@ from .models import Training
 from core.meas.utils import MeasuringI2C
 import time
 def TrainingI2C(name,count,prediction="N"):
-    tr=Training.objects.create(
-        name=name,
-        count=count,
-        predict=prediction,
-    )
-    for count in range(int(count)):
-        MeasuringI2C(f"TR~{tr.name}~{count}",tr,prediction)
+    tr,created=Training.objects.get_or_create(name=name)
+    if created == True:
+        tr.predict=prediction
+    else:
+        tr.predict="M"
+    __count=tr.count
+    tr.count+=count
+    tr.save()
+    # tr=Training.objects.create(
+    #     name=name,
+    #     count=count,
+    #     predict=prediction,
+    # )
+    for _count in range(int(count)):
+        MeasuringI2C(f"TR~{tr.name}~{__count+_count}",tr,prediction)
+    
         
