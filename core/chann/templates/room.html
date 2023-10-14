@@ -1,0 +1,38 @@
+<!-- chat/templates/chat/room.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Room</title>
+</head>
+<body>
+    <button onclick="A()">asd</button>
+    <script>
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chann/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            console.log("onmessage")
+            console.log(e)
+        };
+
+        chatSocket.onclose = function(e) {
+            console.log("onclose")
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        function A()
+        {
+            chatSocket.send(JSON.stringify({
+                'message': "Hola"
+            }))
+            console.log("A")
+        }
+        
+    </script>
+</body>
+</html>

@@ -8,7 +8,7 @@ class User(AbstractUser):
         permissions = (
             ("is_development", "is_development"),
             ("is_admin", "is_admin"),
-            ("is_guest ", "is_guest"),
+            ("is_guest", "is_guest"),
             ("act_desact_user","act_desact_user"),
             ("view_binnacle","view_binnacle"),
             ("view_performance","view_performance"),

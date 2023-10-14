@@ -7,7 +7,7 @@
 * `sudo apt-get install apache2`
 * `sudo apt-get install libapache2-mod-wsgi-py3`
 
-### venv
+## venv
 * `sudo apt-get install python3-pip`
 * `sudo pip install virtualenv`
 * `pip install virutalenv`
@@ -22,16 +22,16 @@
 
 
 
-### apache2
-z
-## WSGIDaemonProcess en nuevo puerto
+## apache2
+
+### WSGIDaemonProcess en nuevo puerto
 
 ### Cambiar Puerto en 'ports.conf'
 
-# Deshabilitar sitio(en caso de querer usar puertos ya creados)
+### Deshabilitar sitio(en caso de querer usar puertos ya creados)
 * `sudo a2dissite file.conf`
-
 * `Listen ##`
+
 ### Crear fichero 'file.conf' en 'sities-available'
 ``` 
 <VirtualHost *:##>
@@ -99,5 +99,3 @@ WSGIPythonPath /project
 * `sudo chown :www-data ./db.sqlite3`
 * `sudo chown :www-data ./`
 * `sudo service apache2 restart`
-
-

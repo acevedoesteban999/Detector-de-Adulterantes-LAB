@@ -24,39 +24,31 @@
 {% endblock %}
 
 {% block nav_links %}
-    <li class="nav-item has-tree-view {% if 'process' in request.path %}menu-open{% endif %} ">
-        <a href="#" class="nav-link menus {% if 'process' in request.path %}active{% endif %}">
+    <li class="nav-item has-tree-view {% if 'pro/' in request.path %}menu-open{% endif %} ">
+        <a href="" class="nav-link menus {% if 'pro/' in request.path %}active{% endif %}">
             <i class="nav-icon fas fa-house"></i>
-            <p>Principal</p>
+            <p>Proceso</p>
             <p><i class="right fas fa-angle-left"></i></p>
         </a>
-        <ul class="nav nav-treeview">
+        {% comment %} <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="{% url 'main' %}" class="nav-link {% if "process/main" in request.path %}active{% endif %}">
+                <a href="{% url 'reg' %}" class="nav-link {% if "reg/" in request.path %}active{% endif %}">
                     <i class="nav-icon fas fa-house"></i>
                     <p>Home</p>
                 </a>
             </li>
-        </ul>
-        <ul class="nav nav-treeview">
+        </ul> {% endcomment %}
+        {% comment %} <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="{% url 'meas_add' %}" class="nav-link {% if "process/measuring/add" in request.path %}active{% endif %}">
+                <a href="" class="nav-link {% if "" in request.path %}active{% endif %}">
                     <i class="nav-icon fa-solid fas fa-plus"></i>
-                    <p>Nueva Medición</p>
+                    <p>Nueva Predicción</p>
                 </a>
             </li>
-        </ul>
+        </ul> {% endcomment %}
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="{% url 'tra_add' %}" class="nav-link {% if "process/tra/add" in request.path %}active{% endif %}">
-                    <i class="nav-icon fas fa-solid fa-graduation-cap"></i>
-                    <p>Nuevo Entrenamiento</p>
-                </a>
-            </li>
-        </ul>
-        <ul class="nav nav-treeview">
-            <li class="nav-item">
-                <a href="{% url 'reg' %}" class="nav-link {% if "process/reg" in request.path %}active{% endif %}">
+                <a href="{% url 'reg' %}" class="nav-link {% if "reg/" in request.path %}active{% endif %}">
                     <i class="nav-icon fas fa-solid fa-folder"></i>
                     <p>Registros</p>
                 </a>
@@ -64,12 +56,37 @@
         </ul>
         <ul class="nav nav-treeview">
             <li class="nav-item">
-                <a href="{% url 'cha' %}" class="nav-link {% if "process/measuring/charts" in request.path %}active{% endif %}">
+                <a href="{% url 'pred_add' %}" class="nav-link {% if "pred/add" in request.path %}active{% endif %}">
+                    <i class="nav-icon fas fa-solid fa-tablets"></i>
+                    <p>Nueva Predicción</p>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'tra_add' %}" class="nav-link {% if "tra/add" in request.path %}active{% endif %}">
+                    <i class="nav-icon fas fa-solid fa-vial"></i>
+                    <p>Nuevo Entrenamiento</p>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{% url 'mod_add' %}" class="nav-link {% if "mod/add" in request.path %}active{% endif %}">
+                    <i class="nav-icon fas fa-solid fa-graduation-cap"></i>
+                    <p>Nuevo Modelo</p>
+                </a>
+            </li>
+        </ul>
+
+        {% comment %} <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="" class="nav-link {% if "" in request.path %}active{% endif %}">
                     <i class="nav-icon fas fa-solid fa-chart-line"></i>
                     <p>Gráficos</p>
                 </a>
             </li>
-        </ul>
+        </ul> {% endcomment %}
         
     </li>
     {% if perms.user.is_development %}
