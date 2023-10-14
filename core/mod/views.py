@@ -34,9 +34,10 @@ class ModelCreateView(MyLoginRequiredMixin,FormView):
                 #q=(Q(name__contains=search_value) | Q(id__contains=search_value))
                 trainings=Training.objects.filter(name__contains=search)[:5]
                 return render(request,'sea_tra.html',context={'trainings':trainings,'search':search})
-                            
-        self._list=[int(x) for x in request.POST.get('list_pk').split(',')] 
-        
+        try:                    
+            self._list=[int(x) for x in request.POST.get('list_pk').split(',')] 
+        except:
+            self._list=[]
         form = self.get_form()
         
         if form.is_valid():
@@ -50,10 +51,11 @@ class ModelCreateView(MyLoginRequiredMixin,FormView):
     
     def form_valid(self,request,form):
         try:
-            form.save(self._list)
+            if not(form.save(self._list)):
+                return self.form_invalid(request,form,rason="Ya se está entrenando un modelo")
         except Exception as e:
             return self.form_invalid(request,form,e)
-        messages.success(request,'Creada nuevo modelo correctamente')
+        messages.success(request,f"Se ha iniciado el proceso de creación de entrenamiento del modelo {form.cleaned_data['name']}")
         return redirect('mod_list')
     
     def get_context_data(self, **kwargs):
