@@ -14,22 +14,103 @@ class ModelForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class':'form-control','placeholder': 'Ingrese un nombre'}),
         }
         
+    
     def save(self,_list):
+        try:
+            import numpy as np
+            #from sklearn.datasets import load_digits
+            import tensorflow as tf
+            #from tensorflow.keras import layers
+            from tinymlgen import port
+            #from tensorflow.keras.models import load_model
+            from config.settings import BASE_DIR
+            import os
+            m=Model.objects.create(
+                name=self.cleaned_data.get('name'),
+            )
+            for l in _list:
+                Training.objects.get(pk=l).models.add(m)
+            d=[]
+            l=[]
+            for t in m.training_model.all():
+                for measuring in t.measuring_trainig.all():
+                    d.append(measuring.get_list_data()) 
+                    l.append(measuring.get_predict_index())
+            print(d)
+            print(l)
+            _in=np.array(d,dtype=float)
+            _out=np.array(l,dtype=int)
+            model=tf.keras.Sequential()
+            model.add(tf.keras.layers.Dense(units=1,input_shape=[1]))
+            model.compile(
+                optimizer=tf.keras.optimizers.Adam(0.1),
+                loss='mean_squared_error',
+            )
 
-        m=Model.objects.create(
-            name=self.cleaned_data.get('name'),
-            #file_model=f"{self.cleaned_data.get('name')}.txt"
-        )
-        for l in _list:
-            Training.objects.get(pk=l).models.add(m)
-        d=[]
-        l=[]
-        for t in m.training_model.all():
-            for measuring in t.measuring_trainig.all():
-                d.append(measuring.get_list_data()) 
-                l.append(measuring.get_predict_index())
-        print(d)
-        print(l)
+            train=model.fit(
+                _in,
+                _out,
+                epochs=500,
+            )
+
+            model.save(os.path.join(BASE_DIR,f"media/_{self.cleaned_data.get('name')}.h5"))
+            model.save_weights(os.path.join(BASE_DIR,f"media/_w_{self.cleaned_data.get('name')}.h5"))
+            
+        except:
+            pass
+        pass
+        #import numpy as np
+        # from sklearn.model_selection import train_test_split
+        # from sklearn.preprocessing import StandardScaler
+        # from sklearn.decomposition import PCA
+        # from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+        # def get_n_c(x_standar_scaler_train):
+        #     pca=PCA().fit(x_standar_scaler_train)
+        #     var=pca.explained_variance_ratio_
+        #     _d=0
+        #     for c,d in enumerate(var,start=1):
+        #         _d+=d
+        #         if _d>0.95:
+        #             return c
+        # X=[]
+        # y=[]
+
+        # for t in Training.objects.filter(pk__in=_list):
+        #     for m in t.measuring_trainig.all():
+        #         X.append(m.get_list_data())
+        #         y.append(m.get_predict_index()) 
+        # print(X)
+        # print(y)        
+        # X_train, X_test, y_train, y_test = train_test_split(X, y)
+        # sclaer = StandardScaler()
+        # x_ss_train=sclaer.fit_transform(X_train)
+        # n_c=get_n_c(x_ss_train)
+        # pca = PCA(n_components=n_c)
+        # x_pca_train=pca.fit(x_ss_train)
+        # lda=LDA(n_components=n_c)
+        # lda.fit(x_pca_train)
+        
+        # # import numpy as np
+        # # import matplotlib.pyplot as plt
+        
+        # #plt.plot(np.cumsum(var))
+        # #plt.show()
+        
+        # pass    
+        # # m=Model.objects.create(
+        # #     name=self.cleaned_data.get('name'),
+        # #     #file_model=f"{self.cleaned_data.get('name')}.txt"
+        # # )
+        # # for l in _list:
+        # #     Training.objects.get(pk=l).models.add(m)
+        # # d=[]
+        # # l=[]
+        # # for t in m.training_model.all():
+        # #     for measuring in t.measuring_trainig.all():
+        # #         d.append(measuring.get_list_data()) 
+        # #         l.append(measuring.get_predict_index())
+        # # print(d)
+        # # print(l)
         
         
 class ModelUpdateForm(forms.ModelForm):

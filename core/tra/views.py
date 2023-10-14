@@ -31,9 +31,9 @@ class TrainingCreateView(MyLoginRequiredMixin,FormView):
     
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        
-        if form.is_valid():
-            return self.form_valid(request,form)
+        multi='Training with this Nombre already exists' in form.errors.as_text()
+        if form.is_valid() or multi:
+            return self.form_valid(request,form,multi)
         else:
             return self.form_invalid(request,form,"data no válida")
     
@@ -41,17 +41,13 @@ class TrainingCreateView(MyLoginRequiredMixin,FormView):
         messages.error(request,f'Error al crear entrnamiento, {rason}')
         return super().form_invalid(form)
     
-    def form_valid(self,request,form):
-        try:
-            form.save()
-        except Exception as e:
-            return self.form_invalid(request,form,e)
-        messages.success(request,'Creada nuevo entrenamiento correctamente')
+    def form_valid(self,request,form,multi):
+        form.save(multi)
+        messages.success(request,f"{'Creada nuevo' if multi==False else 'Actualizado'} entrenamiento correctamente")
         return redirect('tra_list')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        print(context)
         context['title'] = "Nuevo entrenamiento"
         return context
        

@@ -7,7 +7,12 @@
                 Comenzar
             </button>
         </div>
-        <div class="col-auto">
+        {% comment %} <div class="col-auto">
+            <button  type="submit" class="btn btn-primary">
+                Finalizar
+            </button>
+        </div> {% endcomment %}
+        <div class="col-auto ">
             <a href="{% url 'tra_csv' %}" class="rounded-pill btn btn-info btn-flat">
                 CSV
             </a>
@@ -17,9 +22,21 @@
     <script>
         $("option[value='N']").remove();
         $("option[value='C']").remove();
+        $("option[value='M']").remove();
         $( "#frmForm" ).on( "submit", function( event ) {
             $("#frmForm").children(":first").append("<div class='overlay dark'><i class='fa fa-2x fa-refresh fa-spin'></i><div class='m-3 text-light'>Realizando Medición</div><i class='fa fa-2x fa-refresh fa-spin'></i></div>")
-            //event.preventDefault();
+            /*event.preventDefault();
+            var data = $("#frmForm").serialize();
+            $.ajax({
+                url: ".",
+                type: "POST",
+                data: data,
+                success: function(response){
+                  console.log(response)  
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                },
+            });*/
             /*
              $.ajax({
                 url: ".",
