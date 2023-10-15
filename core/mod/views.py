@@ -32,8 +32,8 @@ class ModelCreateView(MyLoginRequiredMixin,FormView):
                 if not search:
                     return HttpResponse("")
                 #q=(Q(name__contains=search_value) | Q(id__contains=search_value))
-                trainings=Training.objects.filter(name__contains=search)[:5]
-                return render(request,'sea_tra.html',context={'trainings':trainings,'search':search})
+                objects=Training.objects.filter(name__contains=search)[:5]
+                return render(request,'sea_tra.html',context={'objects':objects,'search':search})
         try:                    
             self._list=[int(x) for x in request.POST.get('list_pk').split(',')] 
         except:

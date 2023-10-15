@@ -5,9 +5,11 @@
         Comenzar
     </button>
     <script>
-
+        //let lsist_pk=[1,2,3,4,5]
+        
         $( "#frmForm" ).on( "submit", function( event ) {
-            $("#frmForm").children(":first").append("<div class='overlay dark'><i class='fa fa-2x fa-refresh fa-spin'></i><div class='m-3 text-light'>Realizando Predicción</div><i class='fa fa-2x fa-refresh fa-spin'></i></div>")
+        $("#frmForm").children(":first").append("<div class='overlay dark'><i class='fa fa-2x fa-refresh fa-spin'></i><div class='m-3 text-light'>Realizando Medición</div><i class='fa fa-2x fa-refresh fa-spin'></i></div>")
+        $('#frmForm').append('<input type="hidden" name="list_pk" value="'+ list_pk +'" />');     
             //event.preventDefault();
             /*
              $.ajax({
@@ -32,5 +34,70 @@
         });
 
         
+    </script>
+    <script>
+        var list_name=[];
+        var list_pk=[];
+        function Add_Element(name,pk)
+        {
+            if(list_pk.includes(pk)==true )
+                return
+            if(list_pk.length!=0)
+            {
+                list_name=[]
+                list_pk=[]
+            }
+            list_name.push(name)
+            list_pk.push(pk)
+
+            $("#id_models").val('')
+            str=""
+            list_name.forEach((element) =>{
+                str+=element+"\n"
+                
+            })
+            $("#id_models").val(str)
+        }
+        function Del_Element(name,pk)
+        {
+           
+            list_name = list_name.filter(function(item) {
+                return item !== name
+            })
+            list_pk = list_pk.filter(function(item) {
+                return item !== pk
+            })
+            $("#id_models").val('')
+            str=""
+            list_name.forEach((element) =>{
+                str+=element+"\n"
+                
+            })
+            $("#id_models").val(str)
+        }
+        $( "#id_search" ).on("input", function( event ) {
+            $.ajax({
+                url: ".",
+                data: {
+                    'action': 'search_models',
+                    'data': $( "#id_search" ).val(),
+                },
+                type: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                dataType: 'text',
+                success: function (request) {
+                    //console.log("A")
+                    //console.log(request)
+                    $('#id_search_data').remove()
+                    
+                    $('#id_search').parent().append(request);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(errorThrown)
+                }
+            });
+        });
     </script>
 {% endblock  %}
