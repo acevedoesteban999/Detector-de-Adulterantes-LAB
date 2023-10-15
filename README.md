@@ -90,7 +90,10 @@ WSGIPythonPath /project
 #### Agregar o descomentar en '/boot/config.txt'
 * `dtparam=i2c_arm=on`
 
-### Permisos
+### Git
+* `git config --global merge.ours.driver true`
+
+### OS Pprmisos
 * `sudo chmod 664 ./db.sqlite3`
 * `sudo chmod 777 ./`
 * `sudo chmod 777 /home/<user>` 
@@ -98,3 +101,4 @@ WSGIPythonPath /project
 * `sudo chown :www-data ./db.sqlite3`
 * `sudo chown :www-data ./`
 * `sudo service apache2 restart`
+
