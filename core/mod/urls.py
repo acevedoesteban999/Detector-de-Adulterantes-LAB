@@ -23,4 +23,5 @@ urlpatterns = [
     path('reg/data/<int:pk>/',ModelDataView.as_view(),name='mod_data'),
     path('reg/update/<int:pk>/',ModelUpdateView.as_view(),name='mod_update'),
     path('reg/delete/<int:pk>/',ModelDeleteView.as_view(),name='mod_delete'),
+    path('downlaod_model/<int:pk>/',ModelDownloadView.as_view(),name='mod_download'),
 ]

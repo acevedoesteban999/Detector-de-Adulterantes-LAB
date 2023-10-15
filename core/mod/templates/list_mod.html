@@ -37,7 +37,7 @@
                         <a href="{% url 'mod_data' model.id %}" data-toggle="tooltip" title="Data" class="m-1 btn btn-primary btn-xs btn-flat">
                             <i class="fas fa-database"></i>
                         </a>
-                        <a href="" data-toggle="tooltip" title="Datos" class="m-1 btn btn-success btn-xs btn-flat">
+                        <a href="{% url 'mod_download' model.id %}" target='_blank' data-toggle="tooltip" title="Datos" class="m-1 btn btn-success btn-xs btn-flat">
                             <i class="fas fa-line-chart"></i>
                         </a>
                     {% endif %}

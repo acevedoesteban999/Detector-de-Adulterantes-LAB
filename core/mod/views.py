@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,HttpResponse
 from .models import *
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView,FormView,ListView,UpdateView,DeleteView,DetailView
+from django.views.generic import TemplateView,FormView,ListView,UpdateView,DeleteView,DetailView,View
 from core.log.utils import MyLoginRequiredMixin
 from .forms import *
 from core.meas.models import Measuring,MeasuringData
@@ -119,3 +119,44 @@ class ModelDataView(MyLoginRequiredMixin,ListView):
         context['back_url']=reverse_lazy('mod_list')
         return context
 
+class ModelDownloadView(MyLoginRequiredMixin,View):
+    
+    def get(self,request,*args, **kwargs):
+        from django.http import HttpResponse, Http404        
+        import os
+        from config.settings import MEDIA_ROOT
+        import io
+        import zipfile
+
+        # Crear un objeto de archivo ZIP en memoria
+        try:
+            zip_data = io.BytesIO()
+            pk=kwargs.get('pk')
+            _name=Model.objects.get(pk=pk).name.replace(" ","_")
+            with zipfile.ZipFile(zip_data, 'w') as archive:
+                archive.write(arcname=f"_{_name}.h",filename= os.path.join(MEDIA_ROOT, f"models\_{_name}.h"))  
+                archive.write(arcname=f"_{_name}.h5",filename= os.path.join(MEDIA_ROOT, f"models\_{_name}.h5"))  
+                archive.write(arcname=f"_{_name}_W.h5",filename= os.path.join(MEDIA_ROOT, f"models\_{_name}_W.h5")) 
+
+            zip_data.seek(0)
+            response = HttpResponse(zip_data.read(), content_type="application/zip")
+            response['Content-Disposition'] = 'attachment; filename=' + _name + ".zip"
+            return response
+        except:
+            raise Http404
+        
+        
+        pk=kwargs.get('pk')
+        _name=Model.objects.get(pk=pk).name.replace(" ","_")
+        file_path = os.path.join(MEDIA_ROOT, f"models\_{_name}.h")
+        print(file_path)
+        if os.path.exists(file_path):
+            with open(file_path, 'rb') as fh:
+                response = HttpResponse(fh.read(), content_type="application/zip")
+                response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
+                return response
+        raise Http404
+        #csvfile = StringIO("Hola Mundo")
+        #response = HttpResponse(csvfile.getvalue(), content_type='text/txt')
+        #response['Content-Disposition'] = f"attachment; filename=A.txt"
+        #return response

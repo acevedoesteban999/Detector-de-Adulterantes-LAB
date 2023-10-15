@@ -46,10 +46,11 @@ def trin_model_thread(name,_list):
                 _out,
                 epochs=500,
             )
-            model.save(os.path.join(BASE_DIR,f"media/models/_{name}.h5"))
-            model.save_weights(os.path.join(BASE_DIR,f"media/models/_{name}_W.h5"))
+            _name=name.replace(' ','_')
+            model.save(os.path.join(BASE_DIR,f"media/models/_{_name}.h5"))
+            model.save_weights(os.path.join(BASE_DIR,f"media/models/_{_name}_W.h5"))
             c_code = port(model, variable_name='digits_model', pretty_print=True)
-            with open(os.path.join(BASE_DIR,f"media/models/_{name}.h"), "w") as text_file:
+            with open(os.path.join(BASE_DIR,f"media/models/_{_name}.h"), "w") as text_file:
                 print(c_code, file=text_file)
             m.state=True
         except Exception as e:
