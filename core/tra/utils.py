@@ -7,6 +7,7 @@ import time
 def train_thread(name,count,prediction):
     try:
         tr,created=Training.objects.get_or_create(name=name)
+        tr.state=None
         if created == True:
             tr.predict=prediction
         else:
