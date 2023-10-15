@@ -1,17 +1,23 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
-class ESPAsyncWebServer
+class WebServer
 {
     private:
-        AsyncWebServer server(80);
+        AsyncWebServer * server;
     public:
-    ESPAsyncWebServer()
-    {
-        server.on("/hello_server", HTTP_GET, [](AsyncWebServerRequest *request)
+        WebServer()
         {
-        request->send(200, "text/plain", "Hello AsyncWebServer!");
-        });
-        server.begin()
-    }
-    ~ESPAsyncWebServer(){}
+            this->server=new AsyncWebServer(80);
+            
+            this->server->on("/hello_server", HTTP_GET, [](AsyncWebServerRequest *request)
+            {
+                request->send(200, "text/plain", "Hello AsyncWebServer!");
+            });
+            this->server->begin();
+        }
+        ~WebServer()
+        {
+            delete this->server;
+        }
+
 };
