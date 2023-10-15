@@ -10,8 +10,7 @@ def trin_model_thread(name,_list):
                 name=name,
             )
             import numpy as np
-            #import tensorflow as tf
-            from tensorflow import keras
+            import tensorflow as tf
             from tinymlgen import port
             for l in _list:
                 Training.objects.get(pk=l).models.add(m)
@@ -21,40 +20,36 @@ def trin_model_thread(name,_list):
                 for measuring in t.measuring_trainig.all():
                     d.append(measuring.get_list_data()) 
                     l.append(measuring.get_predict_index())
-            # print(d)
-            # print(l)
             _in=np.array(d,dtype=float)
             _out=np.array(l,dtype=int)
-            #_in=np.array([1,6,30,7,70,45,503,291,99],dtype=float)
-            #_out=np.array([0.254,0.1524,0.762,0.1778,1.778,1.0922,12.776,5.1054,2.514],dtype=float)
-
-            input = keras.Input(shape=(18))
-            x = keras.layers.Dense(64, activation="relu")(input)
-            output = keras.layers.Dense(5)(x)
-            model=keras.Model(input, output)
-            #model.add(keras.layers.Input(shape=(18,)))
-            #model.add(keras.layers.Dense(64,activation='relu',input_shape=[18]))
-            #model.add(keras.layers.Dense(5))
+            
+            input = tf.keras.Input(shape=(18,))
+            x = tf.keras.layers.Dense(30, activation=tf.nn.relu)(input)
+            x = tf.keras.layers.Dense(30, activation=tf.nn.relu)(x)
+            output = tf.keras.layers.Dense(5,activation=tf.nn.softmax)(x)
+            model=tf.keras.Model(input, output)
             
             model.compile(
-                optimizer=keras.optimizers.Adam(0.1),
-                loss='mean_squared_error',
+                optimizer=tf.keras.optimizers.Adam(0.1),
+                loss="mean_squared_error",
+                metrics=['accuracy'],
+                
             )
-            t=time.time()
-            train=model.fit(
+            model.fit(
                 _in,
                 _out,
-                epochs=500,
+                epochs=10,
+                verbose=False,
             )
             _name=name.replace(' ','_')
             model.save(os.path.join(BASE_DIR,f"media/models/_{_name}.h5"))
             model.save_weights(os.path.join(BASE_DIR,f"media/models/_{_name}_W.h5"))
-            c_code = port(model, variable_name='digits_model', pretty_print=True)
+            c_code = port(model, pretty_print=True)
             with open(os.path.join(BASE_DIR,f"media/models/_{_name}.h"), "w") as text_file:
                 print(c_code, file=text_file)
             m.state=True
         except Exception as e:
-            print(e)
+            print("Error:",e)
             m.state=False
             
         m.save()
