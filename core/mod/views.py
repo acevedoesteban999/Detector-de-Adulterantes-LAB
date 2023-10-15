@@ -134,29 +134,14 @@ class ModelDownloadView(MyLoginRequiredMixin,View):
             pk=kwargs.get('pk')
             _name=Model.objects.get(pk=pk).name.replace(" ","_")
             with zipfile.ZipFile(zip_data, 'w') as archive:
-                archive.write(arcname=f"_{_name}.h",filename= os.path.join(MEDIA_ROOT, f"models\_{_name}.h"))  
-                archive.write(arcname=f"_{_name}.h5",filename= os.path.join(MEDIA_ROOT, f"models\_{_name}.h5"))  
-                archive.write(arcname=f"_{_name}_W.h5",filename= os.path.join(MEDIA_ROOT, f"models\_{_name}_W.h5")) 
+                archive.write(arcname=f"_{_name}.h",filename= os.path.join(MEDIA_ROOT, f"models/_{_name}.h"))  
+                archive.write(arcname=f"_{_name}.h5",filename= os.path.join(MEDIA_ROOT, f"models/_{_name}.h5"))  
+                archive.write(arcname=f"_{_name}_W.h5",filename= os.path.join(MEDIA_ROOT, f"models/_{_name}_W.h5")) 
 
             zip_data.seek(0)
             response = HttpResponse(zip_data.read(), content_type="application/zip")
             response['Content-Disposition'] = 'attachment; filename=' + _name + ".zip"
             return response
-        except:
+        except Exception as e:
+            print(e)
             raise Http404
-        
-        
-        pk=kwargs.get('pk')
-        _name=Model.objects.get(pk=pk).name.replace(" ","_")
-        file_path = os.path.join(MEDIA_ROOT, f"models\_{_name}.h")
-        print(file_path)
-        if os.path.exists(file_path):
-            with open(file_path, 'rb') as fh:
-                response = HttpResponse(fh.read(), content_type="application/zip")
-                response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
-                return response
-        raise Http404
-        #csvfile = StringIO("Hola Mundo")
-        #response = HttpResponse(csvfile.getvalue(), content_type='text/txt')
-        #response['Content-Disposition'] = f"attachment; filename=A.txt"
-        #return response

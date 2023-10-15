@@ -1,5 +1,6 @@
-#!/bin/bash
-sudo -s source .venv/bin/activate;
+#!/usr/bin/env bash
+set -e
+source /home/esteban/Desktop/Esteban/Tesis/.venv/bin/activate
 python manage.py makemigrations;
 python manage.py migrate;
 yes yes | python manage.py collectstatic;
