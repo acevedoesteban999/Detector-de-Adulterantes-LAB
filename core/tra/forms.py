@@ -84,6 +84,7 @@ class CSVForm(forms.Form):
                     value=float(d),
                     measuring=m
                 )
+        t.state=True
         t.save() 
     def save1(self):
         _count=self.cleaned_data.get('count')
@@ -115,52 +116,60 @@ class CSVForm(forms.Form):
                 )
         t.save() 
     def save_pandas(self):
-        if self.cleaned_data.get('_1f')==True:
-            return self.save1_pandas()
-        _count=self.cleaned_data.get('count')
-        csv=pd.read_csv(self.cleaned_data.get('csv'))[0:_count]
-        t=Training.objects.create(
-            name=self.cleaned_data.get('name'),
-            predict="C",
-            )
-        for count in range(csv.shape[0]):
-            prediction=PredictionChoices[csv.iloc[count,18]-1][0]    
-            m=Measuring.objects.create(
-                name=f"T~{self.cleaned_data.get('name')}~{count}",
-                training=t,
-                predict=prediction
-            )
-            t.count+=1
-            for c,d in enumerate(csv.iloc[count]):
-                if c==18:
-                    break
-                MeasuringData.objects.create(
-                    chanel= Measuring.chanels()[c],
-                    value=d,
-                    measuring=m
+        try:
+            if self.cleaned_data.get('_1f')==True:
+                return self.save1_pandas()
+            _count=self.cleaned_data.get('count')
+            csv=pd.read_csv(self.cleaned_data.get('csv'))[0:_count]
+            t=Training.objects.create(
+                name=self.cleaned_data.get('name'),
+                predict="C",
                 )
+            for count in range(csv.shape[0]):
+                prediction=PredictionChoices[csv.iloc[count,18]-1][0]    
+                m=Measuring.objects.create(
+                    name=f"T~{self.cleaned_data.get('name')}~{count}",
+                    training=t,
+                    predict=prediction
+                )
+                t.count+=1
+                for c,d in enumerate(csv.iloc[count]):
+                    if c==18:
+                        break
+                    MeasuringData.objects.create(
+                        chanel= Measuring.chanels()[c],
+                        value=d,
+                        measuring=m
+                    )
+            t.state=True
+        except:
+            t.state=False
         t.save()  
     def save1_pandas(self):
-        _count=self.cleaned_data.get('count')
-        csv=pd.read_csv(self.cleaned_data.get('csv'))[0:_count]
-        t=Training.objects.create(
-            name=self.cleaned_data.get('name'),
-            predict="C",
-            )
-        for count in range(csv.shape[0]):
-            prediction=PredictionChoices[csv.iloc[count,1]][0]
-            m=Measuring.objects.create(
-                name=f"T~{self.cleaned_data.get('name')}~{count}",
-                training=t,
-                predict=prediction
-            )
-            t.count+=1
-            for c,d in enumerate(csv.iloc[count],start=-2):
-                if c<0:
-                    continue
-                MeasuringData.objects.create(
-                    chanel= Measuring.chanels()[c],
-                    value=d,
-                    measuring=m
+        try:
+            _count=self.cleaned_data.get('count')
+            csv=pd.read_csv(self.cleaned_data.get('csv'))[0:_count]
+            t=Training.objects.create(
+                name=self.cleaned_data.get('name'),
+                predict="C",
                 )
+            for count in range(csv.shape[0]):
+                prediction=PredictionChoices[csv.iloc[count,1]][0]
+                m=Measuring.objects.create(
+                    name=f"T~{self.cleaned_data.get('name')}~{count}",
+                    training=t,
+                    predict=prediction
+                )
+                t.count+=1
+                for c,d in enumerate(csv.iloc[count],start=-2):
+                    if c<0:
+                        continue
+                    MeasuringData.objects.create(
+                        chanel= Measuring.chanels()[c],
+                        value=d,
+                        measuring=m
+                    )
+            t.state=True
+        except:
+            t.state=False
         t.save() 

@@ -38,7 +38,8 @@ class PredictionCreateView(MyLoginRequiredMixin,FormView):
     
     def form_valid(self,request,form):
         try:
-            form.save(self._model_pk)
+            if not form.save(self._model_pk):
+                return self.form_invalid(request,form,rason="Ya se está prediciendo")
         except Exception as e:
             return self.form_invalid(request,form,e)
         messages.success(request,'Creada nueva predicción correctamente')
@@ -62,7 +63,6 @@ class PredictionListView(MyLoginRequiredMixin,ListView):
         context['back_url']=reverse_lazy('reg') 
         return context
     
-
 
 class PredictionDeleteView(MyLoginRequiredMixin,DeleteView):
     model=Prediction

@@ -8,8 +8,9 @@ import time
 from core.meas.utils import MeasuringI2C
 import os
 from config.settings import BASE_DIR
-
-        
+from .utils import prediction_thread
+from threading import Thread
+from config.utils import thread_is_alive
 class PredictionForm(forms.ModelForm):
     models = forms.CharField(widget=forms.Textarea(),label="Modelos",required=False,disabled=True)
     search=forms.CharField(label='Buscar Modelos',max_length=20, required=False,widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'Buscar Modelo'}),)
@@ -28,14 +29,8 @@ class PredictionForm(forms.ModelForm):
         obj.save()
         
     def save(self,_model_pk):
-        from tensorflow import keras
-        import numpy as np
-        measuring=MeasuringI2C(self.cleaned_data.get('name'))
-        model: keras.Sequential= keras.models.load_model(os.path.join(BASE_DIR,f"media/models/_{Model.objects.get(pk=_model_pk).name}.h5"))
-        model.load_weights(os.path.join(BASE_DIR,f"media/models/_{Model.objects.get(pk=_model_pk).name}_W.h5"))
-        predict_class=model.predict(np.array(measuring.get_list_data(),dtype=float).reshape(1,18)).argmax(axis=-1).tolist()[0]
-        print(predict_class)
-        p=Prediction(measuring_ptr=measuring)
-        p.save_base(raw=True)            
-        measuring.predict=PredictionChoices[predict_class][0]
-        measuring.save()
+        if not thread_is_alive("ThreadPrediction"):
+            Thread(target=prediction_thread,name="ThreadPrediction",args=(self.cleaned_data.get('name'),_model_pk,)).start()
+            return True
+        return False
+        

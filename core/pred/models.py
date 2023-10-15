@@ -4,6 +4,7 @@ from core.meas.models import Measuring
 
 
 class Prediction(Measuring):
+    state=models.BooleanField(default=None,null=True)
     def __str__(self):
         return  self.name
 

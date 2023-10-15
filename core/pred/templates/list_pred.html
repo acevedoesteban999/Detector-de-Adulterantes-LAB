@@ -4,6 +4,7 @@
         <th scope="col">Nombre</th>
         <th scope="col">Hora y Fecha</th>
         <th scope="col">Predicción</th>
+        <th scope="col">Estado</th>
         <th scope="col">Opciones</th>
 {% endblock %}
 {% block rows %}
@@ -15,6 +16,23 @@
                 <div class="badge  bg-{% if prediction.predict == "C" %}indigo{% elif prediction.predict == "1" %}success{% elif prediction.predict == "7" %}olive{% elif prediction.predict == "5" %}warning{% elif prediction.predict == "2" %}orange{% elif prediction.predict == "0" %}danger{% else %}secondary{% endif %}">
                     <h5 class="m-0">{{prediction.get_predict_display}}</h5>
                 </div>
+            </td>
+            <td scope="row ">
+                <p>
+                    {% if prediction.state == True %}
+                        <span class="badge-success p-2 px-3" style="border-radius: 60px;" id="span{{prediction.id}}">
+                            <i class="fas fa-solid fa-square-check"></i>
+                        </span>
+                    {% elif prediction.state == False %}
+                    <span class="badge-danger p-2 px-3" style="border-radius: 60px;" id="span{{prediction.id}}">
+                        <i class="fas fa-solid fa-xmark"></i>
+                    </span>
+                    {% else %}
+                        <span class="badge-secondary p-1" style="border-radius: 60px;" id="span{{prediction.id}}">
+                            <i class="fa fa-refresh fa-spin"></i>
+                        </span>
+                    {% endif %}
+                </p>
             </td>
             <td scope="row">
                 <a href="{% url 'meas_update' prediction.id %}" data-toggle="tooltip" title="Editar" class="m-1 btn btn-warning btn-xs btn-flat">
