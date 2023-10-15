@@ -6,9 +6,7 @@ from config.utils import PredictionChoices
 import time
 #from config.utils import is_at_migrations
 from core.meas.utils import MeasuringI2C
-from tensorflow import keras
 import os
-import numpy as np
 from config.settings import BASE_DIR
 
         
@@ -30,6 +28,8 @@ class PredictionForm(forms.ModelForm):
         obj.save()
         
     def save(self,_model_pk):
+        from tensorflow import keras
+        import numpy as np
         measuring=MeasuringI2C(self.cleaned_data.get('name'))
         model: keras.Sequential= keras.models.load_model(os.path.join(BASE_DIR,f"media/models/_{Model.objects.get(pk=_model_pk).name}.h5"))
         model.load_weights(os.path.join(BASE_DIR,f"media/models/_{Model.objects.get(pk=_model_pk).name}_W.h5"))

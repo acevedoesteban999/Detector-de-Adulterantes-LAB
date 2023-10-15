@@ -2,15 +2,16 @@ from core.mod.models import Model
 from core.tra.models import Training
 from config.settings import BASE_DIR
 import os
-import numpy as np
-#import tensorflow as tf
-from tensorflow import keras
-from tinymlgen import port
+
 def trin_model_thread(name,_list):
         try:
             m=Model.objects.create(
                 name=name,
             )
+            import numpy as np
+            #import tensorflow as tf
+            from tensorflow import keras
+            from tinymlgen import port
             for l in _list:
                 Training.objects.get(pk=l).models.add(m)
             d=[]
