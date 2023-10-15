@@ -90,8 +90,6 @@ WSGIPythonPath /project
 #### Agregar o descomentar en '/boot/config.txt'
 * `dtparam=i2c_arm=on`
 
-### Git
-* `git config --global merge.ours.driver true`
 
 ### OS Pprmisos
 * `sudo chmod 664 ./db.sqlite3`
