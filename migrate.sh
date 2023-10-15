@@ -2,8 +2,7 @@
 sudo -s source .venv/bin/activate;
 python manage.py makemigrations;
 python manage.py migrate;
-yes no | python manage.py collectstatic;
-#chmod 777 update.sh
+yes yes | python manage.py collectstatic;
 sudo chmod 777 ./db.sqlite3
 sudo chmod 777 ./
 sudo chown :www-data ./db.sqlite3

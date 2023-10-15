@@ -1,4 +1,5 @@
 config/_config.py
+.venv/
 __pycache__/
 Proyecto/
 **/migrations/*

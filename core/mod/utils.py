@@ -5,6 +5,7 @@ import os
 
 def trin_model_thread(name,_list):
         try:
+            import time
             m=Model.objects.create(
                 name=name,
             )
@@ -39,7 +40,7 @@ def trin_model_thread(name,_list):
                 optimizer=keras.optimizers.Adam(0.1),
                 loss='mean_squared_error',
             )
-
+            t=time.time()
             train=model.fit(
                 _in,
                 _out,
