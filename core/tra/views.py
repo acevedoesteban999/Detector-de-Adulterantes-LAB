@@ -42,7 +42,8 @@ class TrainingCreateView(MyLoginRequiredMixin,FormView):
         return super().form_invalid(form)
     
     def form_valid(self,request,form,multi):
-        form.save(multi)
+        if not form.save(multi):
+            return self.form_invalid(request,form,rason="Ya se están recogiendo muestras para un entrenamiento")
         messages.success(request,f"{'Creada nuevo' if multi==False else 'Actualizado'} entrenamiento correctamente")
         return redirect('tra_list')
     

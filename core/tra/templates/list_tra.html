@@ -8,6 +8,7 @@
         <th scope="col">Muestras</th>
         <th scope="col">Predicción</th>
         <th scope="col">Hora y Fecha</th>
+        <th scope="col">Estado</th>
         <th scope="col">Opciones</th>
 {% endblock %}
 
@@ -22,22 +23,41 @@
                 </div>
             </td>
             <td scope="row">{{training.datetime}}</td>
+            <td scope="row ">
+                <p>
+                    {% if training.state == True %}
+                        <span class="badge-success p-2 px-3" style="border-radius: 60px;" id="span{{training.id}}">
+                            <i class="fas fa-solid fa-square-check"></i>
+                        </span>
+                    {% elif training.state == False %}
+                    <span class="badge-danger p-2 px-3" style="border-radius: 60px;" id="span{{training.id}}">
+                        <i class="fas fa-solid fa-xmark"></i>
+                    </span>
+                    {% else %}
+                        <span class="badge-secondary p-1" style="border-radius: 60px;" id="span{{training.id}}">
+                            <i class="fa fa-refresh fa-spin"></i>
+                        </span>
+                    {% endif %}
+                </p>
+            </td>
             <td scope="row">
-                <a href="{% url 'tra_update' training.id %}" data-toggle="tooltip" title="Editar" class="m-1 btn btn-warning btn-xs btn-flat">
-                    <i class="fas fa-edit"></i>
-                </a>
-                <a href="{% url 'tra_data' training.id %}" data-toggle="tooltip" title="Data" class="m-1 btn btn-primary btn-xs btn-flat">
-                    <i class="fas fa-database"></i>
-                </a>
+                {% if model.state != None %}
+                    <a href="{% url 'tra_update' training.id %}" data-toggle="tooltip" title="Editar" class="m-1 btn btn-warning btn-xs btn-flat">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    {% if model.state == True %}
+                        <a href="{% url 'tra_data' training.id %}" data-toggle="tooltip" title="Data" class="m-1 btn btn-primary btn-xs btn-flat">
+                            <i class="fas fa-database"></i>
+                        </a>
 
-                <a href="{% url 'tra_multidata' training.id %}" data-toggle="tooltip" title="Multiples Datos" class="m-1 btn bg-orange btn-xs btn-flat">
-                    <i class="fas fa-line-chart"></i>
-                </a> 
-
-                <a href="{% url 'tra_delete' training.id %}" data-toggle="tooltip" title="Eliminar" class="m-1 btn btn-danger btn-xs btn-flat">
-                    <i class="fas fa-regular fa-trash"></i>
-                </a>
-
+                        <a href="{% url 'tra_multidata' training.id %}" data-toggle="tooltip" title="Multiples Datos" class="m-1 btn bg-orange btn-xs btn-flat">
+                            <i class="fas fa-line-chart"></i>
+                        </a> 
+                    {% endif %}
+                    <a href="{% url 'tra_delete' training.id %}" data-toggle="tooltip" title="Eliminar" class="m-1 btn btn-danger btn-xs btn-flat">
+                        <i class="fas fa-regular fa-trash"></i>
+                    </a>
+                {% endif %}
             </td>
         </tr>
     {% endfor %}

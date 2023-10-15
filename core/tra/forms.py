@@ -2,8 +2,9 @@ from django import forms
 from .models import Training
 from core.meas.models import Measuring,MeasuringData
 import time
-
-from .utils import TrainingI2C
+from config.utils import thread_is_alive
+from .utils import train_thread
+from threading import Thread
 from core.meas.models import PredictionChoices
 
 try:
@@ -27,7 +28,11 @@ class TrainingingForm(forms.ModelForm):
             name=self.cleaned_data.get('name')
         else:
             name=self.data.get('name')
-        TrainingI2C(name,self.cleaned_data.get('count'),self.cleaned_data.get('prediction'))
+        if not thread_is_alive("ThreadTrainings"):
+            Thread(target=train_thread,name="ThreadTrainings",args=(name,self.cleaned_data.get('count'),self.cleaned_data.get('prediction'),)).start()
+            return True
+        return False
+        #TrainingI2C(name,self.cleaned_data.get('count'),self.cleaned_data.get('prediction'))
         
 class TrainingingUpdateForm(forms.ModelForm):
     class Meta:
