@@ -2,7 +2,6 @@
 
 
 ## Configuraciones de raspberry para desplegar django-adaminlte-3 en apache2
-
 * `sudo apt-get update`
 * `sudo apt-get install apache2`
 * `sudo apt-get install libapache2-mod-wsgi-py3`
@@ -26,12 +25,10 @@
 
 ### WSGIDaemonProcess en nuevo puerto
 
-### Cambiar Puerto en 'ports.conf'
-
 ### Deshabilitar sitio(en caso de querer usar puertos ya creados)
 * `sudo a2dissite file.conf`
+### Cambiar Puerto en 'ports.conf'
 * `Listen ##`
-
 ### Crear fichero 'file.conf' en 'sities-available'
 ``` 
 <VirtualHost *:##>
@@ -55,9 +52,7 @@
 * `sudo a2ensite file.conf`
 * `sudo systemctl reload apache2`
 
-
 ## WSGIPythonHome en puerto default apache
-
 * `sudo nano /etc/apache2/sites-available/000-default.conf`
 ```
 <VirtualHost *:80>
