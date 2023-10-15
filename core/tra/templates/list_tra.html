@@ -41,11 +41,11 @@
                 </p>
             </td>
             <td scope="row">
-                {% if model.state != None %}
+                {% if training.state != None %}
                     <a href="{% url 'tra_update' training.id %}" data-toggle="tooltip" title="Editar" class="m-1 btn btn-warning btn-xs btn-flat">
                         <i class="fas fa-edit"></i>
                     </a>
-                    {% if model.state == True %}
+                    {% if training.state == True %}
                         <a href="{% url 'tra_data' training.id %}" data-toggle="tooltip" title="Data" class="m-1 btn btn-primary btn-xs btn-flat">
                             <i class="fas fa-database"></i>
                         </a>
