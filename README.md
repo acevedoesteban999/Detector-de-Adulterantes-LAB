@@ -90,6 +90,9 @@ WSGIPythonPath /project
 #### Agregar o descomentar en '/boot/config.txt'
 * `dtparam=i2c_arm=on`
 
+### Pip Adicionales
+* `pip install flatbuffers==23.5.26`
+
 
 ### OS Pprmisos
 * `sudo chmod 664 ./db.sqlite3`
