@@ -1,27 +1,37 @@
+#pragma once
 #define NUMBER_OF_INPUTS 18
 #define NUMBER_OF_OUTPUTS 5
 #define TENSOR_ARENA_SIZE 5*1024
 #include <EloquentTinyML.h>
 #include "M1.h"
-
+#ifndef OBJ_LIB
+    #define OBJ_LIB
+    #include "_object.h"
+#endif
 class Model
 {
 	private:
+        bool active;
 		Eloquent::TinyML::TfLite<NUMBER_OF_INPUTS, NUMBER_OF_OUTPUTS, TENSOR_ARENA_SIZE> tf;
 	public:
 		Model()
-		{}
+		{
+			active=false;
+		}
 		~Model()
 		{}
-		bool start()
+		bool start(Object&obj)
 		{
-			//unsigned char model_data[] __attribute__((aligned(4)))={}	;
-			//tf.begin(model_data);
-			return true;
+			active=tf.begin(obj.get_data());
+			return active;
 		}
-		void predict()
+		void predict(float*datas)
 		{
-			float x_test[NUMBER_OF_INPUTS] = { 1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3};
+			if(active==false)
+				return;
+			float x_test[NUMBER_OF_INPUTS];
+			for(int i=0;i<NUMBER_OF_INPUTS;i++)
+				x_test[i]=datas[i];
     		// // the output vector for the model predictions
     
 			float y_pred[NUMBER_OF_OUTPUTS];

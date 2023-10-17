@@ -258,6 +258,30 @@ class As7265x
             colorData = colorData | this->virtualReadRegister(channelRegister + 1);
             return colorData;
         }
+        float*getCalibrateds()
+        {
+            float datas[18]={
+                getCalibratedA(),
+                getCalibratedB(),
+                getCalibratedC(),
+                getCalibratedD(),
+                getCalibratedE(),
+                getCalibratedF(),
+                getCalibratedG(),
+                getCalibratedH(),
+                getCalibratedI(),
+                getCalibratedJ(),
+                getCalibratedK(),
+                getCalibratedL(),
+                getCalibratedR(),
+                getCalibratedS(),
+                getCalibratedT(),
+                getCalibratedU(),
+                getCalibratedV(),
+                getCalibratedW(),
+            };
+            return datas;
+        }
         //Returns the various calibration data
         float getCalibratedA()
         {
@@ -550,15 +574,25 @@ class As7265x
         }
     };
     private:
+        bool active;
         AS7265X as7265x;
     public:
         As7265x()
-        {}
+        {
+            active=false;
+        }
         ~As7265x()
         {}
         bool start()
+        {  
+            active=as7265x.begin();
+            return active;  
+        }
+        float* get_datas()
         {
-          as7265x.begin(); 
-          return true; 
+            if(!active)
+                return nullptr;
+            as7265x.takeMeasurementsWithBulb();
+            return as7265x.getCalibrateds();
         }
 };

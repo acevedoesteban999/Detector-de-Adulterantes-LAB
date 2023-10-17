@@ -4,6 +4,10 @@
 #include "_download.h"
 #include "_wifi.h"
 #include "_web.h"
+#ifndef OBJ_LIB
+    #define OBJ_LIB
+    #include "_object.h"
+#endif
 #include "_spiffs.h"
 #define LED_PIN 2
 
@@ -13,20 +17,41 @@ As7265x as7265x;
 Download_Model download_model;
 Wifi wifi;
 Spiffs spiffs;
+Object obj;
 void setup() {
     Serial.begin(115200);
     pinMode(LED_PIN, OUTPUT);
-    
-    
+
     spiffs.start();
     wifi.start();
     web.start();
-    model.start();
     as7265x.start();
     //model.predict();
-    download_model.download("https://raw.githubusercontent.com/Esteban1914/files/tesis/asmcas.edbm");
-    spiffs.save_model();
+    if(download_model.download("https://raw.githubusercontent.com/Esteban1914/files/tesis/asmcas.edbm",obj)) 
+    {
+        Serial.println("Download model");
+        if(spiffs.save_data("/model",obj))
+        {
+            Serial.println("Saved model");
+        }
 
+    }
+    if(spiffs.load_data("/model",obj))
+    {
+        Serial.println("Load model");
+        if(model.start(obj))
+        {
+            Serial.println("Start model");
+            obj.clear();
+            float*datas=as7265x.get_datas();
+            if (datas!=nullptr)
+                model.predict(datas);
+            else
+                Serial.println("No Datas");
+        }
+        
+    }
+    
     //WiFi.disconnect()
     // server.on("/a", HTTP_GET, [](AsyncWebServerRequest *request){
     //     request->send(SPIFFS, "/index.html");
