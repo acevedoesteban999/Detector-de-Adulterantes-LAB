@@ -1,56 +1,37 @@
 #include <Arduino.h>
-#include"_as7265x.h"
-#include "_model_.h"
-#include "_download.h"
-#include "_wifi.h"
 #include "_web.h"
+#ifndef _LIB
+    #define _LIB
+    #include "_wifi.h"
+    #include "_download.h"
+    #include"_as7265x.h"
+    #include "_model_.h"
+    #include "_spiffs.h"
+#endif
 #ifndef OBJ_LIB
     #define OBJ_LIB
     #include "_object.h"
 #endif
-#include "_spiffs.h"
 #define LED_PIN 2
 
 Web web;
 Model model;
 As7265x as7265x;
-Download_Model download_model;
+Download download;
 Wifi wifi;
 Spiffs spiffs;
 Object obj;
 void setup() {
     Serial.begin(115200);
     pinMode(LED_PIN, OUTPUT);
-
     spiffs.start();
+    web.init(&download,&as7265x,&model,&spiffs,&wifi);
+    as7265x.start();
     wifi.start();
     web.start();
-    as7265x.start();
-    //model.predict();
-    if(download_model.download("https://raw.githubusercontent.com/Esteban1914/files/tesis/asmcas.edbm",obj)) 
-    {
-        Serial.println("Download model");
-        if(spiffs.save_data("/model",obj))
-        {
-            Serial.println("Saved model");
-        }
+    if(spiffs.load_data("/model123",obj))
+        model.start(obj);
 
-    }
-    if(spiffs.load_data("/model",obj))
-    {
-        Serial.println("Load model");
-        if(model.start(obj))
-        {
-            Serial.println("Start model");
-            obj.clear();
-            float*datas=as7265x.get_datas();
-            if (datas!=nullptr)
-                model.predict(datas);
-            else
-                Serial.println("No Datas");
-        }
-        
-    }
     
     //WiFi.disconnect()
     // server.on("/a", HTTP_GET, [](AsyncWebServerRequest *request){

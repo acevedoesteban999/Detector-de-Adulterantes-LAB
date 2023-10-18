@@ -1,4 +1,3 @@
-#pragma once
 #include "SPIFFS.h"
 #ifndef OBJ_LIB
     #define OBJ_LIB
@@ -50,14 +49,26 @@ class Spiffs
             
             return true;
         }
+        bool save_data(String dir,String&str)
+        {
+            if(active==false)
+                return false;
+            File file = SPIFFS.open(dir, "w");
+            if(!file)
+                return false;
+            int bytesWritten = file.print(str);
+            file.close();
+            return true;
+        }
+        
         bool load_data(String dir,Object&obj)
         {
             if(active==false)
                 return false;
             obj.clear();
+            if(!SPIFFS.exists(dir))
+                return false; 
             File file = SPIFFS.open(dir, "r");
-            if(!file)
-                    return false;
             while(file.available())
             {
                 size_t size = file.available();

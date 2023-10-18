@@ -1,24 +1,23 @@
-#pragma once
 #include "HTTPClient.h"
 #ifndef OBJ_LIB
     #define OBJ_LIB
     #include "_object.h"
 #endif
-class Download_Model
+class Download
 {
     private:
         HTTPClient http;
     public:
-    Download_Model()
+    Download()
     {}
-    ~Download_Model()
+    ~Download()
     {}
     bool download(String url,Object&obj)
     {
         http.begin(url);
         int httpCode = http.GET();
         int len = http.getSize();
-        if (len<=0)
+        if (httpCode!=200)
             return false;
         WiFiClient * stream = http.getStreamPtr();
         obj.clear();

@@ -3,7 +3,6 @@
 #define NUMBER_OF_OUTPUTS 5
 #define TENSOR_ARENA_SIZE 5*1024
 #include <EloquentTinyML.h>
-#include "M1.h"
 #ifndef OBJ_LIB
     #define OBJ_LIB
     #include "_object.h"
