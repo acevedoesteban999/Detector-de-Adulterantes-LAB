@@ -49,7 +49,8 @@ class Spiffs
             
             return true;
         }
-        bool save_data(String dir,String&str)
+        
+        bool save_data(String dir,String str)
         {
             if(active==false)
                 return false;

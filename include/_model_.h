@@ -11,6 +11,7 @@ class Model
 {
 	private:
         bool active;
+		String model_name;
 		Eloquent::TinyML::TfLite<NUMBER_OF_INPUTS, NUMBER_OF_OUTPUTS, TENSOR_ARENA_SIZE> tf;
 	public:
 		Model()
@@ -19,18 +20,30 @@ class Model
 		}
 		~Model()
 		{}
+		bool get_active()
+		{
+			return active;
+		}
 		bool start(Object&obj)
 		{
 			active=tf.begin(obj.get_data());
 			return active;
 		}
-		void predict(float*datas)
+		void load_name(String name)
+		{
+			model_name=name;
+		}
+		String get_name()
+		{
+			return model_name;
+		}
+		uint8_t predict(_18float datas)
 		{
 			if(active==false)
-				return;
+				return 0;
 			float x_test[NUMBER_OF_INPUTS];
 			for(int i=0;i<NUMBER_OF_INPUTS;i++)
-				x_test[i]=datas[i];
+				x_test[i]=datas.get_data(i);
     		// // the output vector for the model predictions
     
 			float y_pred[NUMBER_OF_OUTPUTS];
@@ -61,5 +74,6 @@ class Model
 			// or you can skip the predict() method and call directly predictClass()
 			Serial.print("Sanity check: ");
 			Serial.println(tf.predictClass(x_test));
+			return tf.predictClass(x_test);
 		}
 };

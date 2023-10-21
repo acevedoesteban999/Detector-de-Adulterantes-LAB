@@ -258,29 +258,28 @@ class As7265x
             colorData = colorData | this->virtualReadRegister(channelRegister + 1);
             return colorData;
         }
-        float*getCalibrateds()
+        _18float getCalibrateds()
         {
-            float datas[18]={
-                getCalibratedA(),
-                getCalibratedB(),
-                getCalibratedC(),
-                getCalibratedD(),
-                getCalibratedE(),
-                getCalibratedF(),
-                getCalibratedG(),
-                getCalibratedH(),
-                getCalibratedI(),
-                getCalibratedJ(),
-                getCalibratedK(),
-                getCalibratedL(),
-                getCalibratedR(),
-                getCalibratedS(),
-                getCalibratedT(),
-                getCalibratedU(),
-                getCalibratedV(),
-                getCalibratedW(),
-            };
-            return datas;
+            _18float _18;
+            _18.add(getCalibratedA());
+            _18.add(getCalibratedB());
+            _18.add(getCalibratedC());
+            _18.add(getCalibratedD());
+            _18.add(getCalibratedE());
+            _18.add(getCalibratedF());
+            _18.add(getCalibratedG());
+            _18.add(getCalibratedH());
+            _18.add(getCalibratedI());
+            _18.add(getCalibratedJ());
+            _18.add(getCalibratedK());
+            _18.add(getCalibratedL());
+            _18.add(getCalibratedR());
+            _18.add(getCalibratedS());
+            _18.add(getCalibratedT());
+            _18.add(getCalibratedU());
+            _18.add(getCalibratedV());
+            _18.add(getCalibratedW());
+            return _18;
         }
         //Returns the various calibration data
         float getCalibratedA()
@@ -588,10 +587,14 @@ class As7265x
             active=as7265x.begin();
             return active;  
         }
-        float* get_datas()
+        bool get_active()
+        {
+            return active;
+        }
+        _18float get_datas()
         {
             if(!active)
-                return nullptr;
+                return _18float();
             as7265x.takeMeasurementsWithBulb();
             return as7265x.getCalibrateds();
         }

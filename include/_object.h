@@ -61,9 +61,60 @@ class Object
         {
             return data;
         }
+        String get_data_str()
+        {
+            String s;
+            for(int i=0;i<count;i++)
+                s+=String((char)data[i]);
+            return s;
+        }
         void print()
         {
             for(int i=0;i<count;i++)
                 Serial.print(data[i]);
+            Serial.println();
+        }
+        void print_str()
+        {
+            String s=get_data_str();
+            Serial.println(s);
         }
 };
+
+class _18float
+    {
+        private:
+            float _18[18];
+            unsigned count;
+        public:
+            _18float()
+            {
+                count=0;
+            }
+            bool complete()
+            {
+                return count==18?true :false;
+            }
+            float* get_18()
+            {
+                return _18;    
+            }
+            float get_data(unsigned i)
+            {
+                if(i>=18)
+                    return 0;
+                return _18[i];
+            }
+            // _18float(const _18float&_18)
+            // {
+            //     for(int i=0;i<18;i++)
+            //         this->_18[i]=_18._18[i];
+            //     count=18;
+            // }
+            void add(float data)
+            {
+                if(count>=18)
+                    return;
+                _18[count++]=data;
+            }
+    };
