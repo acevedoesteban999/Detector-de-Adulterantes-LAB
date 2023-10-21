@@ -13,8 +13,8 @@ def prediction_thread(name,_model_pk):
         from tensorflow import keras
         import numpy as np
         _name=Model.objects.get(pk=_model_pk).name.replace(' ','_')
-        model: keras.Sequential= keras.models.load_model(os.path.join(BASE_DIR,f"media/models/_{_name}.h5"))
-        model.load_weights(os.path.join(BASE_DIR,f"media/models/_{_name}_W.h5"))
+        model: keras.Sequential= keras.models.load_model(os.path.join(BASE_DIR,f"media/models/{_name}.keras"))
+        model.load_weights(os.path.join(BASE_DIR,f"media/models/{_name}_W.keras"))
         predict_class=model.predict(np.array(measuring.get_list_data(),dtype=float).reshape(1,18)).argmax(axis=-1).tolist()[0]
         measuring.predict=PredictionChoices[predict_class][0]
         measuring.save()

@@ -11,6 +11,7 @@ def trin_model_thread(name,_list):
             )
             import numpy as np
             import tensorflow as tf
+            import hexdump
             from tinymlgen import port
             for l in _list:
                 Training.objects.get(pk=l).models.add(m)
@@ -42,11 +43,16 @@ def trin_model_thread(name,_list):
                 verbose=False,
             )
             _name=name.replace(' ','_')
-            model.save(os.path.join(BASE_DIR,f"media/models/_{_name}.h5"))
-            model.save_weights(os.path.join(BASE_DIR,f"media/models/_{_name}_W.h5"))
-            c_code = port(model, pretty_print=True)
-            with open(os.path.join(BASE_DIR,f"media/models/_{_name}.h"), "w") as text_file:
-                print(c_code, file=text_file)
+            model.save(os.path.join(BASE_DIR,f"media/models/{_name}.keras"))
+            model.save_weights(os.path.join(BASE_DIR,f"media/models/{_name}_W.keras"))
+            #c_code = port(model, pretty_print=True)
+            converter = tf.lite.TFLiteConverter.from_keras_model(model)
+            converter.optimizations = [tf.lite.Optimize.OPTIMIZE_FOR_SIZE]
+            tflite_model = converter.convert()
+            with open(os.path.join(BASE_DIR,f"media/models/{_name}.edbm"), "wb") as text_file:
+                text_file.write(tflite_model)
+            
+            
             m.state=True
         except Exception as e:
             print("Error:",e)
