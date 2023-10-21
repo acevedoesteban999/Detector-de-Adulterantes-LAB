@@ -119,6 +119,20 @@ class ModelDataView(MyLoginRequiredMixin,ListView):
         context['back_url']=reverse_lazy('mod_list')
         return context
 
+
+
+class ModelUploadView(MyLoginRequiredMixin,View):
+    
+    def get(self,request,*args, **kwargs):
+        from git import Repo
+        from config.settings import BASE_DIR
+        # Crear un objeto de archivo ZIP en memoria
+        try:
+            repo=Repo(BASE_DIR)
+            print(repo.status())
+        except Exception as e:
+            print(e)
+
 class ModelDownloadView(MyLoginRequiredMixin,View):
     
     def get(self,request,*args, **kwargs):
@@ -128,15 +142,15 @@ class ModelDownloadView(MyLoginRequiredMixin,View):
         import io
         import zipfile
 
-        # Crear un objeto de archivo ZIP en memoria
         try:
+            print("A")
             zip_data = io.BytesIO()
             pk=kwargs.get('pk')
             _name=Model.objects.get(pk=pk).name.replace(" ","_")
             with zipfile.ZipFile(zip_data, 'w') as archive:
-                archive.write(arcname=f"_{_name}.h",filename= os.path.join(MEDIA_ROOT, f"models/_{_name}.h"))  
-                archive.write(arcname=f"_{_name}.h5",filename= os.path.join(MEDIA_ROOT, f"models/_{_name}.h5"))  
-                archive.write(arcname=f"_{_name}_W.h5",filename= os.path.join(MEDIA_ROOT, f"models/_{_name}_W.h5")) 
+                archive.write(arcname=f"_{_name}.h",filename= os.path.join(MEDIA_ROOT, f"models/{_name}"))  
+                archive.write(arcname=f"_{_name}.h5",filename= os.path.join(MEDIA_ROOT, f"models/{_name}.keras"))  
+                archive.write(arcname=f"_{_name}_W.h5",filename= os.path.join(MEDIA_ROOT, f"models/{_name}_W.keras")) 
 
             zip_data.seek(0)
             response = HttpResponse(zip_data.read(), content_type="application/zip")
