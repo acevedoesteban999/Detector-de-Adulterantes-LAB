@@ -54,9 +54,9 @@ class Spiffs
         {
             if(active==false)
                 return false;
+            if(!SPIFFS.exists(dir))
+                return false; 
             File file = SPIFFS.open(dir, "w");
-            if(!file)
-                return false;
             int bytesWritten = file.print(str);
             file.close();
             return true;
@@ -77,6 +77,7 @@ class Spiffs
                 int c=file.read(buff, ((size > sizeof(buff)) ? sizeof(buff) : size));
                 obj.append(buff,c);
             }
+            file.close();
             return true;
         }
 };

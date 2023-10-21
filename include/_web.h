@@ -108,7 +108,6 @@ class Web
             if(flag_download)
             {
                 String state;
-                bool reset_spiffs=true;
                 if(wifi->connect_wifi(wifi->get_ssid(),wifi->get_pass()))
                 {   
                     if(spiffs->save_data("/wifi_ssid",wifi->get_ssid()) && spiffs->save_data("/wifi_pass",wifi->get_pass()))
@@ -119,16 +118,15 @@ class Web
                         Object obj;
                         if(download->download(_url,obj))
                         {
-                            if(spiffs->save_data("/model",obj) && spiffs->save_data("/model_name",model_name))
+                            if(model->start(obj))
                             {
-                                reset_spiffs=false;
-                                if(model->start(obj))
+                                if(spiffs->save_data("/model",obj) && spiffs->save_data("/model_name",model_name))
                                     state="OK";
                                 else
-                                    state="Error3";
+                                    state="Error2";
                             }
                             else
-                                state="Error2";
+                                state="Error3";
                         }
                         else
                             state="Error1";
@@ -139,9 +137,8 @@ class Web
                 else
                     state="Error4";
                 wifi->set_state(state);
-                if(reset_spiffs)
+                if(state!="OK")
                     load_spiffs_params();
-                
                 wifi->create_ap();
                 flag_download=false;
             }
@@ -189,26 +186,24 @@ class Web
                 String resp="";
                 if(request->hasParam("action", true) && request->getParam("action", true)->value()=="predict")
                 {
-
-                    if (this->as7265x->get_active())
+                    if(this->model->get_active())
                     {
-                        _18float data=this->as7265x->get_datas();
-                        if(data.complete())
+                        if (this->as7265x->get_active())
                         {
-                            if(this->model->get_active())
+                            _18float data=this->as7265x->get_datas();
+                            if(data.complete())
                             {
                                 resp=String(this->model->predict(data));
                                 state="OK";
                             }
                             else
-                                state="Error3";
+                                state="Error2";
                         }
                         else
-                            state="Error2";
+                            state="Error1";
                     }
                     else
-                        state="Error1";
-                    
+                        state="Error3";    
                 }
                 String _r="state="+state+"&predict_data="+resp;
                 AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", _r);

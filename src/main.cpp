@@ -21,12 +21,10 @@ Download download;
 Wifi wifi;
 Spiffs spiffs;
 Object obj;
-Object obj1;
 void setup() {
     Serial.begin(115200);
     pinMode(LED_PIN, OUTPUT);
     spiffs.start();
-    //spiffs.print_files();
     web.init(&download,&as7265x,&model,&spiffs,&wifi);
     as7265x.start();
     wifi.start();

@@ -76,11 +76,6 @@
 
 class As7265x
 {
-    ////////////////////////AS7265X///////////////////////////
-    // Serial.println(String(as7265x.isConnected()).c_str());
-    // as7265x.begin();
-    // as7265x.takeMeasurementsWithBulb();
-    // Serial.println(as7265x.getCalibratedA());
     
     class AS7265X
     {
@@ -380,11 +375,6 @@ class As7265x
             };
             as7265x_union a_u(b0,b1,b2,b3);
             float calBytes=a_u._float;
-            // Serial.println(b0);
-            // Serial.println(b1);
-            // Serial.println(b2);
-            // Serial.println(b3);
-            // Serial.println(calBytes);
             return calBytes;
         }
         // #Given 4 bytes returns the floating point value
