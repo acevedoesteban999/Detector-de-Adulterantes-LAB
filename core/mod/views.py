@@ -125,11 +125,17 @@ class ModelUploadView(MyLoginRequiredMixin,View):
     
     def get(self,request,*args, **kwargs):
         from git import Repo
-        from config.settings import BASE_DIR
+        import os
+        from config.settings import BASE_DIR,MEDIA_ROOT
         # Crear un objeto de archivo ZIP en memoria
         try:
-            repo=Repo(BASE_DIR)
-            print(repo.status())
+            # repo=Repo(BASE_DIR)
+            # pk=kwargs.get('pk')
+            # _name=Model.objects.get(pk=pk).name.replace(" ","_")
+            # repo.index.add([os.path.join(MEDIA_ROOT, f"/models/{_name}")])
+            # repo.index.commit(f"AutoCommit: {_name}")
+            # remote_branch = repo.remotes.origin.refs[repo.active_branch.name]
+            repo.git.push('--set-upstream', 'origin', remote_branch)
         except Exception as e:
             print(e)
 
