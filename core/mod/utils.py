@@ -49,7 +49,7 @@ def trin_model_thread(name,_list):
             converter = tf.lite.TFLiteConverter.from_keras_model(model)
             converter.optimizations = [tf.lite.Optimize.OPTIMIZE_FOR_SIZE]
             tflite_model = converter.convert()
-            with open(os.path.join(BASE_DIR,f"media/models/{_name}.edbm"), "wb") as text_file:
+            with open(os.path.join(BASE_DIR,f"media/models/{_name}"), "wb") as text_file:
                 text_file.write(tflite_model)
             
             

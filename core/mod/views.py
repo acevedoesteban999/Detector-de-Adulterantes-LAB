@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView,FormView,ListView,UpdateView,DeleteView,DetailView,View
 from core.log.utils import MyLoginRequiredMixin
 from .forms import *
+from config.utils import thread_is_alive
 from core.meas.models import Measuring,MeasuringData
 from core.tra.models import Training
 from django.contrib import messages
@@ -14,6 +15,13 @@ class ModelListView(MyLoginRequiredMixin,ListView):
     template_name='list_mod.html'
     model=Model    
     def get_queryset(self):
+        objs=Model.objects.filter(state=None)
+        if objs.count()!=0:
+            if not thread_is_alive("ThreadModel"):
+              for o in objs:
+                  o.state=False
+                  o.save()  
+        
         return super().get_queryset().order_by('-datetime')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -124,20 +132,26 @@ class ModelDataView(MyLoginRequiredMixin,ListView):
 class ModelUploadView(MyLoginRequiredMixin,View):
     
     def get(self,request,*args, **kwargs):
-        from git import Repo
+        from git import Repo,Git
+        from django.http import HttpResponse, Http404   
         import os
         from config.settings import BASE_DIR,MEDIA_ROOT
+        import shutil
         # Crear un objeto de archivo ZIP en memoria
+        pk=kwargs.get('pk')
+        _name=Model.objects.get(pk=pk).name.replace(" ","_")
         try:
-            # repo=Repo(BASE_DIR)
-            # pk=kwargs.get('pk')
-            # _name=Model.objects.get(pk=pk).name.replace(" ","_")
-            # repo.index.add([os.path.join(MEDIA_ROOT, f"/models/{_name}")])
-            # repo.index.commit(f"AutoCommit: {_name}")
-            # remote_branch = repo.remotes.origin.refs[repo.active_branch.name]
-            repo.git.push('--set-upstream', 'origin', remote_branch)
+            r=Repo("../files/")
+            r.git.checkout("tesis")
+            r.remote().pull()
+            shutil.copy2(os.path.join(BASE_DIR,f"media/models/{_name}"),BASE_DIR.__str__().replace("Tesis","files"))
+            r.index.add([f"{_name}"])
+            r.index.commit(f"AutoCommit: {_name}")
+            r.remote().push()
+            return render(request,"html_upload.html",context={"MSG":f"Se ha actualizado correctamente el modelo {_name}","URL":f"https://raw.githubusercontent.com/Esteban1914/files/tesis/{_name}"})
         except Exception as e:
             print(e)
+            return render(request,"html_upload.html",context={"MSG":f"Error al actualizar modelo {_name}","Error":e})
 
 class ModelDownloadView(MyLoginRequiredMixin,View):
     
