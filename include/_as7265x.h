@@ -361,26 +361,19 @@ class As7265x
             int b1 = this->virtualReadRegister(calAddress + 1);
             int b2 = this->virtualReadRegister(calAddress + 2);
             int b3 = this->virtualReadRegister(calAddress + 3);
-            union as7265x_union
-            {
-                char _bytes[4];
-                float _float;
-                as7265x_union(int byte0,int byte1,int byte2,int byte3)
-                {
-                    this->_bytes[3]=byte0;
-                    this->_bytes[2]=byte1;
-                    this->_bytes[1]=byte2;
-                    this->_bytes[0]=byte3;
-                }
-            };
-            as7265x_union a_u(b0,b1,b2,b3);
-            float calBytes=a_u._float;
-            return calBytes;
+            
+            unsigned int calBytes = 0;
+            calBytes |= (b0 << (8 * 3));
+            calBytes |= (b1 << (8 * 2));
+            calBytes |= (b2 << (8 * 1));
+            calBytes |= (b3 << (8 * 0));
+            float floatValue = *((float*)&calBytes);
+            return floatValue;
         }
         // #Given 4 bytes returns the floating point value
         void setMeasurementMode(int mode)
         {
-            mode = 0b11 ? mode > 0b11 : mode;
+            mode = mode > 0b11 ? 0b11 : mode;
 
             int value = this->virtualReadRegister(CONFIG);
             value &= 0b11110011;
@@ -389,7 +382,7 @@ class As7265x
         }
         void setGain(int gain)
         {
-            gain = 0b11 ? gain > 0b11 : gain;
+            gain = gain > 0b11 ? 0b11 : gain;
 
             int value = this->virtualReadRegister(CONFIG);
             value &= 0b11001111;
@@ -436,7 +429,7 @@ class As7265x
         void setBulbCurrent(int current, int device)
         {
             this->selectDevice(device);
-            current = 0b11 ? current > 0b11 : current;
+            current = current > 0b11 ? 0b11 : current;
             int value = this->virtualReadRegister(LED_CONFIG);
             value &= 0b11001111;
             value |= (current << 4);
@@ -464,7 +457,7 @@ class As7265x
         }
         void setIndicatorCurrent(int current)
         {
-            current = 0b11 ? current > 0b11 : current;
+            current = current > 0b11 ? 0b11 : current;
             int value = this->virtualReadRegister(LED_CONFIG);
             value &= 0b11111001;
             value |= (current << 1);

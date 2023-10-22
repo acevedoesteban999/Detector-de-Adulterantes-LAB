@@ -105,6 +105,11 @@ class _18float
                     return 0;
                 return _18[i];
             }
+            void print()
+            {
+                for(int i=0;i<count;i++)
+                    Serial.println(_18[i]);
+            }
             // _18float(const _18float&_18)
             // {
             //     for(int i=0;i<18;i++)
