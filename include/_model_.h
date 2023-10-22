@@ -1,7 +1,7 @@
 #pragma once
 #define NUMBER_OF_INPUTS 18
 #define NUMBER_OF_OUTPUTS 5
-#define TENSOR_ARENA_SIZE 5*1024
+#define TENSOR_ARENA_SIZE 3*1024
 #include <EloquentTinyML.h>
 #ifndef OBJ_LIB
     #define OBJ_LIB
@@ -24,6 +24,10 @@ class Model
 		{
 			return active;
 		}
+		void clear()
+		{
+
+		}
 		bool start(Object&obj)
 		{
 			active=tf.begin(obj.get_data());
@@ -39,6 +43,7 @@ class Model
 		}
 		uint8_t predict(_18float datas)
 		{
+			datas.print();
 			if(active==false)
 				return 0;
 			float x_test[NUMBER_OF_INPUTS];
@@ -69,11 +74,11 @@ class Model
 
 			// let's print the "most probable" class
 			// you can either use probaToClass() if you also want to use all the probabilities
-			Serial.print("Predicted class is: ");
+			Serial.print("\nPredicted class is: ");
 			Serial.println(tf.probaToClass(y_pred));
 			// or you can skip the predict() method and call directly predictClass()
 			Serial.print("Sanity check: ");
 			Serial.println(tf.predictClass(x_test));
-			return tf.predictClass(x_test);
+			return tf.probaToClass(y_pred);
 		}
 };

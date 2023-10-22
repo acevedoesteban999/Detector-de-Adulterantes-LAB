@@ -36,15 +36,8 @@ class Object
         }
         void append(unsigned char*values,int len)
         {
-            if(count+len>=max)
-            {
-                resize();
-                return append(values,len);
-            } 
             for(int i=0;i<len;i++)
-            {
-                data[count++]=values[i];
-            }
+                append(values[i]);
         }
         void clear()
         {
@@ -77,7 +70,7 @@ class Object
         void print_str()
         {
             String s=get_data_str();
-            Serial.println(s);
+            Serial.print(s);
         }
 };
 

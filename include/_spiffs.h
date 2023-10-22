@@ -49,13 +49,14 @@ class Spiffs
             
             return true;
         }
-        
+        bool exist(String dir)
+        {
+            return SPIFFS.exists(dir);
+        }
         bool save_data(String dir,String str)
         {
             if(active==false)
                 return false;
-            if(!SPIFFS.exists(dir))
-                return false; 
             File file = SPIFFS.open(dir, "w");
             int bytesWritten = file.print(str);
             file.close();
@@ -80,4 +81,8 @@ class Spiffs
             file.close();
             return true;
         }
+        bool delete_data(String dir)
+		{
+			return SPIFFS.remove(dir);
+		}
 };

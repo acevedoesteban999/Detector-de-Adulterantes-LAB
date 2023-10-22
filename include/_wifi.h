@@ -88,16 +88,18 @@ class Wifi
         {
             if(state=="OK")
                 return "Actulizado Modelo Correctamente";
-            else if(state=="Error1")
+            else if(state=="E1")
                 return "Error al Descargar Modelo";
-            else if(state=="Error2")
+            else if(state=="E2")
                 return "Error al Salvar Modelo en Memoria";
-            else if(state=="Error3")
+            else if(state=="E3")
                 return "Error al Cargar Modelo";
-            else if(state=="Error4")
+            else if(state=="E4")
                 return "Error al Conectar a Wifi";
-            else if(state=="Error5")
+            else if(state=="E5")
                 return "Error al Salvar datos Wifi";
+            else if(state=="E6")
+                return "Error Modelo Incorrecto";
             else
                 return "Error";
         }

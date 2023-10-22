@@ -181,19 +181,19 @@ const char predict_html[] = R"rawliteral(
                 h.innerHTML=params.get("predict_data");
                 h.style="color: green;";
             }
-            else if(state=="Error1")
+            else if(state=="E1")
             {
                 d.style="";
                 h.innerHTML="Error al Conectar al Sensor"
                 h.style="color: red;";
             }
-            else if(state=="Error2")
+            else if(state=="E2")
             {
                 d.style="";
                 h.innerHTML="Error al Leer Datos del Sensor"
                 h.style="color: red;";
             }
-            else if(state=="Error3")
+            else if(state=="E3")
             {
                 d.style="";
                 h.innerHTML="Error al Cargar Modelo"

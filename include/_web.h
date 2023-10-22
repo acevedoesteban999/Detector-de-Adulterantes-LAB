@@ -1,6 +1,7 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include "_htmls.h"
+#include <esp_system.h>
 #ifndef _LIB
     #define _LIB
     #include "_wifi.h"
@@ -71,7 +72,6 @@ class Web
             }
             else if(var == "SSID")
             {
-                Serial.println(_wifi->get_ssid().c_str());
                 return F(_wifi->get_ssid().c_str());
             }
             else if(var == "PASS")
@@ -96,8 +96,6 @@ class Web
         void load_spiffs_params()
         {
             Object obj,obj1;
-            if(spiffs->load_data("/model",obj))
-                model->start(obj);
             if(spiffs->load_data("/model_name",obj))
                 model->load_name(obj.get_data_str());
             if(spiffs->load_data("/wifi_ssid",obj)&&spiffs->load_data("/wifi_pass",obj1))
@@ -118,27 +116,20 @@ class Web
                         Object obj;
                         if(download->download(_url,obj))
                         {
-                            if(model->start(obj))
-                            {
-                                if(spiffs->save_data("/model",obj) && spiffs->save_data("/model_name",model_name))
-                                    state="OK";
-                                else
-                                    state="Error2";
-                            }
-                            else
-                                state="Error3";
+                            spiffs->save_data("/new_model",obj);
+                            spiffs->save_data("/new_model_name",model_name);
+                            esp_restart();
                         }
                         else
-                            state="Error1";
+                            state="E1";
                     }
                     else
-                        state="Error5";
+                        state="E5";
                 }
                 else
-                    state="Error4";
+                    state="E4";
                 wifi->set_state(state);
-                if(state!="OK")
-                    load_spiffs_params();
+                load_spiffs_params();
                 wifi->create_ap();
                 flag_download=false;
             }
@@ -197,13 +188,13 @@ class Web
                                 state="OK";
                             }
                             else
-                                state="Error2";
+                                state="E2";
                         }
                         else
-                            state="Error1";
+                            state="E1";
                     }
                     else
-                        state="Error3";    
+                        state="E3";    
                 }
                 String _r="state="+state+"&predict_data="+resp;
                 AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", _r);
