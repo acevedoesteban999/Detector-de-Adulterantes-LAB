@@ -115,19 +115,21 @@ class ModelDataView(MyLoginRequiredMixin,ListView):
         self.pk = kwargs['pk']
         return super().dispatch(request, *args, **kwargs)
     def get_queryset(self):
-        print(Training.objects.filter(models=self.pk))
-        print(Training.objects.all().values())
+        objs=Training.objects.filter(state=None)
+        if objs.count()!=0:
+            if not thread_is_alive("ThreadTrainings"):
+              for o in objs:
+                  o.state=False
+                  o.save()  
         return super().get_queryset().filter(models__id=self.pk)
     
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = Training.objects.get(pk=self.pk).name
+        context['title'] = Model.objects.get(pk=self.pk).name
         
         context['back_url']=reverse_lazy('mod_list')
         return context
-
-
 
 class ModelUploadView(MyLoginRequiredMixin,View):
     
@@ -163,14 +165,13 @@ class ModelDownloadView(MyLoginRequiredMixin,View):
         import zipfile
 
         try:
-            print("A")
             zip_data = io.BytesIO()
             pk=kwargs.get('pk')
             _name=Model.objects.get(pk=pk).name.replace(" ","_")
             with zipfile.ZipFile(zip_data, 'w') as archive:
-                archive.write(arcname=f"_{_name}.h",filename= os.path.join(MEDIA_ROOT, f"models/{_name}"))  
-                archive.write(arcname=f"_{_name}.h5",filename= os.path.join(MEDIA_ROOT, f"models/{_name}.keras"))  
-                archive.write(arcname=f"_{_name}_W.h5",filename= os.path.join(MEDIA_ROOT, f"models/{_name}_W.keras")) 
+                archive.write(arcname=f"_{_name}.",filename= os.path.join(MEDIA_ROOT, f"models/{_name}"))  
+                archive.write(arcname=f"_{_name}.keras",filename= os.path.join(MEDIA_ROOT, f"models/{_name}.keras"))  
+                archive.write(arcname=f"_{_name}_W.keras",filename= os.path.join(MEDIA_ROOT, f"models/{_name}_W.keras")) 
 
             zip_data.seek(0)
             response = HttpResponse(zip_data.read(), content_type="application/zip")
