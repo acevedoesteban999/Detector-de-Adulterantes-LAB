@@ -1,0 +1,22 @@
+{% extends '_base.html' %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-conetent-center text-center ">
+            <div class="col-10">
+                <h1 class="display-4"><span class="badge bg-{% if not Error %}success{% else %}danger{% endif %}">{{MSG}}</span></h1>
+                <br>
+                {% if not Error %}
+                    <a href="{{URL}}" target='_blank' role="button" class="rounded p-2 m-3 btn-info btn-flat">Ver Raw del Modelo</a>
+                {% endif %}
+                {% if Error %}
+                    <h3 class="h5"><span class="badge bg-danger">{{Error}}</span></h3>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row justify-content-end mt-4">
+            <div class="col-auto">
+                <a href="{% url 'mod_list' %}" class="rounded p-2 m-5 btn-warning" >Regresar</a>
+            </div>
+        </div>
+    </div>
+{% endblock  %}
