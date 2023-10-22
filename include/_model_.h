@@ -1,4 +1,3 @@
-#pragma once
 #define NUMBER_OF_INPUTS 18
 #define NUMBER_OF_OUTPUTS 5
 #define TENSOR_ARENA_SIZE 3*1024
