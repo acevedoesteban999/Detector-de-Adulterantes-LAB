@@ -148,7 +148,7 @@ const char predict_html[] = R"rawliteral(
     </style>
 </head>
 <body>
-    <h2>Predecir Modelo</h2>
+    <h2>Predecir</h2>
     <h5>Modelo actual: <strong>%MODEL_NAME%</strong><h5>
     <button class="button" onclick="Predict()">Predecir</button>
     <br>
