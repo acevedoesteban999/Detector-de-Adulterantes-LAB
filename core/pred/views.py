@@ -56,7 +56,13 @@ class PredictionListView(MyLoginRequiredMixin,ListView):
     model=Prediction
     
     def get_queryset(self):
-       return super().get_queryset().order_by('-datetime')
+        objs=Prediction.objects.filter(state=None)
+        if objs.count()!=0:
+            if not thread_is_alive("ThreadPrediction"):
+                for o in objs:
+                  o.state=False
+                  o.save()  
+        return super().get_queryset().order_by('-datetime')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
