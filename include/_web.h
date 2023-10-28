@@ -1,6 +1,6 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
-#include "_htmls.h"
+//#include "_htmls.h"
 #include <esp_system.h>
 #ifndef _LIB
     #define _LIB
@@ -137,19 +137,19 @@ class Web
         }
         bool start()
         {
-            server->on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-            {
-                request->send_P(200, "text/html", index_html, processor);
-            });
-            server->on("/download", HTTP_GET, [](AsyncWebServerRequest *request)
-            {
-                request->send_P(200, "text/html", download_html, processor);
-                _wifi->reset_download();
-            });
-            server->on("/styles.css", HTTP_GET, [](AsyncWebServerRequest *request)
-            {
-                request->send_P(200, "text/css", styles_css);
-            });
+            // server->on("/", HTTP_GET, [](AsyncWebServerRequest *request)
+            // {
+            //     request->send_P(200, "text/html", index_html, processor);
+            // });
+            // server->on("/download", HTTP_GET, [](AsyncWebServerRequest *request)
+            // {
+            //     request->send_P(200, "text/html", download_html, processor);
+            //     _wifi->reset_download();
+            // });
+            // server->on("/styles.css", HTTP_GET, [](AsyncWebServerRequest *request)
+            // {
+            //     request->send_P(200, "text/css", styles_css);
+            // });
             server->on("/post/download", HTTP_POST, [&,this](AsyncWebServerRequest *request)
             {
                 if(request->hasParam("action", true) && request->getParam("action", true)->value()=="download")
@@ -166,11 +166,20 @@ class Web
                 request->send(response);
                 
             });
-            server->on("/predict", HTTP_GET, [](AsyncWebServerRequest *request)
-            {
-                request->send_P(200, "text/html", predict_html, processor);
+            // server->on("/predict", HTTP_GET, [](AsyncWebServerRequest *request)
+            // {
+            //     request->send_P(200, "text/html", predict_html, processor);
+            // });
+            server->on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+                request->send(SPIFFS, "/static/main.html", "text/html",false,processor);
             });
-            
+            server->on("/download", HTTP_GET, [](AsyncWebServerRequest *request){
+                request->send(SPIFFS, "/static/download.html", "text/html",false,processor);
+                _wifi->reset_download();
+            });
+            server->on("/predict", HTTP_GET, [](AsyncWebServerRequest *request){
+                request->send(SPIFFS, "/static/predict.html", "text/html",false,processor);
+            });
             server->on("/post/predict", HTTP_POST, [&,this](AsyncWebServerRequest *request)
             {
                 String state="Error0";
@@ -201,6 +210,7 @@ class Web
                 request->send(response);
                 
             });
+            server->serveStatic("/static", SPIFFS, "/static");
             server->onNotFound(notFound);
             server->begin();
             return true;

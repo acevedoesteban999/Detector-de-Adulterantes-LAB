@@ -1,0 +1,73 @@
+
+<!-- github/Esteban1914  -->
+<!DOCTYPE HTML><html>
+<head>
+    <link href="/static/styles.css" rel="stylesheet">
+    <title>ESP Web Server</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+    <style>
+    </style>
+</head>
+<body>
+    <h2>Predecir</h2>
+    <h5>Modelo actual: <strong>%MODEL_NAME%</strong><h5>
+    <button class="button" onclick="Predict()">Predecir</button>
+    <br>
+    <div style="display: none;" id="id_h">
+        <h2 id="h5_h"></h2>
+    </div>
+    <a class="button1" role="button" href="/">Regresar</a>
+</body>
+<script>
+    function Predict()
+    {   
+        let d=document.getElementById("id_h");
+        let h=document.getElementById("h5_h");
+        d.style="display: none;"
+        
+        fetch("/post/predict",
+        {
+            method: 'POST', 
+            headers:{
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: "action=predict"
+        })
+        .then(res=> res.text()).then(data=>{ 
+            var params = new URLSearchParams(data);
+            let state=params.get("state");
+            if(state=="OK")
+            {
+                d.style="";
+                h.innerHTML=params.get("predict_data");
+                h.style="color: green;";
+            }
+            else if(state=="E1")
+            {
+                d.style="";
+                h.innerHTML="Error al Conectar al Sensor"
+                h.style="color: red;";
+            }
+            else if(state=="E2")
+            {
+                d.style="";
+                h.innerHTML="Error al Leer Datos del Sensor"
+                h.style="color: red;";
+            }
+            else if(state=="E3")
+            {
+                d.style="";
+                h.innerHTML="Error al Cargar Modelo"
+                h.style="color: red;";
+            }
+            else
+            {
+                d.style="";
+                h.innerHTML="Error"
+                h.style="color: red;";
+            }
+        });
+    }
+</script>
+</html>

@@ -22,9 +22,11 @@ Wifi wifi;
 Spiffs spiffs;
 Object obj;
 void setup() {
+    
     Serial.begin(115200);
     pinMode(LED_PIN, OUTPUT);
     spiffs.start();
+    spiffs.print_files();
     web.init(&download,&as7265x,&model,&spiffs,&wifi);
     
     as7265x.start();
@@ -59,9 +61,17 @@ void setup() {
         
         wifi.set_download();
     }
-    else
+    else if(spiffs.exist("/error0_mode"))
     {
+        spiffs.delete_data("/model");
+        spiffs.delete_data("/error0_mode");
+    }
+    else if(spiffs.exist("/model"))
+    {
+        
+        spiffs.save_data("/error0_mode","_");
         spiffs.load_data("/model",obj);
+        spiffs.delete_data("/error0_mode");
         model.start(obj);
     }
     web.load_spiffs_params();

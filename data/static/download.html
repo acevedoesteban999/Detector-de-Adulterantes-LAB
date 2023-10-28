@@ -1,0 +1,62 @@
+<!-- github/Esteban1914  -->
+<!DOCTYPE HTML><html>
+<head>
+    <title>ESP Web Server</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:,">
+    <link href="/static/styles.css" rel="stylesheet">
+    <style>
+    </style>
+</head>
+<body>
+    <h1>Descargar Modelo</h1>
+    <div style="display: %DISPLAY%;color:%COLOR%" id="id_h">
+            <h2 id="h5_h">%H5_DATA%</h2>
+    </div>
+    <div id="div_al">
+        <h5>Modelo actual: <strong>%MODEL_NAME%</strong></h5>
+        <label for="n_model">Modelo</label>
+        <br>
+        <input autocomplete="new-password" placeholder="Modelo" type="text" name="n_model" id="id_model" value="%MODEL_NAME%">
+        <br>
+        <label for="n_ssid">SSID</label>
+        <br>
+        <input autocomplete="new-password" placeholder="SSID Wifi" type="text" name="n_ssid" id="id_ssid" value="%SSID%">
+        <br>
+        <label for="n_pass">Password</label>
+        <br>
+        <input autocomplete="new-password" placeholder="Password Wifi" type="password" name="n_pass" id="id_pass" value="%PASS%">
+        <br>
+        <button class="button" onclick="Download()">Descargar</button>
+        <br>
+    </div>
+    
+    <a class="button1" role="button" href="/">Regresar</a>
+</body>
+<script>
+    function Download()
+    {   
+
+        let  model=document.getElementById("id_model").value
+        let ssid=document.getElementById("id_ssid").value
+        let pass=document.getElementById("id_pass").value
+        let d=document.getElementById("id_h");
+        let h=document.getElementById("h5_h");
+        d.style="display: none;"
+        fetch("/post/download",
+        {
+            method: 'POST', 
+            headers:{
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: "action=download&model="+String(model)+"&ssid="+String(ssid)+"&pass="+String(pass)
+        })
+        .then(res=> res.text()).then(data=>{ 
+                document.getElementById("div_al").style="display: none;"
+                d.style="";
+                h.innerHTML=data;
+                h.style="color: black;";
+        });
+    }
+</script>
+</html>

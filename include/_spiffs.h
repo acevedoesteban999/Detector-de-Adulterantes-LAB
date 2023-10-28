@@ -32,7 +32,10 @@ class Spiffs
             File file=root.openNextFile();
             while(file)
             {
+                
                 Serial.println(file.name());
+                Serial.println(file.path());
+                
                 file=root.openNextFile();
             }
         }
