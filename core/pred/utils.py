@@ -15,7 +15,7 @@ def prediction_thread(name,_model_pk):
         _name=Model.objects.get(pk=_model_pk).name.replace(' ','_')
         model: keras.Sequential= keras.models.load_model(os.path.join(BASE_DIR,f"media/models/{_name}.keras"))
         model.load_weights(os.path.join(BASE_DIR,f"media/models/{_name}_W.keras"))
-        predict_class=model.predict(np.array(measuring.get_list_data(),dtype=float).reshape(1,18)).argmax(axis=-1).tolist()[0]
+        predict_class=model.predict(np.array(measuring.get_list_data(),dtype=float).reshape(1,18)).argmax()
         measuring.predict=PredictionChoices[predict_class][0]
         measuring.save()
         p.state=True
