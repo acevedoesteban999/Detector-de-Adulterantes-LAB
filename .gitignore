@@ -9,4 +9,5 @@ media/users/
 media/models/
 static/admin
 static/admin-lte
+kerastuner/
 
