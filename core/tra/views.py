@@ -154,7 +154,7 @@ class TrainingDownloadCSVDataView(MyLoginRequiredMixin,View):
             l2=[]
             for md in m.measuring_data.all():
                 l2.append(md.value)
-            l2.append([PredictionChoices.index(item)+1 for item in PredictionChoices if item[0] == m.predict][0])
+            l2.append([PredictionChoices.index(item) for item in PredictionChoices if item[0] == m.predict][0])
             l1.append(l2)
         labels=Measuring.chanels()
         labels.append("label")

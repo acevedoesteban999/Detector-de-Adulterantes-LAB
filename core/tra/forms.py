@@ -68,7 +68,7 @@ class CSVForm(forms.Form):
             predict="C",
             )
         for count in range(len(rows)):
-            prediction=PredictionChoices[int(rows[count][18])-1][0]
+            prediction=PredictionChoices[int(rows[count][18])][0]
             
             m=Measuring.objects.create(
                 name=f"T~{self.cleaned_data.get('name')}~{count}",
@@ -98,7 +98,7 @@ class CSVForm(forms.Form):
             )
         for count in range(len(rows)):
             
-            prediction=PredictionChoices[int(rows[count][1])-1][0]
+            prediction=PredictionChoices[int(rows[count][1])][0]
             
             m=Measuring.objects.create(
                 name=f"T~{self.cleaned_data.get('name')}~{count}",
@@ -126,7 +126,7 @@ class CSVForm(forms.Form):
                 predict="C",
                 )
             for count in range(csv.shape[0]):
-                prediction=PredictionChoices[csv.iloc[count,18]-1][0]    
+                prediction=PredictionChoices[csv.iloc[count,18]][0]    
                 m=Measuring.objects.create(
                     name=f"T~{self.cleaned_data.get('name')}~{count}",
                     training=t,

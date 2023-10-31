@@ -131,6 +131,31 @@ class ModelDataView(MyLoginRequiredMixin,ListView):
         context['back_url']=reverse_lazy('mod_list')
         return context
 
+class ModelLoadView(MyLoginRequiredMixin,FormView):
+    template_name='_form.html'
+    form_class=ModelLoadForm
+    
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(request,form)
+        else:
+            return self.form_invalid(request,form,"data no válida")
+    
+    def form_invalid(self,request,form,rason=""):
+        messages.error(request,f'Error al cargar modelo, {rason}')
+        return super().form_invalid(form)
+    
+    def form_valid(self,request,form):
+        name=form.save()
+        messages.success(request,f"Se ha cargado el modelo {name}")
+        return redirect('mod_list')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['title'] = "Nuevo Modelo"
+        return context
+
 class ModelUploadView(MyLoginRequiredMixin,View):
     
     def get(self,request,*args, **kwargs):
@@ -169,9 +194,9 @@ class ModelDownloadView(MyLoginRequiredMixin,View):
             pk=kwargs.get('pk')
             _name=Model.objects.get(pk=pk).name.replace(" ","_")
             with zipfile.ZipFile(zip_data, 'w') as archive:
-                archive.write(arcname=f"_{_name}.",filename= os.path.join(MEDIA_ROOT, f"models/{_name}"))  
-                archive.write(arcname=f"_{_name}.keras",filename= os.path.join(MEDIA_ROOT, f"models/{_name}.keras"))  
-                archive.write(arcname=f"_{_name}_W.keras",filename= os.path.join(MEDIA_ROOT, f"models/{_name}_W.keras")) 
+                archive.write(arcname=f"{_name}",filename= os.path.join(MEDIA_ROOT, f"models/{_name}"))  
+                archive.write(arcname=f"{_name}.keras",filename= os.path.join(MEDIA_ROOT, f"models/{_name}.keras"))  
+                archive.write(arcname=f"{_name}_W.keras",filename= os.path.join(MEDIA_ROOT, f"models/{_name}_W.keras")) 
 
             zip_data.seek(0)
             response = HttpResponse(zip_data.read(), content_type="application/zip")

@@ -21,7 +21,42 @@ class ModelForm(forms.ModelForm):
             Thread(target=trin_model_thread,name="ThreadModel",args=(self.cleaned_data.get('name'),_list,)).start()
             return True
         return False
+
+class ModelLoadForm(forms.Form):
+    zip_model=forms.FileField(label="ZIP",widget=forms.FileInput(attrs={'class':'form-control'}))
+    def save(self):
+        import io
+        import zipfile
         
+        zip=self.cleaned_data['zip_model']
+        _name=str(zip).replace(".zip","")
+        contenido_zip = io.BytesIO(zip.read())
+        with zipfile.ZipFile(contenido_zip, 'r') as zip_ref:
+            
+            
+            #archivos = zip_ref.namelist()
+            model_c=zip_ref.read(_name)
+            model_keras=zip_ref.read(_name+".keras")
+            model_keras_w=zip_ref.read(_name+"_W.keras")
+            m=Model.objects.create(
+                name=_name,
+                state=False,
+            )
+            import os
+            from config.settings import BASE_DIR
+            print(BASE_DIR)
+            print(os.path.join(BASE_DIR,f"media/models/{_name}"))
+            with open(os.path.join(BASE_DIR,f"media/models/{_name}"),'wb') as file:
+                file.write(model_c)
+            with open(os.path.join(BASE_DIR,f"media/models/{_name}.keras"),'wb') as file:
+                file.write(model_keras)
+            with open(os.path.join(BASE_DIR,f"media/models/{_name}_W.keras"),'wb') as file:
+                file.write(model_keras_w)
+            m.state=True
+            m.save()
+            return _name        
+            
+   
 class ModelUpdateForm(forms.ModelForm):
     class Meta:
         model =Model
