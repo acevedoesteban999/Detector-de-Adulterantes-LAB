@@ -20,6 +20,7 @@ def prediction_thread(name,_model_pk):
         measuring.save()
         p.state=True
         
-    except:
+    except Exception as e:
+        print("Error:",e)
         p.state=False
     p.save_base(raw=True)            

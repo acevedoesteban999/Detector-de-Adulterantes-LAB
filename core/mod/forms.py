@@ -44,8 +44,6 @@ class ModelLoadForm(forms.Form):
             )
             import os
             from config.settings import BASE_DIR
-            print(BASE_DIR)
-            print(os.path.join(BASE_DIR,f"media/models/{_name}"))
             with open(os.path.join(BASE_DIR,f"media/models/{_name}"),'wb') as file:
                 file.write(model_c)
             with open(os.path.join(BASE_DIR,f"media/models/{_name}.keras"),'wb') as file:
