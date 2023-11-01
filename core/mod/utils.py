@@ -124,8 +124,8 @@ def trin_model_thread(name,_list):
                     
                 model.add(keras.layers.Input(shape=(18, )))
 
-                model.add(layers.Dense(448,activation="relu",))
-                model.add(layers.Dense(384,activation="relu",))
+                model.add(layers.Dense(32,activation="relu",))
+                model.add(layers.Dense(32,activation="relu",))
                 model.add(keras.layers.Dense(5,activation="softmax"))
 
                 model.compile(
