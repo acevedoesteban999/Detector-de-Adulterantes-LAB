@@ -82,13 +82,17 @@ class As7265x
         public:
             AS7265X()
             {
-                Wire.begin(18,19);
+                start();
             }
             ~AS7265X()
             {
                 Wire.end();
             }
-
+        bool start()
+        {
+            Wire.end();
+            return Wire.begin(18,19);
+        }
         bool begin()
         {
             if (! this->isConnected())
@@ -567,7 +571,9 @@ class As7265x
         {}
         bool start()
         {  
-            active=as7265x.begin();
+            active=false;
+            if(as7265x.start())
+                active=as7265x.begin();
             return active;  
         }
         bool get_active()

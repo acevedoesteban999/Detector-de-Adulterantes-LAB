@@ -1,16 +1,292 @@
-<!-- github/Esteban1914  -->
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./bootstrap.min.css" rel="stylesheet">
+    
+    <title>ESP32</title>
+</head>
+<body class="bg-light" >
+    <div id="ID_LOADING" style="display: block;">
+        <div class="container m-5 p-5">
+            <div class="row justify-content-center">
+                <div class="col-auto text-center">
+                    <h1>
+                        <div class="display-1">
+                            Cargando Página 
+                        </div>
+                        <br>
+                        <h6>
+                            Por favor espere...
+                        </h6>
+                    </h1>
+                </div>
+            </div>
+        </div> 
+        
+    </div>
+    <div id="ID_LOADED" style="display: none;">
+        <div class="container my-5 ">
+            <div class="row align-items-center justify-content-around">
+                <div class="col-auto">
+                    <div class="row m-2 text-center align-items-center justify-content-around rounded-pill bg-primary p-3">
+                        <div class="col-auto my-2">
+                            <div class="badge text-bg-light">
+                                <div class="h4 m-0 p-0">
+                                    Sensor
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            %SENSOR_ICON%
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-auto">
+                    <div class="row  m-2 text-center align-items-center justify-content-around rounded-pill bg-primary p-3">
+                        <div class="col-auto my-2">
+                            <div class="badge text-bg-light">
+                                <div class="h4 m-0 p-0">
+                                    Modelo
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="badge text-bg-light">
+                                <div class="h6 m-0 p-0">
+                                    %MODEL_NAME%
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <br>
+            <br>
+            <div class="row m-2 justify-content-center">
+                <div class="col-auto text-center rounded-pill bg-primary p-4">
+                    <div class="btn  btn-light" data-bs-toggle="modal" data-bs-target="#PredictModal">
+                        <div class="h4 m-0 p-0">
+                            Clasificar Muestra
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-2 justify-content-center">
+                <div class="col-auto text-center rounded-pill bg-primary p-4">
+                    <div class="btn btn-light" data-bs-toggle="modal" data-bs-target="#UpdateModal" > 
+                        <div class="h4 m-0 p-0">
+                            Actualizar Modelo
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-2 justify-content-center">
+                <div class="col-auto text-center rounded-pill bg-primary p-4">
+                    <div class="btn btn-light" data-bs-toggle="modal" data-bs-target="#ConfigModal">
+                        <div class="h4 m-0 p-0">
+                            Configuración
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal fade" id="PredictModal" tabindex="-1" aria-labelledby="PredictModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="PredictModalLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h1>
+                        Tomar Muestra
+                    </h1>
+                    
+                    
+                    <div style="display: none;" id="id_h">
+                        <div class="badge bg-secondary m-3 p-2">
+                            <h5>
+                                Clasificaión
+                                <br>
+                                <h2 id="h5_h"></h2>
+                            </h5>
+                            <br>
+                            <h6>
+                                <h2 id="h6_h"><small id="_sml"></small></h2>
+                            </h6>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
+                                <div class="card card-primary card-outline">
+                                    <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="fas fa-solid fa-chart-line"></i>
+                                        Gráfico
+                                    </h3>
+                                    </div>
+                                    <div class="card-body">
+                                    <canvas id="Chart" width="400" height="400"></canvas>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: none;" id="id_err_pred">
+                        <h5 id="id_err_pred_mess"  class="text-wrap display-4 text-danger">
+                            
+                        </h5>
+                    </div>
+                
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="Predict()">Iniciar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="modal fade" id="UpdateModal" tabindex="-1" aria-labelledby="UpdateModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="UpdateModalLabel"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h1>Descargar Modelo</h1>
+                    
+                    <div id="div_al">
+                        <input class="text-center" autocomplete="new-password" placeholder="Modelo" type="text" name="n_model" id="id_model" value="%MODEL_NAME%">
+                        <br>
+                        <label for="n_ssid">SSID</label>
+                        <br>
+                        <input class="text-center" autocomplete="new-password" placeholder="SSID Wifi" type="text" name="n_ssid" id="id_ssid" value="%SSID%">
+                        <br>
+                        <label for="n_pass">Password</label>
+                        <br>
+                        <input class="text-center" autocomplete="new-password" placeholder="Password Wifi" type="password" name="n_pass" id="id_pass" value="%PASS%">
+                        <br>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="Download()">Actualizar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        <div class="modal fade" id="ConfigModal" tabindex="-1" aria-labelledby="ConfigModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="ConfigModalLabel"></h1>
+                <button  type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h1>Configurar AP</h1>
+                    <label for="n_ssid">AP SSID</label>
+                    <br>
+                    <input class="text-center" autocomplete="new-password" placeholder="SSID AP Wifi" type="text" name="n_ssid" id="id_ap_ssid" value="%SSID_AP%">
+                    <br>
+                    <label for="n_pass">AP Password</label>
+                    <br>
+                    <input class="text-center" autocomplete="new-password" placeholder="Password AP Wifi" type="password" name="n_pass" id="id_ap_pass" value="%PASS_AP%">
+                    <br>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="Configure()" class="btn btn-success">Configurar</button>
+                </div>
+            </div>
+            </div>
+        </div>
 
-    <head>
-        <link href="/static/styles.css" rel="stylesheet">
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>ESP32 </title>
-    </head>
-    <body>
-        <a class="button" role="button" href="/predict">Predecir</a>
-        <hr>
-        <a class="button" role="button" href="/download">Actualizar Modelo</a>
-    </body>
+        <div class="modal fade" id="MessageModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">    
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body text-center m-5 mb-1">
+                        %DATA_ICON%
+                        <div class="text-center mt-3" id="id__h">
+                            <h2 id="h5__h">%H5_DATA%</h2>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" onclick="Reset_Update()" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>    
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="ResetModal" data-bs-backdrop="static" aria-labelledby="ResetModalLabel" data-bs-keyboard="false" tabindex="-1"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body text-center m-5 mb-1">
+                        <div class="text-center mt-3" id="id__h">
+                            <div class="badge rounded-circle p-4 bg-warning">
+                                <svg width="100" height="100" fill="currentColor" class="rounded bi bi-cloud-download-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.5a.5.5 0 0 1 1 0V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0zm-.354 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V11h-1v3.293l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
+                                </svg>
+                            </div>
+                            <h2 id="h5__h" class="badge text-dark  ">
+                                    
+                                <div class="h5 text-wrap">
+                                    Ha iniciado el proceso de actualización
+                                    <br>
+                                    Es necesario volver a conectarse y recargar la página para continuar
+                                </div>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="ResetConfigModal" data-bs-backdrop="static" aria-labelledby="ResetConfigModalLabel" data-bs-keyboard="false" tabindex="-1"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body text-center m-5 mb-1">
+                        <div class="text-center mt-3">
+                            <div class="badge rounded-circle p-4 bg-success">
+                                <svg  width="100" height="100" fill="currentColor" class="bi bi-wifi-2" viewBox="0 0 16 16">
+                                    <path d="M13.229 8.271c.216-.216.194-.578-.063-.745A9.456 9.456 0 0 0 8 6c-1.905 0-3.68.56-5.166 1.526a.48.48 0 0 0-.063.745.525.525 0 0 0 .652.065A8.46 8.46 0 0 1 8 7a8.46 8.46 0 0 1 4.577 1.336c.205.132.48.108.652-.065zm-2.183 2.183c.226-.226.185-.605-.1-.75A6.473 6.473 0 0 0 8 9c-1.06 0-2.062.254-2.946.704-.285.145-.326.524-.1.75l.015.015c.16.16.408.19.611.09A5.478 5.478 0 0 1 8 10c.868 0 1.69.201 2.42.56.203.1.45.07.611-.091l.015-.015zM9.06 12.44c.196-.196.198-.52-.04-.66A1.99 1.99 0 0 0 8 11.5a1.99 1.99 0 0 0-1.02.28c-.238.14-.236.464-.04.66l.706.706a.5.5 0 0 0 .708 0l.707-.707z"/>
+                                </svg>
+                            </div>
+                            <h2 id="h5__h" class="badge text-dark">
+                                    
+                                <div class="h5 text-wrap">
+                                    Se ha actualizado correctamente 
+                                    <br>
+                                    Es necesario volver a conectarse
+                                </div>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+<script>
+    window.addEventListener('load', function() {
+        document.getElementById("ID_LOADING").style="display: none;";  
+        document.getElementById("ID_LOADED").style="display: block;";
+        if("%MESSAGE_BOOL%"=="1")
+        {
+            $('#MessageModal').modal('show');
+        }
+    });
+</script>
+<script src="./bootstrap.bundle.min.js"></script>
+<script src="./jquery-3.7.1.min.js"></script>
+<script src="./chart.js"></script>
+<script src="./index.js"></script>
+                
 </html>

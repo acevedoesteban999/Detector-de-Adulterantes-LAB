@@ -25,7 +25,7 @@ class Spiffs
             active=true;
             return true;
         }
-        void print_files()
+        void print_files(bool path=false)
         {
             Serial.println("Files:");
             File root=SPIFFS.open("/");
@@ -33,8 +33,10 @@ class Spiffs
             while(file)
             {
                 
-                Serial.println(file.name());
-                Serial.println(file.path());
+                if(path)
+                    Serial.println(file.path());
+                else
+                    Serial.println(file.name());
                 
                 file=root.openNextFile();
             }

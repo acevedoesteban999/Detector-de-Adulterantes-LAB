@@ -1,46 +1,73 @@
 #include <WiFi.h>
 #include <ESPmDNS.h>
-
-
+#ifndef OBJ_LIB
+    #define OBJ_LIB
+    #include "_object.h"
+#endif
+#ifndef SPIF_LIB
+    #define SPIF_LIB
+    #include "_spiffs.h"
+#endif
 class Wifi
 {
     private:
         bool active;
-        bool download;
+        bool update;
+        
         String state;
-        String ssid,pass;
+        String ssid,pass,ssid_ap,pass_ap;
+        Spiffs*spiffs;
     public:
         Wifi()
         {
             active=false;
-            download=false;
+            update=false;
         }
         ~Wifi()
         {}
-        bool create_ap(String ssid="Esp32_Tesis_EAS",String pass="Esp32Password_EAS",String hostname="esp32.dev",IPAddress ip=IPAddress(192, 168, 1, 1),IPAddress gateway=IPAddress(192, 168, 1, 1),IPAddress subnet=IPAddress(255, 255, 0, 0),IPAddress primaryDNS=IPAddress(192, 168, 1, 1),IPAddress secondaryDNS=IPAddress(0,0, 0, 0))
+        void init(Spiffs*spiffs)
+        {
+            this->spiffs=spiffs;
+        }
+        bool create_ap()
         { 
+            Object obj;
+            if(spiffs->exist("/ap_ssid")&&spiffs->exist("/ap_pass"))
+            {
+                spiffs->load_data("/ap_ssid",obj);
+                ssid_ap=obj.get_data_str();
+                spiffs->load_data("/ap_pass",obj);
+                pass_ap=obj.get_data_str();
+            }
+            else
+            {
+                ssid_ap="ESP32_AP";
+                pass_ap="ESP32_PASS";
+                spiffs->save_data("/ap_ssid",ssid);
+                spiffs->save_data("/ap_pass",pass);
+            }
             WiFi.disconnect();
             WiFi.mode(WIFI_AP);
             // if (!WiFi.config(ip, gateway, subnet,primaryDNS,secondaryDNS)) 
             //     return false;
             
-            WiFi.softAP(ssid, pass);
+            WiFi.softAP(ssid_ap, pass_ap);
             //if (!MDNS.begin(hostname))
             //   return false;
             //WiFi.setHostname(hostname.c_str());
             return true;
         }
-        void set_download()
+        void set_update()
         {
-            download=true;
+            update=true;
         }
-        void reset_download()
+        void reset_update()
         {
-            download=false;
+            update=false;
         }
-        bool get_download()
+        bool get_update()
         {
-            return download;
+            return update;
         }
         bool connect_wifi(String ssid,String pass)
         {
@@ -76,6 +103,15 @@ class Wifi
         {
             return pass;
         }
+        String get_ssid_ap()
+        {
+            return ssid_ap;
+        }
+        String get_pass_ap()
+        {
+            return pass_ap;
+        }
+        
         void set_state(String s)
         {
             state=s;
@@ -99,7 +135,9 @@ class Wifi
             else if(state=="E5")
                 return "Error al Salvar datos Wifi";
             else if(state=="E6")
-                return "Error Modelo Incorrecto";
+                return "Error en Memoria, Modelo Incorrecto";
+            else if(state=="E7")
+                return "Error en Descarga, Modelo Incorrecto";
             else
                 return "Error";
         }

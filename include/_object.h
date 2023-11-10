@@ -1,12 +1,14 @@
+
 class Object
 {
     private:
+        const unsigned STEP=100;
         unsigned char * data;
         unsigned count;
         unsigned max; 
         void resize()
         {
-            max+=1000;
+            max+=STEP;
             unsigned char*new_data=new unsigned char[max];
             for(int i=0;i<count;i++)
                 new_data[i]=data[i];
@@ -16,7 +18,7 @@ class Object
     public:
         Object()
         {         
-            max=1000;
+            max=STEP;
             count=0;
             data=new unsigned char[max];
         }
@@ -36,6 +38,7 @@ class Object
         }
         void append(unsigned char*values,int len)
         {
+            
             for(int i=0;i<len;i++)
                 append(values[i]);
         }
@@ -43,7 +46,7 @@ class Object
         {
             delete data;
             count=0;
-            max=1000;
+            max=STEP;
             data=new unsigned char[max];
         }
         int get_count()
@@ -73,6 +76,26 @@ class Object
             Serial.print(s);
         }
 };
+struct _2data
+{
+    public:
+        int _i;
+        float _f;
+        _2data(int i=-1,float f=-1)
+        {
+            this->_i=i;
+            this->_f=f;
+        }
+        void print()
+        {
+            Serial.print("\n[ ");
+            Serial.print(_i);
+            Serial.print(" , ");
+            Serial.print(_f);
+            Serial.println(" ]");
+        }
+
+};
 
 class _18float
     {
@@ -86,7 +109,7 @@ class _18float
             }
             bool complete()
             {
-                return count==18?true :false;
+                return true;//count==18?true :false;
             }
             float* get_18()
             {
@@ -100,7 +123,7 @@ class _18float
             }
             void print()
             {
-                for(int i=0;i<count;i++)
+                for(int i=0;i<18;i++)
                     Serial.println(_18[i]);
             }
             // _18float(const _18float&_18)
@@ -114,5 +137,15 @@ class _18float
                 if(count>=18)
                     return;
                 _18[count++]=data;
+            }
+            void reset_count()
+            {
+                count=0;
+            }
+            void add(int index,float data)
+            {
+                if(index<0||index>=18)
+                    return;
+                _18[index]=data;
             }
     };
