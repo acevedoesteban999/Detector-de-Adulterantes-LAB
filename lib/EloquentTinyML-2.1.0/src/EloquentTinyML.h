@@ -80,7 +80,11 @@ namespace Eloquent {
 
                 return true;
             }
-
+            // void clear()
+            // {
+            //     interpreter->~MicroInterpreter();
+            //     model-();
+            // }
             /**
              * Test if the initialization completed fine
              */

@@ -8,26 +8,34 @@
     #define SPIF_LIB
     #include "_spiffs.h"
 #endif
+#ifndef MODEL_LIB
+    #define MODEL_LIB
+    #include "_model.h"
+#endif
 class Wifi
 {
     private:
         bool active;
         bool update;
-        
+        bool flag_download,flag_predict;
         String state;
         String ssid,pass,ssid_ap,pass_ap;
         Spiffs*spiffs;
+        Model*model;
     public:
         Wifi()
         {
             active=false;
             update=false;
+            flag_download=false;
+            flag_predict=false;
         }
         ~Wifi()
         {}
-        void init(Spiffs*spiffs)
+        void init(Spiffs*spiffs,Model*model)
         {
             this->spiffs=spiffs;
+            this->model=model;
         }
         bool create_ap()
         { 
@@ -149,4 +157,35 @@ class Wifi
         {
             return WiFi.softAPIP().toString();
         }
+        void set_flag_downalod(String ssid,String pass,String model_name)
+        {
+            flag_download=true;
+            set_ssid_pass(ssid,pass);
+            set_update();
+            model->load_name(model_name);
+
+        }
+        
+        bool get_flag_download()
+        {
+            return flag_download;
+        }
+        
+        void reset_flag_download()
+        {
+            flag_download=false;
+        }
+        void set_flag_predict()
+        {
+            flag_predict=true;
+        }
+        bool get_flag_predict()
+        {
+            return flag_predict;
+        }
+        void reset_flag_predict()
+        {
+            flag_predict=false;
+        }
+
 };

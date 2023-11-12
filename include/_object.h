@@ -109,7 +109,7 @@ class _18float
             }
             bool complete()
             {
-                return true;//count==18?true :false;
+                return count==18?true :false;
             }
             float* get_18()
             {

@@ -7,33 +7,33 @@
     #include "_wifi.h"
     #include "_download.h"
     #include"_as7265x.h"
-    #include "_model_.h"
 #endif
 #ifndef SPIF_LIB
     #define SPIF_LIB
     #include "_spiffs.h"
 #endif
+#ifndef MODEL_LIB
+    #define MODEL_LIB
+    #include "_model.h"
+#endif
+#ifndef MUTEX_LIB
+    #define MUTEX_LIB
+    #include "mutex"
+#endif
 Wifi*_wifi;
-Model*_model;
+Download*_download;
 As7265x*_as7265x;
+Model*_model;
+Spiffs*_spiffs;
 class Web
 {
     private:
         AsyncWebServer*server;
-        bool flag_download;
-        bool flag_predict;
-        Wifi*wifi;
-        Download*download;
-        As7265x*as7265x;
-        Model*model;
-        Spiffs*spiffs;
     public:
-        
+
         Web()
         {
             server=new AsyncWebServer(80);
-            flag_download=false;
-            flag_predict=false;
         }
         ~Web()
         {
@@ -41,14 +41,11 @@ class Web
         }
         void init(Download*download,As7265x*as7265x,Model*model,Spiffs*spiffs,Wifi*wifi)
         {
-            this->wifi=wifi;
             _wifi=wifi;
             _model=model;
             _as7265x=as7265x;
-            this->download=download;
-            this->as7265x=as7265x;
-            this->model=model;
-            this->spiffs=spiffs;
+            _download=download;
+            _spiffs=spiffs;
         }
         static String processor(const String& var)
         {
@@ -65,17 +62,17 @@ class Web
                                     <path d="m5.354 7.146.896.897-.707.707-.897-.896a.5.5 0 1 1 .708-.708z"/>
                                 </svg>
                             </span>
-                        )rawliteral");     
-                    else     
+                        )rawliteral");
+                    else
                         return F(R"rawliteral(
                             <span class="badge bg-danger rounded-circle">
                                 <svg width="100" height="100" fill="currentColor" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
                                 </svg>
                             </span>
-                        )rawliteral");     
+                        )rawliteral");
             }
-            
+
             else if(var=="SENSOR_ICON")
             {
                 if(_as7265x->get_active())
@@ -120,87 +117,77 @@ class Web
         static void notFound(AsyncWebServerRequest *request) {
             request->send(404, "text/plain", "Not found");
         }
-        void set_flag_downalod(String ssid,String pass,String model_name)
-        {
-            flag_download=true;
-            wifi->set_ssid_pass(ssid,pass);
-            wifi->set_update();
-            model->load_name(model_name);
-            
-        }
-        bool get_flag_download()
-        {
-            return flag_download;
-        }
+        
         void load_spiffs_params()
         {
             Object obj,obj1;
-            if(spiffs->load_data("/model_name",obj))
-                model->load_name(obj.get_data_str());
-            if(spiffs->load_data("/wifi_ssid",obj)&&spiffs->load_data("/wifi_pass",obj1))
-                wifi->set_ssid_pass(obj.get_data_str(),obj1.get_data_str());
+            if(_spiffs->load_data("/model_name",obj))
+                _model->load_name(obj.get_data_str());
+            if(_spiffs->load_data("/wifi_ssid",obj)&&_spiffs->load_data("/wifi_pass",obj1))
+                _wifi->set_ssid_pass(obj.get_data_str(),obj1.get_data_str());
         }
-        void _download()
+        void _download_model()
         {
-            if(flag_download)
+            //if(_wifi->get_flag_download())
+            //{
+            String state;
+            if(_wifi->connect_wifi(_wifi->get_ssid(),_wifi->get_pass()))
             {
-                String state;
-                if(wifi->connect_wifi(wifi->get_ssid(),wifi->get_pass()))
-                {   
-                    if(spiffs->save_data("/wifi_ssid",wifi->get_ssid()) && spiffs->save_data("/wifi_pass",wifi->get_pass()))
-                    {    
-                        String _url="https://raw.githubusercontent.com/Esteban1914/files/tesis/";
-                        String model_name=model->get_name();
-                        _url+=model_name;
-                        Object obj;
-                        spiffs->save_data("/error_model","1");
-                        if(download->download(_url,obj))
-                        {
-                            spiffs->save_data("/new_model",obj);
-                            spiffs->save_data("/new_model_name",model_name);
-                            spiffs->delete_data("/error_model");
-                            esp_restart();
-                        }
-                        else
-                            state="E1";
-                        spiffs->delete_data("/error_model");
+                if(_spiffs->save_data("/wifi_ssid",_wifi->get_ssid()) && _spiffs->save_data("/wifi_pass",_wifi->get_pass()))
+                {
+                    String _url="https://raw.githubusercontent.com/Esteban1914/files/tesis/";
+                    String model_name=_model->get_name();
+                    _url+=model_name;
+                    Object obj;
+                    _spiffs->save_data("/error_model","1");
+                    if(_download->download(_url,obj))
+                    {
+                        _spiffs->save_data("/new_model",obj);
+                        _spiffs->save_data("/new_model_name",model_name);
+                        _spiffs->delete_data("/error_model");
+                        esp_restart();
                     }
                     else
-                        state="E5";
+                        state="E1";
+                    _spiffs->delete_data("/error_model");
                 }
                 else
-                    state="E4";
-                wifi->set_state(state);
-                load_spiffs_params();
-                wifi->create_ap();
-                flag_download=false;
+                    state="E5";
             }
-            
+            else
+                state="E4";
+            _wifi->set_state(state);
+            load_spiffs_params();
+            _wifi->create_ap();
+            //_wifi->reset_flag_download();
+            //}
+
         }
         bool start()
         {
-            server->on("/", HTTP_GET, [&,this](AsyncWebServerRequest *request){
+            server->on("/", HTTP_GET, [](AsyncWebServerRequest *request){
                 if(request->hasParam("rs"))
-                    this->as7265x->start();
+                    _as7265x->start();
                 request->send(SPIFFS, "/static/main.html", "text/html",false,processor);
             });
-            server->on("/post/download", HTTP_POST, [&,this](AsyncWebServerRequest *request)
+            server->on("/post/download", HTTP_POST, [this](AsyncWebServerRequest *request)
             {
+                
                 if(request->hasParam("action", true) && request->getParam("action", true)->value()=="download")
                 {
                     if(request->hasParam("model", true)&&request->hasParam("ssid", true)&&request->hasParam("pass", true))
                     {
                         AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "OK");
-                        request->send(response);             
-                        this->set_flag_downalod(request->getParam("ssid",true)->value(),request->getParam("pass",true)->value(),request->getParam("model",true)->value());
-                        return;    
-                    }   
+                        request->send(response);
+                        _wifi->set_flag_downalod(request->getParam("ssid",true)->value(),request->getParam("pass",true)->value(),request->getParam("model",true)->value());
+                        return;
+                    }
                 }
                 AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", "<div style='color: red;'>Error<div>");
                 request->send(response);
                 
             });
-            server->on("/post/predict", HTTP_POST, [&,this](AsyncWebServerRequest *request)
+            server->on("/post/predict", HTTP_POST, [](AsyncWebServerRequest *request)
             {
                 String state="Error0";
                 String resp="";
@@ -208,16 +195,17 @@ class Web
                 _2data _2d;
                 if(request->hasParam("action", true) && request->getParam("action", true)->value()=="predict")
                 {
-                    if(this->model->get_active())
+                    if(_model->get_active())
                     {
-                        if (this->as7265x->get_active())
+                        if (_as7265x->get_active())
                         {
-                            _18float data=this->as7265x->get_datas();
+                            _18float data=_as7265x->get_datas();
                             if(data.complete())
                             {
-                                this->model->set_datas(data);
-                                _2d=this->model->predict();
-                                list_data=this->model->get_list_data();
+                                _model->set_datas(data);
+                                //_2d=_model->predict();
+                                list_data=_model->get_list_data();
+                                _wifi->set_flag_predict();
                                 state="OK";
                             }
                             else
@@ -227,36 +215,50 @@ class Web
                             state="E1";
                     }
                     else
-                        state="E3";    
+                        state="E3";
                 }
-                String _r="state="+state+"&predict_class="+String(_2d._i)+"&predict_data="+String(_2d._f)+"&list_data="+list_data;
+                String _r="state="+state+"&list_data="+list_data;//"state="+state+"&predict_class="+String(_2d._i)+"&predict_data="+String(_2d._f)+"&list_data="+list_data;
                 AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", _r);
                 request->send(response);
                 
             });
-            server->on("/post/config", HTTP_POST, [&,this](AsyncWebServerRequest *request)
+            server->on("/post/config", HTTP_POST, [](AsyncWebServerRequest *request)
             {
+                
                 if(request->hasParam("action", true) && request->getParam("action", true)->value()=="config")
                 {
                     if(request->hasParam("ssid", true)&&request->hasParam("pass", true))
                     {
                         AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", " ");
                         request->send(response);
-                        this->spiffs->save_data("/ap_ssid",request->getParam("ssid",true)->value());
-                        this->spiffs->save_data("/ap_pass",request->getParam("pass",true)->value());
-                        this->wifi->create_ap();
+                        _spiffs->save_data("/ap_ssid",request->getParam("ssid",true)->value());
+                        _spiffs->save_data("/ap_pass",request->getParam("pass",true)->value());
+                        _wifi->create_ap();
                     }
                 }
                 
-                
+
             });
-            server->on("/post/reset_update", HTTP_POST, [&,this](AsyncWebServerRequest *request)
+            server->on("/post/reset_update", HTTP_POST, [](AsyncWebServerRequest *request)
             {
-                this->wifi->reset_update();
+                
+                _wifi->reset_update();
+                
             });
             server->serveStatic("/", SPIFFS, "/static").setCacheControl("max-age=600");
             server->onNotFound(notFound);
             server->begin();
             return true;
+        }
+        void start_data()
+        {
+            server=new AsyncWebServer(80);
+            start();
+        }
+        void clear_data()
+        {
+            server->reset();
+            server->end();
+            delete server;
         }
 };

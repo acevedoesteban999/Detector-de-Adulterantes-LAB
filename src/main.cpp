@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "_web.h"
+#include <ESP.h>
 #include <esp_task_wdt.h>
 #include <esp_heap_caps.h>
 #ifndef _LIB
@@ -7,7 +8,6 @@
     #include "_wifi.h"
     #include "_download.h"
     #include"_as7265x.h"
-    #include "_model_.h"
 #endif
 #ifndef SPIF_LIB
     #define SPIF_LIB
@@ -17,6 +17,12 @@
     #define OBJ_LIB
     #include "_object.h"
 #endif
+
+#ifndef MODEL_LIB
+    #define MODEL_LIB
+    #include "_model.h"
+#endif
+
 #define LED_PIN 2
 
 Web web;
@@ -29,16 +35,12 @@ Object obj;
 void setup() {
     Serial.begin(115200);
     esp_task_wdt_init(100, true);
+    esp_get_free_heap_size();
     pinMode(LED_PIN, OUTPUT);
     spiffs.start();
-    web.init(&download,&as7265x,&model,&spiffs,&wifi);
     as7265x.start();
-    wifi.init(&spiffs);
+    wifi.init(&spiffs,&model);
     wifi.start();
-    web.start();
-    //spiffs.load_data("/static/index.js",obj);
-    obj.print_str();
-    //spiffs.print_files();
     if(spiffs.exist("/error_model"))
     {
         spiffs.load_data("/error_model",obj);
@@ -80,25 +82,35 @@ void setup() {
         spiffs.save_data("/error_model","0");
         
         spiffs.load_data("/model",obj);
-        
         model.start(obj);
         spiffs.delete_data("/error_model");        
     }
-    
+    model.predict().print();
     obj.clear();
+    spiffs.load_data("/model_name",obj);
+    model.predict().print();
+    web.init(&download,&as7265x,&model,&spiffs,&wifi);
+    web.start();
     web.load_spiffs_params();
-    //model.set_datas(as7265x.get_datas());
-    //model.predict().print();
 }
 
 
 void loop() {
-    delay(1000);
-    model.set_datas(as7265x.get_datas());
-    model.predict().print();
+    // unsigned int freeRAM = ESP.getFreeHeap();
 
-    if(web.get_flag_download())
-        web._download();
+    // Serial.print("Memoria RAM libre: ");
+    // Serial.print(freeRAM);
+    // Serial.println(" bytes");
+
+    if(wifi.get_flag_download())
+        web._download_model();
+    if(wifi.get_flag_predict())
+    {
+        Serial.println("PREDICT");
+        web.clear_data();
+        model.predict().print();
+        web.start_data();
+    }
     digitalWrite(LED_PIN,HIGH);
     delay(500);
     digitalWrite(LED_PIN,LOW);

@@ -100,17 +100,18 @@
             <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h2>Clasificar Muetra</h2>
                 <h1 class="modal-title fs-5" id="PredictModalLabel"></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <h1>
-                        Tomar Muestra
-                    </h1>
+                    <!-- <h1>
+                        Muestreo
+                    </h1> -->
                     
                     
                     <div style="display: none;" id="id_h">
-                        <div class="badge bg-secondary m-3 p-2">
+                        <div class="badge bg-light m-3 p-2 border border-2 text-dark">
                             <h5>
                                 Clasificaión
                                 <br>
@@ -128,7 +129,7 @@
                                     <div class="card-header">
                                     <h3 class="card-title">
                                         <i class="fas fa-solid fa-chart-line"></i>
-                                        Gráfico
+                                        Datos
                                     </h3>
                                     </div>
                                     <div class="card-body">
@@ -146,9 +147,9 @@
                     </div>
                 
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer  justify-content-around">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" onclick="Predict()">Iniciar</button>
+                <button type="button" class="btn btn-success" onclick="Predict()">Tomar Muestra</button>
                 </div>
             </div>
             </div>
@@ -157,11 +158,12 @@
             <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h2>Actualizar Modelo</h2>
                 <h1 class="modal-title fs-5" id="UpdateModalLabel"></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <h1>Descargar Modelo</h1>
+                    
                     
                     <div id="div_al">
                         <input class="text-center" autocomplete="new-password" placeholder="Modelo" type="text" name="n_model" id="id_model" value="%MODEL_NAME%">
@@ -176,7 +178,7 @@
                         <br>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer justify-content-around">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-success" onclick="Download()">Actualizar</button>
                 </div>
@@ -187,11 +189,12 @@
             <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h2>Configuración</h2>
                 <h1 class="modal-title fs-5" id="ConfigModalLabel"></h1>
                 <button  type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <h1>Configurar AP</h1>
+                    
                     <label for="n_ssid">AP SSID</label>
                     <br>
                     <input class="text-center" autocomplete="new-password" placeholder="SSID AP Wifi" type="text" name="n_ssid" id="id_ap_ssid" value="%SSID_AP%">
@@ -201,14 +204,14 @@
                     <input class="text-center" autocomplete="new-password" placeholder="Password AP Wifi" type="password" name="n_pass" id="id_ap_pass" value="%PASS_AP%">
                     <br>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer justify-content-around">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" onclick="Configure()" class="btn btn-success">Configurar</button>
                 </div>
             </div>
             </div>
         </div>
-
+        
         <div class="modal fade" id="MessageModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">    
             <div class="modal-dialog">
                 <div class="modal-content">

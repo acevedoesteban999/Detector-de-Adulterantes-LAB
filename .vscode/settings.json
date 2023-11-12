@@ -4,6 +4,11 @@
         "string": "cpp",
         "string_view": "cpp",
         "*.tcc": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "deque": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "system_error": "cpp"
     }
 }

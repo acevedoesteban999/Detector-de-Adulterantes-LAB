@@ -19,7 +19,7 @@ function Predict()
     .then(res=> res.text()).then(data=>{ 
         var params = new URLSearchParams(data);
         
-        l=["100%","75%","50%","25%","0%"];
+        
         let state=params.get("state");
         
         var values=params.get("list_data");
@@ -28,9 +28,10 @@ function Predict()
         if(state=="OK")
         {
             d.style="";
+            l=["100%","75%","50%","25%","0%"];
             let predict_class=params.get("predict_class")
             let predict_data=params.get("predict_data")
-            h.innerHTML=predict_class;
+            h.innerHTML=l[parseInt(predict_class)];
             sml.innerHTML=predict_data+"%";
             if(predict_class=="0")
             {
