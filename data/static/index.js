@@ -3,7 +3,7 @@ function Predict()
     let d=document.getElementById("id_h");
     let h=document.getElementById("h5_h");
     let h1=document.getElementById("h6_h");
-    let sml=document.getElementById("_sml");
+    //let sml=document.getElementById("_sml");
     let err_pred=document.getElementById("id_err_pred")
     let err_pred_mess=document.getElementById("id_err_pred_mess")
     d.style="display: none;"
@@ -30,9 +30,9 @@ function Predict()
             d.style="";
             l=["100%","75%","50%","25%","0%"];
             let predict_class=params.get("predict_class")
-            let predict_data=params.get("predict_data")
+            //let predict_data=params.get("predict_data")
             h.innerHTML=l[parseInt(predict_class)];
-            sml.innerHTML=predict_data+"%";
+            //sml.innerHTML=predict_data+"%";
             if(predict_class=="0")
             {
                 h.style="color: green;";

@@ -41,6 +41,7 @@ void setup() {
     as7265x.start();
     wifi.init(&spiffs,&model);
     wifi.start();
+    model.init(&spiffs);
     if(spiffs.exist("/error_model"))
     {
         spiffs.load_data("/error_model",obj);
@@ -85,13 +86,17 @@ void setup() {
         model.start(obj);
         spiffs.delete_data("/error_model");        
     }
-    model.predict().print();
-    obj.clear();
-    spiffs.load_data("/model_name",obj);
-    model.predict().print();
     web.init(&download,&as7265x,&model,&spiffs,&wifi);
     web.start();
     web.load_spiffs_params();
+    obj.clear();
+    
+    // model.predict().print();
+    // model.clear();
+    // spiffs.load_data("/model",obj);
+    // model.start(obj);
+    // model.predict().print();
+    
 }
 
 
@@ -104,13 +109,13 @@ void loop() {
 
     if(wifi.get_flag_download())
         web._download_model();
-    if(wifi.get_flag_predict())
-    {
-        Serial.println("PREDICT");
-        web.clear_data();
-        model.predict().print();
-        web.start_data();
-    }
+    // if(wifi.get_flag_predict())
+    // {
+    //     Serial.println("PREDICT");
+    //     web.clear_data();
+    //     model.predict().print();
+    //     web.start_data();
+    // }
     digitalWrite(LED_PIN,HIGH);
     delay(500);
     digitalWrite(LED_PIN,LOW);

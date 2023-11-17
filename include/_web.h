@@ -54,7 +54,7 @@ class Web
             else if(var=="DATA_ICON")
             {
                 if(_wifi->get_update())
-                    if(_wifi->get_state_str()=="OK")
+                    if(_wifi->get_state()=="OK")
                         return F(R"rawliteral(
                             <span class="badge bg-success rounded-circle">
                                 <svg width="100" height="100" fill="currentColor" class="bi bi-check2-all" viewBox="0 0 16 16">
@@ -203,7 +203,10 @@ class Web
                             if(data.complete())
                             {
                                 _model->set_datas(data);
-                                //_2d=_model->predict();
+                                _2d=_model->predict();
+                                //_model->restart();
+                                //Serial.println("A");
+                                //_model->predict().print();
                                 list_data=_model->get_list_data();
                                 _wifi->set_flag_predict();
                                 state="OK";
@@ -217,7 +220,7 @@ class Web
                     else
                         state="E3";
                 }
-                String _r="state="+state+"&list_data="+list_data;//"state="+state+"&predict_class="+String(_2d._i)+"&predict_data="+String(_2d._f)+"&list_data="+list_data;
+                String _r="state="+state+"&predict_class="+String(_2d._i)+"&predict_data="+String(_2d._f)+"&list_data="+list_data;
                 AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", _r);
                 request->send(response);
                 
