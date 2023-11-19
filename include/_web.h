@@ -1,25 +1,14 @@
+#pragma once
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 //#include "_htmls.h"
 #include <esp_system.h>
-#ifndef _LIB
-    #define _LIB
-    #include "_wifi.h"
-    #include "_download.h"
-    #include"_as7265x.h"
-#endif
-#ifndef SPIF_LIB
-    #define SPIF_LIB
-    #include "_spiffs.h"
-#endif
-#ifndef MODEL_LIB
-    #define MODEL_LIB
-    #include "_model.h"
-#endif
-#ifndef MUTEX_LIB
-    #define MUTEX_LIB
-    #include "mutex"
-#endif
+#include "_wifi.h"
+#include "_download.h"
+#include"_as7265x.h"
+#include "_spiffs.h"
+#include "_model.h"
+
 Wifi*_wifi;
 Download*_download;
 As7265x*_as7265x;
@@ -117,7 +106,6 @@ class Web
         static void notFound(AsyncWebServerRequest *request) {
             request->send(404, "text/plain", "Not found");
         }
-        
         void load_spiffs_params()
         {
             Object obj,obj1;
@@ -142,10 +130,17 @@ class Web
                     _spiffs->save_data("/error_model","1");
                     if(_download->download(_url,obj))
                     {
-                        _spiffs->save_data("/new_model",obj);
-                        _spiffs->save_data("/new_model_name",model_name);
-                        _spiffs->delete_data("/error_model");
-                        esp_restart();
+                        _spiffs->save_data("/error_model","2");
+                        _model->clear();
+                        _model->start(obj);
+                        _model->predict();
+                        _spiffs->save_data("/model",obj);
+                        _spiffs->save_data("/model_name",model_name);
+                        state="OK";
+                        // _spiffs->save_data("/new_model",obj);
+                        // _spiffs->save_data("/new_model_name",model_name);
+                        // _spiffs->delete_data("/error_model");
+                        // esp_restart();
                     }
                     else
                         state="E1";
@@ -159,7 +154,7 @@ class Web
             _wifi->set_state(state);
             load_spiffs_params();
             _wifi->create_ap();
-            //_wifi->reset_flag_download();
+            _wifi->reset_flag_download();
             //}
 
         }
@@ -208,7 +203,6 @@ class Web
                                 //Serial.println("A");
                                 //_model->predict().print();
                                 list_data=_model->get_list_data();
-                                _wifi->set_flag_predict();
                                 state="OK";
                             }
                             else
@@ -244,24 +238,15 @@ class Web
             });
             server->on("/post/reset_update", HTTP_POST, [](AsyncWebServerRequest *request)
             {
-                
+                _spiffs->delete_data("/error_model");
                 _wifi->reset_update();
+                AsyncWebServerResponse *response = request->beginResponse(200, "text/plain");
+                request->send(response);
                 
             });
             server->serveStatic("/", SPIFFS, "/static").setCacheControl("max-age=600");
             server->onNotFound(notFound);
             server->begin();
             return true;
-        }
-        void start_data()
-        {
-            server=new AsyncWebServer(80);
-            start();
-        }
-        void clear_data()
-        {
-            server->reset();
-            server->end();
-            delete server;
-        }
+        }  
 };

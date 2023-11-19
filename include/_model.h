@@ -1,15 +1,12 @@
+#pragma once
 #define NUMBER_OF_INPUTS 18
 #define NUMBER_OF_OUTPUTS 5
 #define TENSOR_ARENA_SIZE 5*1024
-#include <EloquentTinyML.h>
-#ifndef OBJ_LIB
-    #define OBJ_LIB
-    #include "_object.h"
-#endif
-#ifndef SPIF_LIB
-    #define SPIF_LIB
-    #include "_spiffs.h"
-#endif
+#include <_eloquentTinyML.h>
+#include "_object.h"
+#include "_spiffs.h"
+
+
 class Model
 {
 	private:
@@ -18,7 +15,7 @@ class Model
 		_18float data;
 		Spiffs*spiffs;
 		float y_pred[NUMBER_OF_OUTPUTS];
-		Eloquent::TinyML::TfLite<NUMBER_OF_INPUTS, NUMBER_OF_OUTPUTS, TENSOR_ARENA_SIZE> tf;
+		_Eloquent::_TinyML::_TfLite<NUMBER_OF_INPUTS, NUMBER_OF_OUTPUTS, TENSOR_ARENA_SIZE> tf;
 	public:
 		Model()
 		{

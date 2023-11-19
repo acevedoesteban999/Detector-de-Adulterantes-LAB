@@ -1,8 +1,7 @@
+#pragma once
 #include "SPIFFS.h"
-#ifndef OBJ_LIB
-    #define OBJ_LIB
-    #include "_object.h"
-#endif
+#include "_object.h"
+
 class Spiffs
 {
     private:
@@ -88,6 +87,8 @@ class Spiffs
         }
         bool delete_data(String dir)
 		{
-			return SPIFFS.remove(dir);
+            if(exist(dir))
+			    return SPIFFS.remove(dir);
+            return true;
 		}
 };

@@ -7,11 +7,10 @@
 #include "tensorflow/lite/micro/micro_error_reporter.h"
 #include "tensorflow/lite/micro/micro_interpreter.h"
 
+namespace _Eloquent {
+    namespace _TinyML {
 
-namespace Eloquent {
-    namespace TinyML {
-
-        enum TfLiteError {
+        enum _TfLiteError {
             OK,
             VERSION_MISMATCH,
             CANNOT_ALLOCATE_TENSORS,
@@ -20,21 +19,32 @@ namespace Eloquent {
         };
 
         /**
-         * Eloquent interface to Tensorflow Lite for Microcontrollers
+         * _Eloquent interface to Tensorflow Lite for Microcontrollers
          *
          * @tparam inputSize
          * @tparam outputSize
          * @tparam tensorArenaSize how much memory to allocate to the tensors
          */
         template<size_t inputSize, size_t outputSize, size_t tensorArenaSize>
-        class TfLite {
+        class _TfLite {
+        protected:
+            bool failed,active;
+            _TfLiteError error;
+            uint8_t tensorArena[tensorArenaSize];
+            tflite::ErrorReporter *reporter;
+            tflite::MicroInterpreter *interpreter;
+            tflite::ops::micro::AllOpsResolver *resolver;
+            TfLiteTensor *input;
+            TfLiteTensor *output;
+            const tflite::Model *model;
         public:
             /**
              * Contructor
              * @param modelData a model as exported by tinymlgen
              */
-            TfLite() :
+            _TfLite() :
                 failed(false) {
+                    active=false;
             }
 
             /**
@@ -43,12 +53,23 @@ namespace Eloquent {
              * @param modelData
              * @return
              */
+            void clear()
+            {
+                delete reporter;
+                delete interpreter;
+                delete resolver;
+                active=false;
+            }
             bool begin(const unsigned char *modelData) {
-                static tflite::MicroErrorReporter microReporter;
-                static tflite::ops::micro::AllOpsResolver resolver;
+                
+                if (active)
+                    return false;
+                //tflite::MicroErrorReporter microReporter;
+                //tflite::ops::micro::AllOpsResolver resolver;
 
-                //this->reporter = new tflite::MicroErrorReporter microReporter;
-                reporter = &microReporter;
+                this->reporter = new tflite::MicroErrorReporter;
+                this->resolver = new tflite::ops::micro::AllOpsResolver;
+                //reporter = &microReporter;
                 model = tflite::GetModel(modelData);
                 
                 // assert model version and runtime version match
@@ -63,23 +84,24 @@ namespace Eloquent {
 
                     return false;
                 }
-
-                static tflite::MicroInterpreter interpreter(model, resolver, tensorArena, tensorArenaSize, reporter);
                 
-                //this->interpreter=new interpreter(model, resolver, tensorArena, tensorArenaSize, reporter);
-                if (interpreter.AllocateTensors() != kTfLiteOk) {
+
+                //tflite::MicroInterpreter interpreter(model, resolver, tensorArena, tensorArenaSize, reporter);
+                
+                this->interpreter=new tflite::MicroInterpreter(model, *resolver, tensorArena, tensorArenaSize, reporter);
+                if (interpreter->AllocateTensors() != kTfLiteOk) {
                     failed = true;
                     error = CANNOT_ALLOCATE_TENSORS;
 
                     return false;
                 }
-
-                input = interpreter.input(0);
-                output = interpreter.output(0);
+                
+                input = interpreter->input(0);
+                output = interpreter->output(0);
                 error = OK;
-
-                this->interpreter = &interpreter;
-
+                
+                //this->interpreter = &interpreter;
+                active=true;
                 return true;
             }
             // void clear()
@@ -207,15 +229,7 @@ namespace Eloquent {
                 }
             }
 
-        protected:
-            bool failed;
-            TfLiteError error;
-            uint8_t tensorArena[tensorArenaSize];
-            tflite::ErrorReporter *reporter;
-            tflite::MicroInterpreter *interpreter;
-            TfLiteTensor *input;
-            TfLiteTensor *output;
-            const tflite::Model *model;
+        
         };
     }
 }

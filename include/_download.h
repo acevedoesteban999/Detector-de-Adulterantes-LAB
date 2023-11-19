@@ -1,8 +1,6 @@
+#pragma once
 #include "HTTPClient.h"
-#ifndef OBJ_LIB
-    #define OBJ_LIB
-    #include "_object.h"
-#endif
+#include "_object.h"
 class Download
 {
     private:

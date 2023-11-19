@@ -1,3 +1,4 @@
+#pragma once
 #include <Wire.h>
 
 #define I2C_ADDR  0x49

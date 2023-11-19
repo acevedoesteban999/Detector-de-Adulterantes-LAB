@@ -1,25 +1,15 @@
+#pragma once
 #include <WiFi.h>
 #include <ESPmDNS.h>
-#ifndef OBJ_LIB
-    #define OBJ_LIB
-    #include "_object.h"
-#endif
-#ifndef SPIF_LIB
-    #define SPIF_LIB
-    #include "_spiffs.h"
-#endif
-#ifndef MODEL_LIB
-    #define MODEL_LIB
-    #include "_model.h"
-#endif
+#include "_object.h"
+#include "_spiffs.h"
+#include "_model.h"
+
 class Wifi
 {
     private:
-        bool active;
-        bool update;
-        bool flag_download,flag_predict;
-        String state;
-        String ssid,pass,ssid_ap,pass_ap;
+        bool active,update,flag_download;
+        String state,ssid,pass,ssid_ap,pass_ap;
         Spiffs*spiffs;
         Model*model;
     public:
@@ -28,7 +18,6 @@ class Wifi
             active=false;
             update=false;
             flag_download=false;
-            flag_predict=false;
         }
         ~Wifi()
         {}
@@ -37,6 +26,13 @@ class Wifi
             this->spiffs=spiffs;
             this->model=model;
         }
+        bool start()
+        {
+            active=create_ap();
+            return active;
+            
+        }
+        
         bool create_ap()
         { 
             Object obj;
@@ -91,13 +87,6 @@ class Wifi
             }
             return true;
         }
-        bool start()
-        {
-            active=create_ap();
-            //active=connect_wifi("iPhone 6 Plus","melon123445");
-            return active;
-            
-        }
         void set_ssid_pass(String ssid,String pass)
         {
             this->ssid=ssid;
@@ -123,6 +112,7 @@ class Wifi
         void set_state(String s)
         {
             state=s;
+            set_update();
         }
         String get_state()
         {
@@ -133,19 +123,19 @@ class Wifi
             if(state=="OK")
                 return "Actulizado Modelo Correctamente";
             else if(state=="E1")
-                return "Error al Descargar Modelo";
+                return "Error al Descargar Modelo, No Encontrado";
             else if(state=="E2")
                 return "Error al Salvar Modelo en Memoria";
             else if(state=="E3")
-                return "Error al Cargar Modelo";
+                return "Error Crítico al Cargar Modelo";
             else if(state=="E4")
-                return "Error al Conectar a Wifi";
+                return "Error en Credenciales al Conectar a Wi-Fi";
             else if(state=="E5")
-                return "Error al Salvar datos Wifi";
+                return "Error al Salvar Datos Wi-Fi";
             else if(state=="E6")
-                return "Error en Memoria, Modelo Incorrecto";
+                return "Error Crítico en Memoria, Modelo Incorrecto";
             else if(state=="E7")
-                return "Error en Descarga, Modelo Incorrecto";
+                return "Error Crítico en Descarga, Modelo Incorrecto";
             else
                 return "Error";
         }
@@ -157,35 +147,21 @@ class Wifi
         {
             return WiFi.softAPIP().toString();
         }
+        
         void set_flag_downalod(String ssid,String pass,String model_name)
         {
             flag_download=true;
             set_ssid_pass(ssid,pass);
-            set_update();
+            //set_update();
             model->load_name(model_name);
 
         }
-        
         bool get_flag_download()
         {
             return flag_download;
         }
-        
         void reset_flag_download()
         {
             flag_download=false;
         }
-        void set_flag_predict()
-        {
-            flag_predict=true;
-        }
-        bool get_flag_predict()
-        {
-            return flag_predict;
-        }
-        void reset_flag_predict()
-        {
-            flag_predict=false;
-        }
-
 };
