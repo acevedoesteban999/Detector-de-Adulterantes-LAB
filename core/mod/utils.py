@@ -7,9 +7,11 @@ def trin_model_thread(name,_list):
     
         try:
             import time
+            
             m=Model.objects.create(
                 name=name,
             )
+            
             import numpy as np
             import tensorflow as tf
             from tensorflow import keras
@@ -18,10 +20,17 @@ def trin_model_thread(name,_list):
             from tinymlgen import port
             from sklearn.model_selection import train_test_split
             import kerastuner as kt
+            from matplotlib import pyplot as plt
+            from sklearn.metrics import confusion_matrix
+            import seaborn as sns
+            import matplotlib
+            matplotlib.use('Agg')
+            from config.settings import MEDIA_ROOT
             for l in _list:
                 Training.objects.get(pk=l).models.add(m)
             d=[]
             l=[]
+            
             for t in m.training_model.all():
                 for measuring in t.measuring_trainig.all():
                     d.append(measuring.get_list_data()) 
@@ -35,27 +44,24 @@ def trin_model_thread(name,_list):
                 model = keras.Sequential()
                 
                 model.add(keras.layers.Input(shape=(18, )))
-
-                for i in range(hp.Int("num_layers", 1, 3)):
-                    model.add(
-                        layers.Dense(
-                            units=hp.Int(f"units_{i}", min_value=32, max_value=512, step=32),
-                            activation=hp.Choice("activation", ["relu", "tanh"]),
-                        )
+                
+                model.add(
+                    layers.Dense(
+                        units=hp.Int("units_0", min_value=32, max_value=256, step=32),
+                        activation=hp.Choice("activation", ["relu", "tanh"]),
                     )
-                if hp.Boolean("dropout"):
-                    model.add(layers.Dropout(rate=0.25))
+                )
                 
                 model.add(keras.layers.Dense(5,activation="softmax"))
-
+                
                 hp_learning_rate = hp.Choice('learning_rate', values=[1e-2, 1e-3, 1e-4])
-
+                
                 model.compile(
                     optimizer=keras.optimizers.Adam(learning_rate=hp_learning_rate),
                     loss="categorical_crossentropy",
                     metrics=['accuracy']
                 )
-
+                
                 return model
             
             
@@ -66,6 +72,7 @@ def trin_model_thread(name,_list):
             y_test=keras.utils.to_categorical(y_test,5)
             
             def get_optim_model():    
+                
                 tuner=kt.Hyperband(
                     model_builder,
                     objective='val_accuracy',
@@ -74,58 +81,79 @@ def trin_model_thread(name,_list):
                     directory='kerastuner',
                     project_name=f"{name}H",
                 )
-
-                tuner1 = kt.RandomSearch(
-                    model_builder,
-                    objective='val_accuracy',
-                    max_trials=5,
-                    executions_per_trial=2,
-                    directory='kerastuner',
-                    project_name=f"{name}R"
-                )
                 stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)
+                epochs=500
                 tuner.search(
                     X_train,
                     y_train,
-                    epochs=50,
+                    epochs=epochs,
                     validation_split=0.2,
-                    validation_data=(X_test,y_test),callbacks=[stop_early]
+                    verbose=False,
+                    validation_data=(X_test,y_test),
+                    callbacks=[stop_early]
                 )
-                tuner1.search(
-                    X_train,
-                    y_train,
-                    epochs=50,
-                    validation_split=0.2,
-                    validation_data=(X_test,y_test),callbacks=[stop_early]
-                )
-                
+                print("Hyperband HyperParameters:")
                 best_hps:kt.HyperParameters=tuner.get_best_hyperparameters(num_trials=1)[0]
-                print(best_hps.values)
+                for k,v in best_hps.values.items(): 
+                    print(k,":",v)
                 model=model_builder(best_hps)
                 model.summary()
-                
-                best_hps1:kt.HyperParameters=tuner1.get_best_hyperparameters(num_trials=1)[0]
-                model1=model_builder(best_hps1)
-                print(best_hps1.values)
-                model1.summary()
-                
-                model.fit(
+                import time
+                t=time.time()
+                history=model.fit(
                     X_train,
                     y_train,
-                    epochs=100,
+                    verbose=False,
+                    epochs=epochs,
                     validation_split=0.2,
                     validation_data=(X_test,y_test)
-                )      
+                )    
+                epochs_range=range(0,epochs)
                 
-                return model
+                plt.clf()
+                plt.plot(epochs_range,history.history['loss'],'r',label='Training Loss')
+                plt.title("Training  Loss")
+                plt.xlabel("Epochs")
+                plt.ylabel("Loss")
+                plt.legend()
+                plt.savefig(MEDIA_ROOT+"/trains/"+f"{name}_loss.png")
                 
+                plt.clf()
+                plt.plot(epochs_range,history.history['accuracy'],'r',label='Training Accuracy')
+                plt.title("Training  Accuracy")
+                plt.xlabel("Epochs")
+                plt.ylabel("Accuracy")
+                plt.legend()
+                plt.savefig(MEDIA_ROOT+"/trains/"+f"{name}_accuracy.png")
+                
+                plt.clf()
+                y_pred=model.predict(X_test) 
+                cm=confusion_matrix(y_test.argmax(axis=1), y_pred.argmax(axis=1))
+                sns.heatmap(cm, annot=True, cmap='Blues', fmt='d', cbar=False)                
+                plt.title('Confusion Matrix')
+                plt.xticks([])
+                plt.yticks([])
+                plt.savefig(MEDIA_ROOT+"/trains/"+f"{name}_confusion_matrix.png")
+                
+                print("Hyperband train time:")  
+                print(time.time()-t)
+                t=time.time()
+                loss, accuracy = model.evaluate(X_test, y_test)
+                print("Loss All Epoch:", loss)
+                print("Accuracy All Epoch:", accuracy)
+                print("Best Epoch:")  
+                values_accuracy=history.history['val_accuracy']
+                best_epochs=values_accuracy.index(max(values_accuracy))+1
+                print(best_epochs)
+                
+
+                return model                 
             def get_static_model():     
                 model = keras.Sequential()
                     
                 model.add(keras.layers.Input(shape=(18, )))
 
-                model.add(layers.Dense(32,activation="relu",))
-                model.add(layers.Dense(32,activation="relu",))
+                model.add(layers.Dense(192,activation="relu",))
                 model.add(keras.layers.Dense(5,activation="softmax"))
 
                 model.compile(
@@ -137,30 +165,22 @@ def trin_model_thread(name,_list):
                     X_train,
                     y_train,
                     epochs=100,
+                    verbose=False,
                     validation_split=0.2,
                     validation_data=(X_test,y_test)
                 )      
                 return model
-            model=get_static_model()
-            # # Evaluar el modelo en los datos de prueba
-            #loss, accuracy = model.evaluate(X_test, y_test)
-
-            # # Realizar predicciones con el modelo entrenado
-            #predictions = model.predict(X_test)
-
-            # # Imprimir resultados
-            #print("Loss:", loss)
-            #print("Accuracy:", accuracy)
-            #print("Predictions:", predictions)
+            model=get_optim_model()
+            
             _name=name.replace(' ','_')
             model.save(os.path.join(BASE_DIR,f"media/models/{_name}.keras"))
             model.save_weights(os.path.join(BASE_DIR,f"media/models/{_name}_W.keras"))
-            #c_code = port(model, pretty_print=True)
             converter = tf.lite.TFLiteConverter.from_keras_model(model)
             converter.optimizations = [tf.lite.Optimize.OPTIMIZE_FOR_SIZE]
             tflite_model = converter.convert()
             with open(os.path.join(BASE_DIR,f"media/models/{_name}"), "wb") as text_file:
                 text_file.write(tflite_model)
+            
             
             m.state=True
         except Exception as e:
