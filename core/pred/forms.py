@@ -12,12 +12,12 @@ from .utils import prediction_thread
 from threading import Thread
 from config.utils import thread_is_alive
 class PredictionForm(forms.ModelForm):
-    models = forms.CharField(widget=forms.Textarea(),label="Modelos",required=False,disabled=True)
-    search=forms.CharField(label='Buscar Modelos',max_length=20, required=False,widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'Buscar Modelo'}),)
+    #models = forms.CharField(widget=forms.Textarea(),label="Modelos",required=False,disabled=True)
+    #search=forms.CharField(label='Buscar Modelos',max_length=20, required=False,widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'Buscar Modelo'}),)
     
     class Meta:
         model =Prediction
-        fields= 'name','models','search',
+        fields= 'name',#'models','search',
         widgets = {
             'name': forms.TextInput(attrs={'class':'form-control','placeholder': 'Ingrese un nombre'}),
           }

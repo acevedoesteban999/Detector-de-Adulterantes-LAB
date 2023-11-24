@@ -1,4 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse
+from django.http import JsonResponse
+from django.core import serializers
 from .models import *
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView,FormView,ListView,UpdateView,DeleteView,DetailView,View
@@ -39,7 +41,6 @@ class ModelCreateView(MyLoginRequiredMixin,FormView):
                 search=request.POST.get('data')
                 if not search:
                     return HttpResponse("")
-                #q=(Q(name__contains=search_value) | Q(id__contains=search_value))
                 objects=Training.objects.filter(name__contains=search,state=True)[:5]
                 return render(request,'sea_tra.html',context={'objects':objects,'search':search})
         try:                    

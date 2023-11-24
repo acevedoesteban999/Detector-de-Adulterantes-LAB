@@ -1,29 +1,17 @@
-<div class="container m-2" id="id_search_data">
-    <div class="row text-center">
-        <div class="col-8">
-            Nombre
-        </div>
-        {% comment %} <div class="col-3">
-            Muestras
-        </div> {% endcomment %}
-        <div class="col-4">
-            Opciones
-        </div>
-    </div>
-    <hr>
+<div id="id_search_data">
     {% for o in objects %}
     <div class="row justify-content-center text-center align-items-center">
-        <div class="col-8 ">
+        <div class="col-6 ">
             <div class="h5 ">
                 <span class="badge bg-success">{{o.name}}</span>
             </div>
         </div>
-        {% comment %} <div class="col-3">
+        <div class="col-3">
             <div class="h5">
                 <span class="badge bg-secondary">{{o.count}}</span>
             </div>
-        </div> {% endcomment %}
-        <div class="col-4">
+        </div>
+        <div class="col-2">
             <div class="row">
                 <div class="col-6">
                     <div style="border-radius:60px;" onclick="Add_Element('{{o.name}}',{{o.pk}})" class="btn-success">+</div>
@@ -36,8 +24,8 @@
     </div>
         
     {% empty %}
-    <div class="row">
-        <span class="m-2 badge bg-danger">No encontrado:{{search}}</span>
+    <div class="row justify-content-center">
+        <span class="m-2 badge bg-danger"><h5>{{search}}</h5></span>
     </div>    
     {% endfor %}
 </div>
