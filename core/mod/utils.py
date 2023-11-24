@@ -150,10 +150,8 @@ def trin_model_thread(name,_list):
                 return model                 
             def get_static_model():     
                 model = keras.Sequential()
-                    
                 model.add(keras.layers.Input(shape=(18, )))
-
-                model.add(layers.Dense(192,activation="relu",))
+                model.add(layers.Dense(196,activation="relu",))
                 model.add(keras.layers.Dense(5,activation="softmax"))
 
                 model.compile(
@@ -161,16 +159,45 @@ def trin_model_thread(name,_list):
                     loss="categorical_crossentropy",
                     metrics=['accuracy']
                 )
-                model.fit(
+                
+                epochs=500
+                history=model.fit(
                     X_train,
                     y_train,
-                    epochs=100,
+                    epochs=epochs,
                     verbose=False,
                     validation_split=0.2,
                     validation_data=(X_test,y_test)
-                )      
+                )
+                epochs_range=range(0,epochs)      
+                plt.clf()
+                plt.plot(epochs_range,history.history['loss'],'r',label='Training Loss')
+                plt.title("Training  Loss")
+                plt.xlabel("Epochs")
+                plt.ylabel("Loss")
+                plt.legend()
+                plt.savefig(MEDIA_ROOT+"/trains/"+f"{name}_loss.png")
+                
+                plt.clf()
+                plt.plot(epochs_range,history.history['accuracy'],'r',label='Training Accuracy')
+                plt.title("Training  Accuracy")
+                plt.xlabel("Epochs")
+                plt.ylabel("Accuracy")
+                plt.legend()
+                plt.savefig(MEDIA_ROOT+"/trains/"+f"{name}_accuracy.png")
+                
+                plt.clf()
+                y_pred=model.predict(X_test) 
+                cm=confusion_matrix(y_test.argmax(axis=1), y_pred.argmax(axis=1))
+                sns.heatmap(cm, annot=True, cmap='Blues', fmt='d', cbar=False)                
+                plt.title('Confusion Matrix')
+                plt.xticks([])
+                plt.yticks([])
+                plt.savefig(MEDIA_ROOT+"/trains/"+f"{name}_confusion_matrix.png")
                 return model
-            model=get_optim_model()
+            
+            #model=get_optim_model()
+            model=get_static_model()
             
             _name=name.replace(' ','_')
             model.save(os.path.join(BASE_DIR,f"media/models/{_name}.keras"))
