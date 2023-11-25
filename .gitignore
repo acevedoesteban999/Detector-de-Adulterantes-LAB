@@ -7,7 +7,9 @@ Proyecto/
 db.sqlite3
 media/users/
 media/models/
+media/trains/
 static/admin
 static/admin-lte
 kerastuner/
+
 

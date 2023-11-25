@@ -86,7 +86,7 @@ class TrainingDeleteView(MyLoginRequiredMixin,DeleteView):
     model=Training
     template_name = 'delete_meas.html'
     #permission_required="user.delete_user"
-    success_url=reverse_lazy('meas_list')
+    success_url=reverse_lazy('tra_list')
  
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -185,5 +185,14 @@ class TrainingCSVView(MyLoginRequiredMixin,FormView):
     success_url=reverse_lazy('tra_list')
     form_class=CSVForm
     def form_valid(self, form) :
-        form.save()
+        try:
+            if not(form.save()):
+                return self.form_invalid(self.request,form,rason="Ya se está cargando un modelo CSV")
+        except Exception as e:
+            return self.form_invalid(self.request,form,e)
+        messages.success(self.request,f"Se ha iniciado el proceso de carga de csv, {form.cleaned_data['name']}")
+        
         return super().form_valid(form)
+    def form_invalid(self,request,form,rason=""):
+        messages.error(request,f'Error al cargar datos, {rason}')
+        return super().form_invalid(form)

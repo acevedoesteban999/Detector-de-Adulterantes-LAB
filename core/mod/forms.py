@@ -8,11 +8,11 @@ from config.utils import thread_is_alive
 from .utils import trin_model_thread
 #from config.utils import is_at_migrations
 class ModelForm(forms.ModelForm):
-    trainings = forms.CharField(widget=forms.Textarea(),label="Entrenamientos",required=False,disabled=True)
-    search=forms.CharField(label='Buscar Entrenamientos',max_length=20, required=False,widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'Buscar Entrenamiento'}),)
+    #trainings = forms.CharField(widget=forms.Textarea(),label="Entrenamientos",required=False,disabled=True)
+    #search=forms.CharField(label='Buscar Entrenamientos',max_length=20, required=False,widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'Buscar Entrenamiento'}),)
     class Meta:
         model =Model
-        fields = 'name','trainings','search',
+        fields = 'name',#'trainings','search',
         widgets = {
             'name': forms.TextInput(attrs={'class':'form-control','placeholder': 'Ingrese un nombre'}),
         }

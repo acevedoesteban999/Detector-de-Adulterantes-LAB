@@ -1,4 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse
+from django.http import JsonResponse
+from django.core import serializers
 from .models import *
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView,FormView,ListView,UpdateView,DeleteView,DetailView,View
@@ -39,8 +41,7 @@ class ModelCreateView(MyLoginRequiredMixin,FormView):
                 search=request.POST.get('data')
                 if not search:
                     return HttpResponse("")
-                #q=(Q(name__contains=search_value) | Q(id__contains=search_value))
-                objects=Training.objects.filter(name__contains=search)[:5]
+                objects=Training.objects.filter(name__contains=search,state=True)[:5]
                 return render(request,'sea_tra.html',context={'objects':objects,'search':search})
         try:                    
             self._list=[int(x) for x in request.POST.get('list_pk').split(',')] 
@@ -67,12 +68,28 @@ class ModelCreateView(MyLoginRequiredMixin,FormView):
         return redirect('mod_list')
     
     def get_context_data(self, **kwargs):
+        # from matplotlib import pyplot as plt
+        # from sklearn.metrics import confusion_matrix
+        # from config.settings import MEDIA_ROOT
+        # import seaborn as sns
+        # import matplotlib
+        # matplotlib.use('Agg')
+        # plt.clf()
+        # y_test=[0,1,2,1,2]
+        # y=[0,0,2,0,2]
+        # cm=confusion_matrix(y_test,y)
+        # sns.heatmap(cm, annot=True, cmap='Blues', fmt='d', cbar=False)
+        # plt.xlabel('Etiquetas Predichas')
+        # plt.ylabel('Etiquetas Reales')
+        # plt.title('Matriz de Confusión')
+        # plt.tight_layout()
+        # plt.savefig(MEDIA_ROOT+"/trains/"+f"name_confusion_matrix_all.png")
         context = super().get_context_data()
         context['title'] = "Nuevo Modelo"
         return context
        
 class ModelUpdateView(MyLoginRequiredMixin,UpdateView):
-    model=Training
+    model=Model
     template_name = '_form.html'
     form_class=ModelUpdateForm
     #permission_required="user.change_user"
@@ -99,7 +116,7 @@ class ModelDeleteView(MyLoginRequiredMixin,DeleteView):
     model=Model
     template_name = 'delete_meas.html'
     #permission_required="user.delete_user"
-    success_url=reverse_lazy('meas_list')
+    success_url=reverse_lazy('mod_list')
  
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -109,7 +126,7 @@ class ModelDeleteView(MyLoginRequiredMixin,DeleteView):
         return context
 
 class ModelDataView(MyLoginRequiredMixin,ListView):
-    template_name='list_tra.html'
+    template_name='list_tra_mod.html'
     model=Training
     def dispatch(self, request, *args, **kwargs):
         self.pk = kwargs['pk']
@@ -126,8 +143,10 @@ class ModelDataView(MyLoginRequiredMixin,ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = Model.objects.get(pk=self.pk).name
-        
+        m=Model.objects.get(pk=self.pk)
+        context['title'] = m.name
+        context['accuracy']= m.accuracy
+        context['loss']=m.loss
         context['back_url']=reverse_lazy('mod_list')
         return context
 

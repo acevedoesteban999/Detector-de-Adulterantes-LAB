@@ -1,40 +1,52 @@
 {% extends '_form.html' %}
 
-{% block btn_save %}
-    <button  type="submit" class="btn btn-primary">
-        Comenzar
-    </button>
-    <script>
-        //let lsist_pk=[1,2,3,4,5]
-        
-        $( "#frmForm" ).on( "submit", function( event ) {
-        $("#frmForm").children(":first").append("<div class='overlay dark'><i class='fa fa-2x fa-refresh fa-spin'></i><div class='m-3 text-light'>Realizando Medición</div><i class='fa fa-2x fa-refresh fa-spin'></i></div>")
-        $('#frmForm').append('<input type="hidden" name="list_pk" value="'+ list_pk +'" />');     
-            //event.preventDefault();
-            /*
-             $.ajax({
-                url: ".",
-                data: {
-                    'action': 'InitTra',
-                    'name': $("#id_name").text(),
-                    'count': $("#id_count").text(),
-                },
-                type: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken
-                },
-                dataType: 'json',
-                success: function (request) {
+{% block extra_field_a %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <button type="button" class="m-3 btn btn-success" data-toggle="modal" data-target="#modalModelos">
+                    Modelo <span id="span_count">( )</span> 
+                </button>
+                <div class="modal fade" id="modalModelos" style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Modelo</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">x</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label for="id_search">Modelo</label>
+                                        <input maxlength="15" type="text" class="form-control" placeholder="Buscar Modelo" id="id_search" oninput="Find_Data()">        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div id="id_put_data" class="col-12">
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                            <textarea disabled class="form-control" name="" id="id_models" cols="30" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-warning" data-dismiss="modal">Canclar</button>
+                                <button type="button" onclick="ActiveBtn()" data-dismiss="modal" class="btn btn-success">Aplicar</button>
+                            </div>
+                        </div>
+                    </div>
                     
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                }
-            });
-            */
-        });
+                </div>
+            </div>
+        </div>
+    </div>
 
-        
-    </script>
+    
     <script>
         var list_name=[];
         var list_pk=[];
@@ -53,7 +65,7 @@
             $("#id_models").val('')
             str=""
             list_name.forEach((element) =>{
-                str+=element+"\n"
+                str+=element
                 
             })
             $("#id_models").val(str)
@@ -70,12 +82,26 @@
             $("#id_models").val('')
             str=""
             list_name.forEach((element) =>{
-                str+=element+"\n"
+                str+=element
                 
             })
             $("#id_models").val(str)
         }
-        $( "#id_search" ).on("input", function( event ) {
+        function ActiveBtn()
+        {
+            if(list_pk.length == 0)
+                $("#btn_start").prop("disabled", true);
+            else
+                $("#btn_start").prop("disabled", false);
+            let str=" "
+            if(list_name[0])
+                str=list_name[0]
+            $("#span_count").text("("+str+")")
+            
+        }
+        
+        function Find_Data()
+        {
             $.ajax({
                 url: ".",
                 data: {
@@ -88,16 +114,31 @@
                 },
                 dataType: 'text',
                 success: function (request) {
-                    //console.log("A")
-                    //console.log(request)
                     $('#id_search_data').remove()
                     
-                    $('#id_search').parent().append(request);
+                    $('#id_put_data').append(request);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log(errorThrown)
                 }
             });
-        });
+        }
     </script>
+{% endblock  %}
+
+{% block btn_save %}
+    <button  id="btn_start" disabled type="submit" class="btn btn-primary">
+        Comenzar
+    </button>
+    <script>
+        
+        $( "#frmForm" ).on( "submit", function( event ) {
+        $("#frmForm").children(":first").append("<div class='overlay dark'><i class='fa fa-2x fa-refresh fa-spin'></i><div class='m-3 text-light'>Realizando Medición</div><i class='fa fa-2x fa-refresh fa-spin'></i></div>")
+        $('#frmForm').append('<input type="hidden" name="list_pk" value="'+ list_pk +'" />');     
+           
+        });
+
+        
+    </script>
+    
 {% endblock  %}
