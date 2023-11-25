@@ -145,8 +145,6 @@ class ModelDataView(MyLoginRequiredMixin,ListView):
         context = super().get_context_data(**kwargs)
         m=Model.objects.get(pk=self.pk)
         context['title'] = m.name
-        context['accuracy']= m.accuracy
-        context['loss']=m.loss
         context['back_url']=reverse_lazy('mod_list')
         return context
 
