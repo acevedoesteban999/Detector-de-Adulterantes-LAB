@@ -77,5 +77,34 @@
         </div>
     </div>
     
-    
 {% endblock  %}
+{% block extra_extra_js %}
+    {% if thread_alive %}
+        <script>    
+            function Thread_Finish()
+            {
+                $.ajax({
+                    url: ".",
+                    data: {
+                        'action': 'thread_finish',
+                    },
+                    type: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    dataType: 'text',
+                    success: function (request) {
+                        if(request=="False")
+                            location.reload();
+                        setTimeout(Thread_Finish, 5000);
+                        
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(errorThrown)
+                    }
+                });
+            }
+            Thread_Finish()
+        </script>
+    {% endif %}
+{% endblock %}
