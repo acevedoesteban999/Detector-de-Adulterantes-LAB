@@ -66,9 +66,17 @@ class PredictionListView(MyLoginRequiredMixin,ListView):
                   o.save()  
         return super().get_queryset().order_by('-datetime')
     
+    def post(self, request, *args, **kwargs):
+        if self.is_ajax():
+            if request.POST.get('action')=="thread_finish":
+                th_al=thread_is_alive("ThreadPrediction")
+                return HttpResponse(th_al)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['back_url']=reverse_lazy('reg') 
+        context['thread_alive']=thread_is_alive("ThreadPrediction")
+        
         return context
     
 

@@ -79,6 +79,34 @@
     
 {% endblock  %}
 {% block extra_extra_js %}
+    {% if thread_alive_csv %}
+    <script>    
+        function Thread_Finish_CSV()
+        {
+            $.ajax({
+                url: ".",
+                data: {
+                    'action': 'thread_finish_csv',
+                },
+                type: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                dataType: 'text',
+                success: function (request) {
+                    if(request=="False")
+                        location.reload();
+                    setTimeout(Thread_Finish_CSV, 5000);
+                    
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(errorThrown)
+                }
+            });
+        }
+        Thread_Finish_CSV()
+    </script>
+    {% endif %}
     {% if thread_alive %}
         <script>    
             function Thread_Finish()
