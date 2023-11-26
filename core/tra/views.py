@@ -7,6 +7,7 @@ from .forms import *
 from core.meas.models import Measuring,MeasuringData
 from django.contrib import messages
 from django.http import HttpResponse,FileResponse
+from core.binn.models import BinnacleMessages
 #import pandas as pd
 from io import StringIO
 import csv
@@ -195,4 +196,5 @@ class TrainingCSVView(MyLoginRequiredMixin,FormView):
         return super().form_valid(form)
     def form_invalid(self,request,form,rason=""):
         messages.error(request,f'Error al cargar datos, {rason}')
+        BinnacleMessages.warning("Error",rason)
         return super().form_invalid(form)

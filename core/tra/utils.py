@@ -3,8 +3,8 @@ from .models import Training
 from config.utils import PredictionChoices
 from core.meas.models import Measuring,MeasuringData
 from core.meas.utils import MeasuringI2C
+from core.binn.models import  BinnacleMessages
 import time
-
 def train_thread(name,count,prediction):
     try:
         tr,created=Training.objects.get_or_create(name=name)
@@ -19,7 +19,9 @@ def train_thread(name,count,prediction):
         for _count in range(int(count)):
             MeasuringI2C(f"TR~{tr.name}~{__count+_count}",tr,prediction)
         tr.state=True
-    except:
+        BinnacleMessages.info("DataTrain Thread",f"OK-----name:{name}-----datas to add: {count}-----datas:{__count}")
+    except Exception as e:
+        BinnacleMessages.error(e) 
         tr.state=False
     tr.save()
 
@@ -97,7 +99,9 @@ def csv_thread(_1f,count,csv_read,name):
                 measuring=m
             )
         t.state=True
-    except:
+        BinnacleMessages.info("CSV Thread",f"OK-----name: {name}-----datas: {count}")
+    except Exception as e:
+        BinnacleMessages.error(e)
         t.state=False
     t.save() 
 # def TrainingI2C(name,count,prediction="N"):

@@ -5,6 +5,7 @@ from django.contrib import messages
 from core.log.utils import MyLoginRequiredMixin
 # Create your views here.
 
+
 class NetWorkView(MyLoginRequiredMixin,FormView):
     form_class=NetWorkForm
     template_name='conf.html'

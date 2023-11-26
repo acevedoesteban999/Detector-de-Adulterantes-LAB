@@ -8,7 +8,7 @@ from .utils import *
 
 class PerformanceView(MyLoginRequiredMixin,TemplateView):
     template_name="perf.html"
-    permission_required="user.view_performance"
+    permission_required="is_development"
     def post(self,request):
         if self.is_ajax():
             if request.POST.get('action')=="cpu":

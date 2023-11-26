@@ -2,9 +2,9 @@ from core.mod.models import Model
 from core.tra.models import Training
 from config.settings import BASE_DIR
 import os
+from core.binn.models import  BinnacleMessages
 
 def trin_model_thread(name,_list):
-    
         try:
             import time
             
@@ -198,7 +198,6 @@ def trin_model_thread(name,_list):
             
             #model=get_optim_model()
             model=get_static_model()
-            
             _name=name.replace(' ','_')
             model.save(os.path.join(BASE_DIR,f"media/models/{_name}.keras"))
             model.save_weights(os.path.join(BASE_DIR,f"media/models/{_name}_W.keras"))
@@ -210,8 +209,9 @@ def trin_model_thread(name,_list):
             
             
             m.state=True
+            BinnacleMessages.info("ModelTrain Thread",f"OK-----name: {name}")
         except Exception as e:
-            print("Error:",e)
+            BinnacleMessages.error(e)
             m.state=False
             
         m.save()

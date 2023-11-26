@@ -6,6 +6,7 @@ import time
 from threading import Thread
 from config.utils import thread_is_alive
 from .utils import trin_model_thread
+from core.binn.models import  BinnacleMessages
 #from config.utils import is_at_migrations
 class ModelForm(forms.ModelForm):
     #trainings = forms.CharField(widget=forms.Textarea(),label="Entrenamientos",required=False,disabled=True)
