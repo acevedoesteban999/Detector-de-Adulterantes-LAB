@@ -5,6 +5,7 @@ from config.utils import PredictionChoices
 from config.settings import BASE_DIR
 from core.meas.utils import MeasuringI2C
 import os
+from core.binn.models import  BinnacleMessages
 def prediction_thread(name,_model_pk):
     try:
         measuring=MeasuringI2C(name)
@@ -19,8 +20,8 @@ def prediction_thread(name,_model_pk):
         measuring.predict=PredictionChoices[predict_class][0]
         measuring.save()
         p.state=True
-        
+        BinnacleMessages.info("Prediction Thread",f"OK-----name: {name}")
     except Exception as e:
-        print("Error:",e)
+        BinnacleMessages.error(e)
         p.state=False
     p.save_base(raw=True)            

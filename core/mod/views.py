@@ -52,10 +52,11 @@ class ModelCreateView(MyLoginRequiredMixin,FormView):
         if form.is_valid():
             return self.form_valid(request,form)
         else:
-            return self.form_invalid(request,form,"data no válida")
+            return self.form_invalid(request,form,"Data no válida")
     
     def form_invalid(self,request,form,rason=""):
         messages.error(request,f'Error al crear modelo, {rason}')
+        BinnacleMessages.warning("Error",rason)
         return super().form_invalid(form)
     
     def form_valid(self,request,form):
@@ -157,7 +158,7 @@ class ModelLoadView(MyLoginRequiredMixin,FormView):
         if form.is_valid():
             return self.form_valid(request,form)
         else:
-            return self.form_invalid(request,form,"data no válida")
+            return self.form_invalid(request,form,"Data no válida")
     
     def form_invalid(self,request,form,rason=""):
         messages.error(request,f'Error al cargar modelo, {rason}')

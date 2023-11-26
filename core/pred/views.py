@@ -6,13 +6,14 @@ from core.log.utils import MyLoginRequiredMixin
 from core.mod.models import Model
 from .forms import *
 from .models import Prediction
+from core.binn.models import BinnacleMessages
 from django.contrib import messages
 # Create your views here.
 
 class PredictionCreateView(MyLoginRequiredMixin,FormView):
     template_name='add_pred.html'
     form_class=PredictionForm
-    
+    #permission_required="is_"
     def post(self, request, *args, **kwargs):
         if self.is_ajax():
             if request.POST.get('action')=="search_models":
@@ -30,10 +31,11 @@ class PredictionCreateView(MyLoginRequiredMixin,FormView):
         if form.is_valid():
             return self.form_valid(request,form)
         else:
-            return self.form_invalid(request,form,"data no válida")
+            return self.form_invalid(request,form,"Data no válida")
     
     def form_invalid(self,request,form,rason=""):
         messages.error(request,f'Error al crear predicción, {rason}')
+        BinnacleMessages.warning("Error",rason)
         return super().form_invalid(form)
     
     def form_valid(self,request,form):

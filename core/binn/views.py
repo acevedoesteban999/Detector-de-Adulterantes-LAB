@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from core.log.utils import MyLoginRequiredMixin
 from django.views.generic import ListView
-from .models import BinnacleMessages
+from core.binn.models import BinnacleMessages
 # Create your views here.
 
 class BinnacleView(MyLoginRequiredMixin,ListView):
     template_name="binn.html"
     model=BinnacleMessages
-    permission_required='view_binnacle'
+    permission_required='is_development'
     
     def dispatch(self, request, *args, **kwargs):
         self.kwargs['iden']=kwargs.get('iden')
