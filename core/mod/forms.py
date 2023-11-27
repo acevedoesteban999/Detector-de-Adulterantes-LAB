@@ -24,6 +24,7 @@ class ModelForm(forms.ModelForm):
         return False
 
 class ModelLoadForm(forms.Form):
+    name=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'Ingrese un nombre'}))
     zip_model=forms.FileField(label="ZIP",widget=forms.FileInput(attrs={'class':'form-control'}))
     def save(self):
         import io
@@ -40,7 +41,7 @@ class ModelLoadForm(forms.Form):
             model_keras=zip_ref.read(_name+".keras")
             model_keras_w=zip_ref.read(_name+"_W.keras")
             m=Model.objects.create(
-                name=_name,
+                name=self.cleaned_data['name'],
                 state=False,
             )
             import os

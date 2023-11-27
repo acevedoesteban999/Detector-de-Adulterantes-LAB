@@ -36,7 +36,7 @@
                             </div>
                             <div class="modal-footer justify-content-between">
                                 <button type="button" class="btn btn-warning" data-dismiss="modal">Canclar</button>
-                                <button type="button" onclick="ActiveBtn()" data-dismiss="modal" class="btn btn-success">Aplicar</button>
+                                <button type="button" onclick="ActiveBtn()" data-dismiss="modal" class="btn btn-success">Aplicar <span id="span_appl">(0)</span> </button>
                             </div>
                         </div>
                     </div>
@@ -66,6 +66,7 @@
             str=str.slice(0, -1);
             $("#id_trainings").val(str)
             datas+=count;
+            $("#span_appl").text("("+datas+")")
         }
         function ActiveBtn()
         {
@@ -95,6 +96,7 @@
             datas-=count
             if(datas<0)
                 datas=0
+            $("#span_appl").text("("+datas+")")
         }
         function Find_Data()
         {
@@ -129,6 +131,9 @@
     <button  id="btn_start" disabled type="submit" class="btn btn-primary">
         Comenzar
     </button>
+    <a href="{% url 'mod_load' %}" class="btn btn-warning btn-flat">
+        Importar Modelo
+    </a>
     <script>
         $( "#frmForm" ).on( "submit", function( event ) {
         $("#frmForm").children(":first").append("<div class='overlay dark'><i class='fa fa-2x fa-refresh fa-spin'></i><div class='m-3 text-light'>Iniciando....</div><i class='fa fa-2x fa-refresh fa-spin'></i></div>")
