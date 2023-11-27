@@ -72,17 +72,17 @@ def trin_model_thread(name,_list):
             y_test=keras.utils.to_categorical(y_test,5)
             
             def get_optim_model():    
-                
+                epochs=800
                 tuner=kt.Hyperband(
                     model_builder,
                     objective='val_accuracy',
-                    max_epochs=50,
+                    max_epochs=epochs,
                     factor=3,
                     directory='kerastuner',
                     project_name=f"{name}H",
                 )
                 stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)
-                epochs=500
+                
                 tuner.search(
                     X_train,
                     y_train,
@@ -119,7 +119,7 @@ def trin_model_thread(name,_list):
                 plt.savefig(MEDIA_ROOT+"/trains/"+f"{name}_loss.png")
                 
                 plt.clf()
-                plt.plot(epochs_range,history.history['accuracy'],'r',label='Training Accuracy')
+                plt.plot(epochs_range,history.history['accuracy'],'g',label='Training Accuracy')
                 plt.title("Training  Accuracy")
                 plt.xlabel("Epochs")
                 plt.ylabel("Accuracy")
@@ -137,11 +137,10 @@ def trin_model_thread(name,_list):
                 
                 print("Hyperband train time:")  
                 print(time.time()-t)
-                t=time.time()
                 loss, accuracy = model.evaluate(X_test, y_test)
-                print("Loss All Epoch:", loss)
-                print("Accuracy All Epoch:", accuracy)
-                print("Best Epoch:")  
+                print("Loss:", loss)
+                print("Accuracy:", accuracy)
+                print("Best Epoch: ")  
                 values_accuracy=history.history['val_accuracy']
                 best_epochs=values_accuracy.index(max(values_accuracy))+1
                 print(best_epochs)
@@ -151,7 +150,7 @@ def trin_model_thread(name,_list):
             def get_static_model():     
                 model = keras.Sequential()
                 model.add(keras.layers.Input(shape=(18, )))
-                model.add(layers.Dense(196,activation="relu",))
+                model.add(layers.Dense(224,activation="tanh",))
                 model.add(keras.layers.Dense(5,activation="softmax"))
 
                 model.compile(
@@ -160,7 +159,8 @@ def trin_model_thread(name,_list):
                     metrics=['accuracy']
                 )
                 
-                epochs=500
+                epochs=250
+                t=time.time()
                 history=model.fit(
                     X_train,
                     y_train,
@@ -169,6 +169,13 @@ def trin_model_thread(name,_list):
                     validation_split=0.2,
                     validation_data=(X_test,y_test)
                 )
+                
+                print("Train time:")  
+                print(time.time()-t)
+                loss, accuracy = model.evaluate(X_test, y_test)
+                print("Loss:", loss)
+                print("Accuracy:", accuracy)
+                
                 epochs_range=range(0,epochs)      
                 plt.clf()
                 plt.plot(epochs_range,history.history['loss'],'r',label='Training Loss')
@@ -179,7 +186,7 @@ def trin_model_thread(name,_list):
                 plt.savefig(MEDIA_ROOT+"/trains/"+f"{name}_loss.png")
                 
                 plt.clf()
-                plt.plot(epochs_range,history.history['accuracy'],'r',label='Training Accuracy')
+                plt.plot(epochs_range,history.history['accuracy'],'g',label='Training Accuracy')
                 plt.title("Training  Accuracy")
                 plt.xlabel("Epochs")
                 plt.ylabel("Accuracy")

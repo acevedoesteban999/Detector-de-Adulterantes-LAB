@@ -83,12 +83,12 @@
 
 {% endblock %}
 
-    {% block box_footer_buttons %}
+    {% block buttons_footer %}
         {% if iden %}
             <a href="{% url 'binn' %}" class="btn btn-{% if iden == "I" %}info{% elif iden == "R" %}success{% elif iden == "A" %}warning{% else %}danger{% endif %} btn-flat">
                 <i class="fas fa-sync-alt"></i> Quitar Filtro
             </a>
         {% else %}
-            {{ block.super }}
+            {{block.super}}
         {% endif %}
     {% endblock %}

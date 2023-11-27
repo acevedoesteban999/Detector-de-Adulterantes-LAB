@@ -4,6 +4,7 @@ import socket
 from django.core.validators import validate_ipv4_address
 from datetime import date,datetime
 import subprocess
+from core.binn.models import BinnacleMessages
 class NetWorkForm(forms.Form):
     ip=forms.GenericIPAddressField(initial=socket.gethostbyname(socket.gethostname()),widget=forms.TextInput(attrs={'class':'form-control'}))
     mak=forms.GenericIPAddressField(initial="0.0.0.0",widget=forms.TextInput(attrs={'class':'form-control'}))
@@ -18,9 +19,12 @@ class DateForm(forms.Form):
         
     def save(self):
         try:
-        # Ejecutar el comando 'date' de Linux para configurar la fecha y hora
-            subprocess.call(["sudo", "date", "-s", self.data.get('date')])
-            subprocess.call(["sudo", "date", "-s", self.data.get('time')])
-        except:
-            print("Error")
-        print(self.data.get('date'),self.data.get('time'))
+            date=self.data.get('date')
+            time=self.data.get('time')
+            # Ejecutar el comando 'date' de Linux para configurar la fecha y hora
+            subprocess.call(["sudo", "date", "-s", date])
+            subprocess.call(["sudo", "date", "-s", time])
+            BinnacleMessages.info("Change Date Tine",f"Change to: {date} {time}")
+        except Exception as e:
+            BinnacleMessages.error(e)
+        
