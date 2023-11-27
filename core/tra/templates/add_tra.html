@@ -20,7 +20,8 @@
     </div>
     
     <script>
-        $("option[value='N']").remove();
+        $("option[value='N']").prependTo($("#id_prediction"));
+        $("#id_prediction").val("N")
         $("option[value='C']").remove();
         $("option[value='M']").remove();
         $( "#frmForm" ).on( "submit", function( event ) {

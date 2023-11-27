@@ -9,7 +9,7 @@ from core.meas.models import PredictionChoices
 import pandas as pd
 
 class TrainingingForm(forms.ModelForm):
-    prediction = forms.ChoiceField(widget=forms.Select(attrs={'class':'form-control'}),choices=PredictionChoices,)
+    prediction = forms.ChoiceField(label="Predicción",widget=forms.Select(attrs={'class':'form-control'}),choices=PredictionChoices,)
     class Meta:
         model =Training
         fields = 'name','count',

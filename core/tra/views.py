@@ -194,6 +194,19 @@ class TrainingCSVView(MyLoginRequiredMixin,FormView):
     template_name='csv_tra.html'
     success_url=reverse_lazy('tra_list')
     form_class=CSVForm
+    def post(self, request, *args, **kwargs):
+        if self.is_ajax():
+            if request.POST.get('action')=="thread_finish_csv":
+                th_al=thread_is_alive("ThreadLoadCSV")
+                return HttpResponse(th_al)
+        return self.post(request,args,kwargs)
+            
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Modelos"
+        context['back_url']=reverse_lazy('reg')
+        context['thread_alive_csv']=thread_is_alive("ThreadLoadCSV")
+        return context
     def form_valid(self, form) :
         try:
             if not(form.save()):
