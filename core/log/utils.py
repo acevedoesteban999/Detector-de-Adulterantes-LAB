@@ -16,6 +16,5 @@ class MyLoginRequiredMixin(LoginRequiredMixin,PermissionRequiredMixin):
     def has_permission(self) -> bool:
         if self.permission_required==None:
             return True
-
         return super().has_permission()
     

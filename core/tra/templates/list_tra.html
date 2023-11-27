@@ -79,7 +79,7 @@
     
 {% endblock  %}
 {% block extra_extra_js %}
-    {% if thread_alive_csv %}
+    {% comment %} {% if thread_alive_csv %}
     <script>    
         function Thread_Finish_CSV()
         {
@@ -106,7 +106,7 @@
         }
         Thread_Finish_CSV()
     </script>
-    {% endif %}
+    {% endif %} {% endcomment %}
     {% if thread_alive %}
         <script>    
             function Thread_Finish()

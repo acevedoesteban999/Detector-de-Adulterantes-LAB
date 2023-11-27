@@ -194,28 +194,21 @@ class TrainingCSVView(MyLoginRequiredMixin,FormView):
     template_name='csv_tra.html'
     success_url=reverse_lazy('tra_list')
     form_class=CSVForm
-    def post(self, request, *args, **kwargs):
-        if self.is_ajax():
-            if request.POST.get('action')=="thread_finish_csv":
-                th_al=thread_is_alive("ThreadLoadCSV")
-                return HttpResponse(th_al)
-        return self.post(request,args,kwargs)
             
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = "Modelos"
         context['back_url']=reverse_lazy('reg')
-        context['thread_alive_csv']=thread_is_alive("ThreadLoadCSV")
         return context
-    def form_valid(self, form) :
+    
+    def form_valid(self, form):
         try:
-            if not(form.save()):
-                return self.form_invalid(self.request,form,rason="Ya se está cargando un modelo CSV")
+            form.save()
         except Exception as e:
             return self.form_invalid(self.request,form,e)
-        messages.success(self.request,f"Se ha iniciado el proceso de carga de csv, {form.cleaned_data['name']}")
-        
+        messages.success(self.request,f"Cargado CSV, {form.cleaned_data['name']}")
         return super().form_valid(form)
+    
     def form_invalid(self,request,form,rason=""):
         messages.error(request,f'Error al cargar datos, {rason}')
         BinnacleMessages.warning("Error",rason)

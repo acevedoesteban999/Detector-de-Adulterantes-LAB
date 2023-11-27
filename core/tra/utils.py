@@ -34,13 +34,11 @@ def csv_thread(_1f,count,csv_read,name):
                 predict="C",
             )
             _count=count
-            #_r=csv.read().decode("utf-8").splitlines()[1:_count]
             _r=csv_read.decode("utf-8").splitlines()[1:_count]
             rows=[]
             for r in _r:
                 rows.append(r.split(',')) 
             for count in range(len(rows)):
-                print(count)
                 prediction=PredictionChoices[int(rows[count][1])-1][0]
                 m=Measuring.objects.create(
                     name=f"T~{name}~{count}",
@@ -57,10 +55,10 @@ def csv_thread(_1f,count,csv_read,name):
                         value=float(d),
                         measuring=m
                     )
-            print("True")
             t.state=True
-        except:
-            print("False")
+            BinnacleMessages.info("CSV Thread",f"OK-----name: {name}-----datas: {count}")
+        except Exception as e:
+            BinnacleMessages.error(e)
             t.state=False
         t.save() 
     try:
@@ -71,33 +69,26 @@ def csv_thread(_1f,count,csv_read,name):
             predict="C",
         )
         _count=count
-        #_r=csv.read().decode("utf-8").splitlines()[1:_count]
         _r=csv_read.decode("utf-8").splitlines()[1:_count]
-
         rows=[]
         for r in _r:
             rows.append(r.split(',')) 
-        t=Training.objects.create(
-            name=name,
-            predict="C",
-            )
         for count in range(len(rows)):
             prediction=PredictionChoices[int(rows[count][18])][0]
-        
-        m=Measuring.objects.create(
-            name=f"T~{name}~{count}",
-            training=t,
-            predict=prediction
-        )
-        t.count+=1
-        for c,d in enumerate(rows[count]):
-            if c==18:
-                break
-            MeasuringData.objects.create(
-                chanel= Measuring.chanels()[c],
-                value=float(d),
-                measuring=m
+            m=Measuring.objects.create(
+                name=f"T~{name}~{count}",
+                training=t,
+                predict=prediction
             )
+            t.count+=1
+            for c,d in enumerate(rows[count]):
+                if c==18:
+                    break
+                MeasuringData.objects.create(
+                    chanel= Measuring.chanels()[c],
+                    value=float(d),
+                    measuring=m
+                )
         t.state=True
         BinnacleMessages.info("CSV Thread",f"OK-----name: {name}-----datas: {count}")
     except Exception as e:

@@ -76,13 +76,13 @@ def trin_model_thread(name,_list):
                 tuner=kt.Hyperband(
                     model_builder,
                     objective='val_accuracy',
-                    max_epochs=50,
+                    max_epochs=500,
                     factor=3,
                     directory='kerastuner',
                     project_name=f"{name}H",
                 )
                 stop_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)
-                epochs=500
+                epochs=5000
                 tuner.search(
                     X_train,
                     y_train,
@@ -139,9 +139,9 @@ def trin_model_thread(name,_list):
                 print(time.time()-t)
                 t=time.time()
                 loss, accuracy = model.evaluate(X_test, y_test)
-                print("Loss All Epoch:", loss)
-                print("Accuracy All Epoch:", accuracy)
-                print("Best Epoch:")  
+                print("Loss:", loss)
+                print("Accuracy:", accuracy)
+                print("Best Epoch: ")  
                 values_accuracy=history.history['val_accuracy']
                 best_epochs=values_accuracy.index(max(values_accuracy))+1
                 print(best_epochs)
@@ -151,11 +151,11 @@ def trin_model_thread(name,_list):
             def get_static_model():     
                 model = keras.Sequential()
                 model.add(keras.layers.Input(shape=(18, )))
-                model.add(layers.Dense(196,activation="relu",))
+                model.add(layers.Dense(200,activation="tanh",))
                 model.add(keras.layers.Dense(5,activation="softmax"))
 
                 model.compile(
-                    optimizer=keras.optimizers.Adam(learning_rate=0.001),
+                    optimizer=keras.optimizers.Adam(learning_rate=0.01),
                     loss="categorical_crossentropy",
                     metrics=['accuracy']
                 )
@@ -196,8 +196,9 @@ def trin_model_thread(name,_list):
                 plt.savefig(MEDIA_ROOT+"/trains/"+f"{name}_confusion_matrix.png")
                 return model
             
-            #model=get_optim_model()
-            model=get_static_model()
+            model=get_optim_model()
+            #model=get_static_model()
+            #raise Exception()
             _name=name.replace(' ','_')
             model.save(os.path.join(BASE_DIR,f"media/models/{_name}.keras"))
             model.save_weights(os.path.join(BASE_DIR,f"media/models/{_name}_W.keras"))
