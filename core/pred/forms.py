@@ -8,9 +8,10 @@ import time
 from core.meas.utils import MeasuringI2C
 import os
 from config.settings import BASE_DIR
-from .utils import prediction_thread
+from .utils import prediction_thread,prediction_thread1
 from threading import Thread
 from config.utils import thread_is_alive
+
 class PredictionForm(forms.ModelForm):
     #models = forms.CharField(widget=forms.Textarea(),label="Modelos",required=False,disabled=True)
     #search=forms.CharField(label='Buscar Modelos',max_length=20, required=False,widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'Buscar Modelo'}),)
@@ -25,12 +26,17 @@ class PredictionForm(forms.ModelForm):
     
     def update(self,pk):
         obj=Prediction.objects.get(pk=pk)
-        obj.measuring.name=self.cleaned_data['name']
+        obj.name=self.cleaned_data['name']
         obj.save()
         
     def save(self,_model_pk):
         if not thread_is_alive("ThreadPrediction"):
             Thread(target=prediction_thread,name="ThreadPrediction",args=(self.cleaned_data.get('name'),_model_pk,)).start()
+            return True
+        return False
+    def save1(self,_model_pk,_train_pk):
+        if not thread_is_alive("ThreadPrediction"):
+            Thread(target=prediction_thread1,name="ThreadPrediction",args=(self.cleaned_data.get('name'),_model_pk,_train_pk,)).start()
             return True
         return False
         

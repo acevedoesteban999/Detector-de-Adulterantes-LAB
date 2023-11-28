@@ -102,7 +102,8 @@ class MeasuringDataView(MyLoginRequiredMixin,DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = Measuring.objects.get(pk=self.pk).name
-        #context['object_list'] = MeasuringData.objects.filter(measuring__pk=self.pk)
+        if(context['object'].predict=="P"):
+            context['object'].predict=context['object'].prediction_meas.first().predict
         context['back_url']=reverse_lazy('reg')
         return context
  

@@ -1,0 +1,24 @@
+{% extends '_base.html' %}
+{% block content %}
+<div class="row p-1"></div>
+<div class="container ">
+    <div class="row justify-content-around mt-5 text-center">
+        <div class="col-12 mb-5 my-3 ">
+            <div class="display-4">
+                Predicción
+            </div>
+        </div>
+        <div class="col-auto m-4">
+            <a href="{% url 'pred_add_real' %}" class="p-3 btn bor-shad btn-info btn-big">
+                <h3>Tiempo real</h3>
+            </a>
+        </div>
+        
+        <div class="col-auto m-4">
+            <a href="{% url 'pred_add_data' %}" class="p-3 btn bor-shad btn-warning btn-big">
+                <h3>Datos previos</h3>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock  %}

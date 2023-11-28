@@ -70,7 +70,7 @@
         <tr class="text-center align-items-center">
             <td scope="row">{{measuring.name}}</td>
             <td scope="row">
-                <div class="badge  bg-{% if measuring.predict == "C" %}indigo{% elif measuring.predict == "1" %}success{% elif measuring.predict == "7" %}olive{% elif measuring.predict == "5" %}warning{% elif measuring.predict == "2" %}orange{% elif measuring.predict == "0" %}danger{% else %}secondary{% endif %}">
+                <div class="badge  bg-{% if measuring.predict == "C" %}indigo{% elif measuring.predict == "1" %}success{% elif measuring.predict == "7" %}olive{% elif measuring.predict == "5" %}warning{% elif measuring.predict == "2" %}orange{% elif measuring.predict == "0" %}danger{% elif measuring.predict == "P" %}purple{% else %}secondary{% endif %}">
                     <h5 class="m-0">{{measuring.get_predict_display}}</h5>
                 </div>
             </td>

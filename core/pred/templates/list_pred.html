@@ -13,7 +13,7 @@
             <td scope="row">{{prediction.name}}</td>
             <td scope="row">{{prediction.datetime}}</td>
             <td scope="row">
-                <div class="badge  bg-{% if prediction.predict == "C" %}indigo{% elif prediction.predict == "1" %}success{% elif prediction.predict == "7" %}olive{% elif prediction.predict == "5" %}warning{% elif prediction.predict == "2" %}orange{% elif prediction.predict == "0" %}danger{% else %}secondary{% endif %}">
+                <div class="badge  bg-{% if prediction.predict == "C" %}indigo{% elif prediction.predict == "1" %}success{% elif prediction.predict == "7" %}olive{% elif prediction.predict == "5" %}warning{% elif prediction.predict == "2" %}orange{% elif prediction.predict == "0" %}danger{% elif prediction.predict == "P" %}purple{% else %}secondary{% endif %}">
                     <h5 class="m-0">{{prediction.get_predict_display}}</h5>
                 </div>
             </td>
@@ -35,10 +35,10 @@
                 </p>
             </td>
             <td scope="row">
-                <a href="{% url 'meas_update' prediction.id %}" data-toggle="tooltip" title="Editar" class="m-1 btn btn-warning btn-xs btn-flat">
+                <a href="{% url 'pred_update' prediction.id %}" data-toggle="tooltip" title="Editar" class="m-1 btn btn-warning btn-xs btn-flat">
                     <i class="fas fa-edit"></i>
                 </a>
-                <a href="{% url 'meas_data' prediction.id %}" data-toggle="tooltip" title="Data" class="m-1 btn btn-primary btn-xs btn-flat">
+                <a href="{% url 'meas_data' prediction.measuring.id %}" data-toggle="tooltip" title="Data" class="m-1 btn btn-primary btn-xs btn-flat">
                     <i class="fas fa-database"></i>
                 </a>
                 <a href="{% url 'pred_delete' prediction.id %}" data-toggle="tooltip" title="Eliminar" class="m-1 btn btn-danger btn-xs btn-flat">
