@@ -6,6 +6,7 @@ from core.log.utils import MyLoginRequiredMixin
 from .forms import *
 from .models import Measuring,MeasuringData
 from django.contrib import messages
+from core.pred.models import PredictionData
 # Create your views here.
 
 class MainView(MyLoginRequiredMixin,TemplateView):
@@ -97,12 +98,17 @@ class MeasuringDataView(MyLoginRequiredMixin,DetailView):
     model=Measuring
     def dispatch(self, request, *args, **kwargs):
         self.pk = kwargs['pk']
+        self.pd=request.GET.get("pd")
         return super().dispatch(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = Measuring.objects.get(pk=self.pk).name
-        #context['object_list'] = MeasuringData.objects.filter(measuring__pk=self.pk)
+        if self.pd:
+            if context['object'].predict in ['1','7','5','2','0']:
+                context['vs']=context['object'].predict
+                context['vs_display']=context['object'].get_predict_display()
+            context['object'].predict=PredictionData.objects.get(pk=self.pd).predict
         context['back_url']=reverse_lazy('reg')
         return context
  

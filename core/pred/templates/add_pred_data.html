@@ -1,0 +1,255 @@
+{% extends '_form.html' %}
+
+{% block extra_field_a %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <button type="button" class="m-3 btn btn-success" data-toggle="modal" data-target="#modalModelos">
+                    Modelo <span id="span_count">( )</span> 
+                </button>
+                <br>
+                
+                <div class="modal fade" id="modalModelos" style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Modelo</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">x</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label for="id_search">Modelo</label>
+                                        <input maxlength="15" type="text" class="form-control" placeholder="Buscar Modelo" id="id_search" oninput="Find_Data()">        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div id="id_put_data" class="col-12">
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                            <textarea disabled class="form-control" name="" id="id_models" cols="30" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-warning" data-dismiss="modal">Canclar</button>
+                                <button type="button" onclick="ActiveBtn()" data-dismiss="modal" class="btn btn-success">Aplicar</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <button type="button" class="m-3 btn btn-success" data-toggle="modal" data-target="#modalDatos">
+                    Dato <span id="span_count_dato">( )</span> 
+                </button>
+                <div class="modal fade" id="modalDatos" style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Datos</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">x</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label for="id_search_dato">Datos</label>
+                                        <input maxlength="15" type="text" class="form-control" placeholder="Buscar Dato" id="id_search1" oninput="Find_Data(true)">        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div id="id_put_data1" class="col-12">
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                            <textarea disabled class="form-control" name="" id="id_datos" cols="30" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-warning" data-dismiss="modal">Canclar</button>
+                                <button type="button" onclick="ActiveBtn()" data-dismiss="modal" class="btn btn-success">Aplicar</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+        var list_name=[];
+        var list_pk=[];
+        var list_data_name=[];
+        var list_data_pk=[];
+        function Add_Element(name,pk)
+        {
+            if(list_pk.includes(pk)==true )
+                return
+            if(list_pk.length!=0)
+            {
+                list_name=[]
+                list_pk=[]
+            }
+            list_name.push(name)
+            list_pk.push(pk)
+
+            $("#id_models").val('')
+            str=""
+            list_name.forEach((element) =>{
+                str+=element
+                
+            })
+            $("#id_models").val(str)
+        }
+        function Del_Element(name,pk)
+        {
+           
+            list_name = list_name.filter(function(item) {
+                return item !== name
+            })
+            list_pk = list_pk.filter(function(item) {
+                return item !== pk
+            })
+            $("#id_models").val('')
+            str=""
+            list_name.forEach((element) =>{
+                str+=element
+                
+            })
+            $("#id_models").val(str)
+        }
+        function Add_Element1(name,pk)
+        {
+            if(list_data_pk.includes(pk)==true )
+                return
+            if(list_data_pk.length!=0)
+            {
+                list_data_name=[]
+                list_data_pk=[]
+            }
+            list_data_name.push(name)
+            list_data_pk.push(pk)
+
+            $("#id_datos").val('')
+            str=""
+            list_data_name.forEach((element) =>{
+                str+=element
+                
+            })
+            $("#id_datos").val(str)
+        }
+        function Del_Element1(name,pk)
+        {
+           
+            list_data_name = list_data_name.filter(function(item) {
+                return item !== name
+            })
+            list_data_pk = list_data_pk.filter(function(item) {
+                return item !== pk
+            })
+            $("#id_datos").val('')
+            str=""
+            list_data_name.forEach((element) =>{
+                str+=element
+                
+            })
+            $("#id_datos").val(str)
+        }
+
+        function ActiveBtn()
+        {
+            if(list_pk.length == 0 || list_data_pk.length == 0 )
+                $("#btn_start").prop("disabled", true);
+            else
+                $("#btn_start").prop("disabled", false);
+            let str=" "
+            if(list_name[0])
+                str=list_name[0]
+            $("#span_count").text("("+str+")")
+            str=" "
+            if(list_data_name[0])
+                str=list_data_name[0]
+            $("#span_count_dato").text("("+str+")")
+            
+        }
+        
+        function Find_Data(datos=false)
+        {
+            let action;
+            if(datos==false)
+            {
+                action="search_models"
+                data=$( "#id_search" ).val()
+            }
+            else
+            {    
+                action="search_trainin"
+                data=$( "#id_search1" ).val()
+            }
+            $.ajax({
+                url: ".",
+                data: {
+                    'action': action,
+                    'data': data,
+                },
+                type: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                dataType: 'text',
+                success: function (request) {
+                    console.log(request)
+                    let __let;
+                    if(datos==false)
+                    {
+                        $("#id_search_data").remove()
+                        $("#id_put_data").append(request);
+                    }
+                    else
+                    {    
+                        $("#id_search_data1").remove()
+                        $("#id_put_data1").append(request);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(errorThrown)
+                }
+            });
+        }
+    </script>
+{% endblock  %}
+
+{% block btn_save %}
+    <button  id="btn_start" disabled type="submit" class="btn btn-primary">
+        Comenzar
+    </button>
+    <script>
+        
+        $( "#frmForm" ).on( "submit", function( event ) {
+        $("#frmForm").children(":first").append("<div class='overlay dark'><i class='fa fa-2x fa-refresh fa-spin'></i><div class='m-3 text-light'>Iniciando....</div><i class='fa fa-2x fa-refresh fa-spin'></i></div>")
+        $('#frmForm').append('<input type="hidden" name="list_pk" value="'+ list_pk +'" />');
+        $('#frmForm').append('<input type="hidden" name="list_pk_data" value="'+ list_data_pk +'" />');     
+           
+        });
+
+        
+    </script>
+    
+{% endblock  %}

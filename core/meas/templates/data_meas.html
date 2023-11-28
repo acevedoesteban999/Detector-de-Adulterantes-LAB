@@ -6,11 +6,24 @@
     <div class="container my-2">
         <div class="row justify-content-center">
             <div class="col-auto">
-                <div class="badge  bg-{% if object.predict == "C" %}indigo{% elif object.predict == "1" %}success{% elif object.predict == "7" %}olive{% elif object.predict == "5" %}warning{% elif object.predict == "2" %}orange{% elif object.predict == "0" %}danger{% else %}secondary{% endif %}">
+                <div class="badge  bg-{% if object.predict == "C" %}indigo{% elif object.predict == "1" %}success{% elif object.predict == "7" %}olive{% elif object.predict == "5" %}warning{% elif object.predict == "2" %}orange{% elif object.predict == "0" %}danger{% elif object.predict == "P" %}purple{% else %}secondary{% endif %}">
                     <h5 class="m-0">{{object.get_predict_display}}</h5>
                 </div>
             </div>
         </div>
+        {% if vs %}
+            <div class="text-center">
+                <small>VS</small>
+            </div>    
+        
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    <div class="badge  bg-{% if vs == "C" %}indigo{% elif vs == "1" %}success{% elif vs == "7" %}olive{% elif vs == "5" %}warning{% elif vs == "2" %}orange{% elif vs == "0" %}danger{% elif vs == "P" %}purple{% else %}secondary{% endif %}">
+                        <h5 class="m-0">{{vs_display}}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
     </div>
 {% endblock %}
 {% block columns %}
@@ -28,4 +41,7 @@
         </tr>
     {% endfor %}
 
+{% endblock %}
+
+{% block box_footer_buttons %}
 {% endblock %}

@@ -9,6 +9,7 @@ PredictionChoices=[
     ('N','Ninguna'),
     ('C','CSV'),
     ('M','Multi'),
+    ('P',"Pred")
 ]
 def is_at_migrations():
     return ('makemigrations' in sys.argv or 'migrate' in sys.argv)
