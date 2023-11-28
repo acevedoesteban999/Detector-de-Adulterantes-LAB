@@ -22,6 +22,7 @@ urlpatterns = [
     path('add/real_time/',PredictionCreateRealTimeView.as_view(),name='pred_add_real'),
     path('add/data/',PredictionCreateDataView.as_view(),name='pred_add_data'),
     path('update/<int:pk>/',PredictionUpdateView.as_view(),name='pred_update'),
+    path('data/<int:pk>/',PredictionDataView.as_view(),name='pred_data'),
     path('reg/list/',PredictionListView.as_view(),name='pred_list'),
     path('reg/delete/<int:pk>/',PredictionDeleteView.as_view(),name='pred_delete'),
 ]

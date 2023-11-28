@@ -6,7 +6,7 @@ from core.log.utils import MyLoginRequiredMixin
 from core.mod.models import Model
 from core.tra.models import Training
 from .forms import *
-from .models import Prediction
+from .models import Prediction,PredictionData
 from core.binn.models import BinnacleMessages
 from django.contrib import messages
 # Create your views here.
@@ -131,6 +131,26 @@ class PredictionListView(MyLoginRequiredMixin,ListView):
         
         return context
     
+
+class PredictionDataView(MyLoginRequiredMixin,ListView):
+    template_name='pred_data.html'
+    model=PredictionData
+    def dispatch(self, request, *args, **kwargs):
+        self.pk = kwargs['pk']
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        return super().get_queryset().filter(prediction=self.pk)
+    
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = Prediction.objects.get(pk=self.pk).name
+        context['back_url']=reverse_lazy('pred_list')
+        return context
+
+    
+
 class PredictionUpdateView(MyLoginRequiredMixin,UpdateView):
     model=Prediction
     template_name = '_form.html'

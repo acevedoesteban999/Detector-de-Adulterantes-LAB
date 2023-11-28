@@ -1,0 +1,41 @@
+{% extends '_list.html' %}
+
+{% block columns %}
+        <th scope="col">Predicción</th>
+        <th scope="col">Opciones</th>
+{% endblock %}
+
+{% block rows %}
+    {% for prediction_data in object_list %}
+        <tr class="text-center align-items-center">
+            <td scope="row">
+                <div class="badge  bg-{% if prediction_data.predict == "C" %}indigo{% elif prediction_data.predict == "1" %}success{% elif prediction_data.predict == "7" %}olive{% elif prediction_data.predict == "5" %}warning{% elif prediction_data.predict == "2" %}orange{% elif prediction_data.predict == "0" %}danger{% elif prediction_data.predict == "P" %}purple{% else %}secondary{% endif %}">
+                    <h5 class="m-0">{{prediction_data.get_predict_display}}</h5>
+                </div>
+            </td>
+            <td scope="row">
+                
+                <a href="{% url 'meas_data' prediction_data.measuring.id %}?pd={{prediction_data.id}}" data-toggle="tooltip" title="Data" class="m-1 btn btn-primary btn-xs btn-flat">
+                    <i class="fas fa-database"></i>
+                </a>
+                <a href="{% url 'meas_delete' prediction_data.measuring.id %}" data-toggle="tooltip" title="Eliminar" class="m-1 btn btn-danger btn-xs btn-flat">
+                    <i class="fas fa-regular fa-trash"></i>
+                </a>
+
+            </td>
+        </tr>
+    {% endfor %}
+
+{% endblock %}
+
+{% block buttons_footer %}
+    
+    <a href="" class="btn btn-success btn-flat">
+        <i class="fas fa-sync-alt"></i> Actualizar
+    </a>
+    {% if training_save_exel %}
+        <a target='_blank' href="{% url 'tra_downl_csv' pk %}" class="btn btn-info btn-flat">
+            Descargar CSV
+        </a>
+    {% endif %}
+{% endblock  %}
