@@ -65,7 +65,7 @@
                                     {% if page_obj.paginator.num_pages != 1 %}
                                         <div class="p-0 m-0 row text-center align-items-center justify-content-center">
                                             <input type="number" id="pageNumberInput" value="{{ page_obj.number }}" class="border pagination-input" max="{{ page_obj.paginator.num_pages }}">
-                                            <a href="#" class="btn btn-success m-1 p-1" onclick="SearchByPage()"><i class="fas fa-search"></i></a>
+                                            <a  class="btn btn-success m-1 p-1" onclick="SearchByPage()"><i class="text-light    fas fa-search"></i></a>
                                         </div>
                                     {% endif %}
                                     {% if page_obj.has_previous %}
