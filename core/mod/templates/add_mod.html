@@ -44,6 +44,15 @@
                 </div>
             </div>
         </div>
+        {% if perms.user.is_development %}
+            <div class="row justify-content-start">
+                <div class="col-auto">
+                    <input type="checkbox"  name="optim_model" id="optim_model_id" >
+                    <label for="optim_model_id">Modelo Óptimo</label>
+                </div>
+            </div>
+            
+        {% endif %}
     </div>
 
     

@@ -62,7 +62,12 @@
                                     <span class="current">
                                         Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
                                     </span>
-                                    <br>
+                                    {% if page_obj.paginator.num_pages != 1 %}
+                                        <div class="p-0 m-0 row text-center align-items-center justify-content-center">
+                                            <input type="number" id="pageNumberInput" value="{{ page_obj.number }}" class="border pagination-input" max="{{ page_obj.paginator.num_pages }}">
+                                            <a href="#" class="btn btn-success m-1 p-1" onclick="SearchByPage()"><i class="fas fa-search"></i></a>
+                                        </div>
+                                    {% endif %}
                                     {% if page_obj.has_previous %}
                                         <a href="?page=1">&laquo; Primera</a>
                                         
@@ -76,11 +81,14 @@
                                     
                                     
                                 </span>
+                                
                             </div>
                         </div>
-
                     </div>
-                
+                    
+                    
+                    
+                    <input type="text" class="pagination-input" maxlength="2">  
                     {% comment %} <a href="{{ create_url }}" class="btn btn-primary btn-flat">
                         <i class="fas fa-plus"></i> Nuevo Registro
                     </a> {% endcomment %}
@@ -89,6 +97,17 @@
                             <i class="fas fa-sync-alt"></i> Actualizar
                         </a>
                     {% endblock  %}
+                    <script>
+                        function SearchByPage()
+                        {
+                            let pageNumber = document.getElementById('pageNumberInput').value;
+                            if (pageNumber<=0)
+                                pageNumber=1
+                            else if (pageNumber>{{ page_obj.paginator.num_pages}})
+                                pageNumber={{ page_obj.paginator.num_pages}}
+                            window.location.href = '?page=' + pageNumber;; // Redirigir a la URL construida
+                        }
+                    </script>
                 {% endblock %}
             </div>
         {% endblock %}

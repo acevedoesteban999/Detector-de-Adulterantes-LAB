@@ -69,7 +69,10 @@ class ModelCreateView(MyLoginRequiredMixin,FormView):
     
     def form_valid(self,request,form):
         try:
-            if not(form.save(self._list)):
+            optim_model=None
+            if request.user.has_perm('is_development'):
+                optim_model=request.POST.get("optim_model")
+            if not(form.save(self._list,optim_model)):
                 return self.form_invalid(request,form,rason="Ya se está entrenando un modelo")
         except Exception as e:
             return self.form_invalid(request,form,e)

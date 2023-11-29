@@ -13,5 +13,6 @@ class Prediction(models.Model):
 
 class PredictionData(models.Model):
     predict=models.CharField(max_length=1,choices=PredictionChoices,default="P")
+    prdict_value=models.FloatField(default=0)
     prediction=models.ForeignKey(Prediction, on_delete=models.CASCADE)
     measuring=models.ForeignKey(Measuring, related_name="meas_prediction_data",on_delete=models.DO_NOTHING)

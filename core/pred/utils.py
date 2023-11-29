@@ -23,16 +23,19 @@ def prediction_thread(name,_model_pk):
         _name=Model.objects.get(pk=_model_pk).name.replace(' ','_')
         model: keras.Sequential= keras.models.load_model(os.path.join(BASE_DIR,f"media/models/{_name}.keras"))
         model.load_weights(os.path.join(BASE_DIR,f"media/models/{_name}_W.keras"))
-        predict_class=model.predict(np.array(measuring.get_list_data(),dtype=float).reshape(1,18)).argmax()
-        pd.predict=PredictionChoices[predict_class][0]
+        
+        data=np.array([measuring.get_list_data()])
+        cla=model.predict(data)
+        pd.predict=PredictionChoices[cla.argmax()][0]
+        pd.prdict_value=cla.max()
         pd.save()   
         p.state=True
         BinnacleMessages.info("Prediction Thread",f"OK-----name: {name}")
     except Exception as e:
+        print(e)
         BinnacleMessages.error(e)
         p.state=False
-    p.save()
-    #p.save_base(raw=True)            
+    p.save()          
     
 def prediction_thread1(name,_model_pk,_train_pk):
     try:
@@ -51,8 +54,10 @@ def prediction_thread1(name,_model_pk,_train_pk):
                 prediction=p,
                 measuring=meas,
             )
-            predict_class=model.predict(np.array(meas.get_list_data(),dtype=float).reshape(1,18)).argmax()
-            pd.predict=PredictionChoices[predict_class][0]
+            data=np.array([meas.get_list_data()])
+            cla=model.predict(data)
+            pd.predict=PredictionChoices[cla.argmax()][0]
+            pd.prdict_value=cla.max()
             pd.save()
         p.state=True
         BinnacleMessages.info("Prediction Thread",f"OK-----name: {name}")
