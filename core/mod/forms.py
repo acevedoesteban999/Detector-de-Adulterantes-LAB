@@ -1,25 +1,22 @@
 from django import forms
 from .models import Model
-from core.tra.models import Training
-#from core.meas.models import Measuring,MeasuringData
-import time
 from threading import Thread
 from config.utils import thread_is_alive
 from .utils import trin_model_thread
-from core.binn.models import  BinnacleMessages
-#from config.utils import is_at_migrations
+
 class ModelForm(forms.ModelForm):
-    #trainings = forms.CharField(widget=forms.Textarea(),label="Entrenamientos",required=False,disabled=True)
-    #search=forms.CharField(label='Buscar Entrenamientos',max_length=20, required=False,widget=forms.TextInput(attrs={'class':'form-control','placeholder': 'Buscar Entrenamiento'}),)
+    neurons=forms.IntegerField(initial=448,min_value=1,max_value=1024,label="Neuronas",widget=forms.NumberInput(attrs={'class':'form-control','placeholder': 'Cantidad de neuronas'}))
+    epochs=forms.IntegerField(initial=500,min_value=1,max_value=9999,label="Épocas",widget=forms.NumberInput(attrs={'class':'form-control','placeholder': 'Cantidad de épocas'}))
     class Meta:
         model =Model
-        fields = 'name',#'trainings','search',
+        fields = 'name','neurons','epochs','activation',
         widgets = {
             'name': forms.TextInput(attrs={'class':'form-control','placeholder': 'Ingrese un nombre'}),
+            'activation':forms.Select(attrs={'class':'form-control'}),
         }
     def save(self,_list,optim_model):
         if not thread_is_alive("ThreadModel"):
-            Thread(target=trin_model_thread,name="ThreadModel",args=(self.cleaned_data.get('name'),_list,optim_model,)).start()
+            Thread(target=trin_model_thread,name="ThreadModel",args=(self.cleaned_data.get('name'),_list,optim_model,self.cleaned_data.get('neurons'),self.cleaned_data.get('epochs'),self.cleaned_data.get('activation'))).start()
             return True
         return False
 
@@ -56,7 +53,6 @@ class ModelLoadForm(forms.Form):
             m.save()
             return _name        
             
-   
 class ModelUpdateForm(forms.ModelForm):
     class Meta:
         model =Model

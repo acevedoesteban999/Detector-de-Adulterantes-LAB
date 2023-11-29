@@ -1,10 +1,11 @@
 from core.mod.models import Model
 from core.tra.models import Training
 from config.settings import BASE_DIR
+
 import os
 from core.binn.models import  BinnacleMessages
 
-def trin_model_thread(name,_list,optim_model):
+def trin_model_thread(name,_list,optim_model,neurons,_epochs,_activation):
         try:
             import time
             if optim_model=="on":
@@ -13,22 +14,19 @@ def trin_model_thread(name,_list,optim_model):
                 optim_model=False
             m=Model.objects.create(
                 name=name,
-            )
-            
-            
+                neurons=neurons,
+                epochs=_epochs,
+                activation=_activation
+            ) 
+            activation = m.get_activation_display()
             import numpy as np
             import tensorflow as tf
             from tensorflow import keras
             from keras import layers
-            import hexdump
-            from tinymlgen import port
             from sklearn.model_selection import train_test_split
             import kerastuner as kt
             from matplotlib import pyplot as plt
             from sklearn.metrics import confusion_matrix
-            # from keras.utils import plot_model
-            # import pydot
-            # import graphviz
             import seaborn as sns
             import matplotlib
             matplotlib.use('Agg')
@@ -56,7 +54,7 @@ def trin_model_thread(name,_list,optim_model):
                 model.add(
                     layers.Dense(
                         units=hp.Int("units_0", min_value=32, max_value=512, step=32),
-                        activation=hp.Choice("activation", ["relu", "tanh"]),
+                        activation=hp.Choice("activation", ["relu", "tanh","sigmoid","linear"]),
                     )
                 )
                 
@@ -76,6 +74,7 @@ def trin_model_thread(name,_list,optim_model):
                 epochs_range=range(0,epochs)
                 
                 plt.clf()
+                plt.plot(epochs_range,history.history['val_accuracy'],'b',linestyle='--',label='Validate Accuracy')
                 plt.plot(epochs_range,history.history['accuracy'],'g',label='Training Accuracy')
                 plt.title("Training  Accuracy")
                 plt.xlabel("Epochs")
@@ -84,6 +83,7 @@ def trin_model_thread(name,_list,optim_model):
                 plt.savefig(MEDIA_ROOT+"/trains/"+f"{name}_accuracy.png")
                 
                 plt.clf()
+                plt.plot(epochs_range,history.history['val_loss'],'b',linestyle='--',label='Validate Loss')
                 plt.plot(epochs_range,history.history['loss'],'r',label='Training Loss')
                 plt.title("Training  Loss")
                 plt.xlabel("Epochs")
@@ -155,10 +155,10 @@ def trin_model_thread(name,_list,optim_model):
 
                 return model                 
             
-            def get_static_model(name):     
+            def get_static_model():     
                 model = keras.Sequential()
                 model.add(keras.layers.Input(shape=(18, )))
-                model.add(layers.Dense(448,activation="tanh",))
+                model.add(layers.Dense(neurons,activation=activation,))
                 model.add(keras.layers.Dense(5,activation="softmax"))
 
                 model.compile(
@@ -167,7 +167,7 @@ def trin_model_thread(name,_list,optim_model):
                     metrics=['accuracy']
                 )
                 
-                epochs=270
+                epochs=_epochs
                 t=time.time()
                 history=model.fit(
                     X_train,
@@ -190,7 +190,7 @@ def trin_model_thread(name,_list,optim_model):
             if optim_model == True:
                 model=get_optim_model()
             else:
-                model=get_static_model(name)
+                model=get_static_model()
             _name=name.replace(' ','_')
             model.save(os.path.join(BASE_DIR,f"media/models/{_name}.keras"))
             model.save_weights(os.path.join(BASE_DIR,f"media/models/{_name}_W.keras"))
@@ -206,6 +206,6 @@ def trin_model_thread(name,_list,optim_model):
         except Exception as e:
             BinnacleMessages.error(e)
             m.state=False
-            
+   
         m.save()
         

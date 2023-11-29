@@ -24,7 +24,7 @@
             </td>
             <td scope="row">{{training.datetime}}</td>
             <td scope="row ">
-                <p>
+                <div class="row justify-content-center">
                     {% if training.state == True %}
                         <span class="badge-success p-2 px-3" style="border-radius: 60px;" id="span{{training.id}}">
                             <i class="fas fa-solid fa-square-check"></i>
@@ -38,7 +38,7 @@
                             <i class="fa fa-refresh fa-spin"></i>
                         </span>
                     {% endif %}
-                </p>
+                    </div>
             </td>
             <td scope="row">
                 {% if training.state != None %}

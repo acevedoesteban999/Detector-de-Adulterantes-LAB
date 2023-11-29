@@ -1,23 +1,22 @@
 from core.as7265x import AS7265X
 from .models import Training
-from config.utils import PredictionChoices
 from core.meas.models import Measuring,MeasuringData
 from core.meas.utils import MeasuringI2C
 from core.binn.models import  BinnacleMessages
 import time
-def train_thread(name,count,prediction):
+def train_thread(name,count,predict):
     try:
         tr,created=Training.objects.get_or_create(name=name)
         tr.state=None
         if created == True:
-            tr.predict=prediction
+            tr.predict=predict
         else:
             tr.predict="M"
         __count=tr.count
         tr.count+=count
         tr.save()
         for _count in range(int(count)):
-            MeasuringI2C(f"TR~{tr.name}~{__count+_count}",tr,prediction)
+            MeasuringI2C(f"TR~{tr.name}~{__count+_count}",tr,predict)
         tr.state=True
         BinnacleMessages.info("DataTrain Thread",f"OK-----name:{name}-----datas to add: {count}-----datas:{__count}")
     except Exception as e:
@@ -39,11 +38,11 @@ def csv_thread(_1f,count,csv_read,name):
             for r in _r:
                 rows.append(r.split(',')) 
             for count in range(len(rows)):
-                prediction=PredictionChoices[int(rows[count][1])-1][0]
+                predict=predictChoices[int(rows[count][1])-1][0]
                 m=Measuring.objects.create(
                     name=f"T~{name}~{count}",
                     training=t,
-                    predict=prediction
+                    predict=predict
                 )
                 
                 t.count+=1
@@ -74,11 +73,11 @@ def csv_thread(_1f,count,csv_read,name):
         for r in _r:
             rows.append(r.split(',')) 
         for count in range(len(rows)):
-            prediction=PredictionChoices[int(rows[count][18])][0]
+            predict=predictChoices[int(rows[count][18])][0]
             m=Measuring.objects.create(
                 name=f"T~{name}~{count}",
                 training=t,
-                predict=prediction
+                predict=predict
             )
             t.count+=1
             for c,d in enumerate(rows[count]):
@@ -95,10 +94,10 @@ def csv_thread(_1f,count,csv_read,name):
         BinnacleMessages.error(e)
         t.state=False
     t.save() 
-# def TrainingI2C(name,count,prediction="N"):
+# def TrainingI2C(name,count,predict="N"):
 #     tr,created=Training.objects.get_or_create(name=name)
 #     if created == True:
-#         tr.predict=prediction
+#         tr.predict=predict
 #     else:
 #         tr.predict="M"
 #     __count=tr.count
@@ -107,9 +106,9 @@ def csv_thread(_1f,count,csv_read,name):
 #     # tr=Training.objects.create(
 #     #     name=name,
 #     #     count=count,
-#     #     predict=prediction,
+#     #     predict=predict,
 #     # )
 #     for _count in range(int(count)):
-#         MeasuringI2C(f"TR~{tr.name}~{__count+_count}",tr,prediction)
+#         MeasuringI2C(f"TR~{tr.name}~{__count+_count}",tr,predict)
     
         

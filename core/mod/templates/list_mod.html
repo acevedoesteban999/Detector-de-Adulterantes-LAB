@@ -1,6 +1,7 @@
 {% extends '_list.html' %}
 {% block columns %}
         <th scope="col">Nombre</th>
+        <th scope="col">Parámetros</th>
         <th scope="col">Hora y Fecha</th>
         <th scope="col">Estado</th>
         <th scope="col">Opciones</th>
@@ -9,10 +10,20 @@
 {% block rows %}
     {% for model in object_list %}
         <tr class="text-center align-items-center">
-            <td scope="row">{{model.name}}</td>
+            <td scope="row" >{{model.name}}</td>
+            <td scope="row">
+                <small>
+                    Neuronas:{{model.neurons}}
+                    <br>
+                    Épocas:{{model.epochs}}
+                    <br>
+                    Activación:{{model.get_activation_display}}
+                </small>
+            </td>
             <td scope="row">{{model.datetime}}</td>
-            <td scope="row ">
-                <p>
+            <td scope="row">
+                <div class="row justify-content-center">
+                    
                     {% if model.state == True %}
                         <span class="badge-success p-2 px-3" style="border-radius: 60px;" id="span{{model.id}}">
                             <i class="fas fa-solid fa-square-check"></i>
@@ -26,7 +37,8 @@
                             <i class="fa fa-refresh fa-spin"></i>
                         </span>
                     {% endif %}
-                </p>
+                </div>
+                
             </td>
             <td scope="row">
                 {% if model.state != None %}
