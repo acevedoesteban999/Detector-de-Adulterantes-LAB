@@ -140,9 +140,9 @@
     <button  id="btn_start" disabled type="submit" class="btn btn-primary">
         Comenzar
     </button>
-    <a href="{% url 'mod_load' %}" class="btn btn-warning btn-flat">
+    {% comment %} <a href="{% url 'mod_load' %}" class="btn btn-warning btn-flat">
         Importar Modelo
-    </a>
+    </a> {% endcomment %}
     <script>
         $( "#frmForm" ).on( "submit", function( event ) {
         $("#frmForm").children(":first").append("<div class='overlay dark'><i class='fa fa-2x fa-refresh fa-spin'></i><div class='m-3 text-light'>Iniciando....</div><i class='fa fa-2x fa-refresh fa-spin'></i></div>")

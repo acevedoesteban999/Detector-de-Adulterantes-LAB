@@ -2,7 +2,7 @@ from django.db import models
 # Create your models here.
 
 ActivationChoices=[
-    ("r","relu "),
+    ("r","relu"),
     ("t","tanh"),
     ("s","sigmoid"),
     ("l","linear"),

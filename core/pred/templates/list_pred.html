@@ -36,15 +36,19 @@
                     </div>
             </td>
             <td scope="row">
-                <a href="{% url 'pred_update' prediction.id %}" data-toggle="tooltip" title="Editar" class="m-1 btn btn-warning btn-xs btn-flat">
-                    <i class="fas fa-edit"></i>
-                </a>
-                <a href="{% url 'pred_data' prediction.id %}" data-toggle="tooltip" title="Data" class="m-1 btn btn-primary btn-xs btn-flat">
-                    <i class="fas fa-database"></i>
-                </a>
-                <a href="{% url 'pred_delete' prediction.id %}" data-toggle="tooltip" title="Eliminar" class="m-1 btn btn-danger btn-xs btn-flat">
-                    <i class="fas fa-regular fa-trash"></i>
-                </a>
+                {% if prediction.state != None %}
+                    <a href="{% url 'pred_update' prediction.id %}" data-toggle="tooltip" title="Editar" class="m-1 btn btn-warning btn-xs btn-flat">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    {% if prediction.state == True %}
+                        <a href="{% url 'pred_data' prediction.id %}" data-toggle="tooltip" title="Data" class="m-1 btn btn-primary btn-xs btn-flat">
+                            <i class="fas fa-database"></i>
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'pred_delete' prediction.id %}" data-toggle="tooltip" title="Eliminar" class="m-1 btn btn-danger btn-xs btn-flat">
+                        <i class="fas fa-regular fa-trash"></i>
+                    </a>
+                {% endif %}
 
             </td>
         </tr>

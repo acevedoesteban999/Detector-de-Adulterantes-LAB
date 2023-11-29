@@ -1,6 +1,6 @@
 from core.mod.models import Model
 from core.tra.models import Training
-from config.settings import BASE_DIR
+from config.settings import MEDIA_ROOT
 
 import os
 from core.binn.models import  BinnacleMessages
@@ -30,7 +30,6 @@ def trin_model_thread(name,_list,optim_model,neurons,_epochs,_activation):
             import seaborn as sns
             import matplotlib
             matplotlib.use('Agg')
-            from config.settings import MEDIA_ROOT
             for l in _list:
                 Training.objects.get(pk=l).models.add(m)
             d=[]
@@ -192,12 +191,12 @@ def trin_model_thread(name,_list,optim_model,neurons,_epochs,_activation):
             else:
                 model=get_static_model()
             _name=name.replace(' ','_')
-            model.save(os.path.join(BASE_DIR,f"media/models/{_name}.keras"))
-            model.save_weights(os.path.join(BASE_DIR,f"media/models/{_name}_W.keras"))
+            model.save(MEDIA_ROOT+f"/models/{_name}.keras")
+            model.save_weights(MEDIA_ROOT+f"/models/{_name}_W.keras")
             converter = tf.lite.TFLiteConverter.from_keras_model(model)
             converter.optimizations = [tf.lite.Optimize.OPTIMIZE_FOR_SIZE]
             tflite_model = converter.convert()
-            with open(os.path.join(BASE_DIR,f"media/models/{_name}"), "wb") as text_file:
+            with open(MEDIA_ROOT+f"/models/{_name}", "wb") as text_file:
                 text_file.write(tflite_model)
             
             

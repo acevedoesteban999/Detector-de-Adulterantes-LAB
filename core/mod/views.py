@@ -129,7 +129,50 @@ class ModelDeleteView(MyLoginRequiredMixin,DeleteView):
     template_name = 'delete_meas.html'
     #permission_required="user.delete_user"
     success_url=reverse_lazy('mod_list')
- 
+    def form_valid(self, form):
+        name=self.get_object().name
+        os.remove(
+            MEDIA_ROOT+"/models/"+f"{name}.keras",
+        )
+        os.remove(
+            MEDIA_ROOT+"/models/"+f"{name}_W.keras",
+        )
+        os.remove(
+            MEDIA_ROOT+"/models/"+f"{name}",
+        )
+        os.remove(
+            MEDIA_ROOT+"/trains/"+f"{name}_accuracy.png",
+        )
+        os.remove(
+            MEDIA_ROOT+"/trains/"+f"{name}_loss.png",
+        )
+        os.remove(
+            MEDIA_ROOT+"/trains/"+f"{name}_confusion_matrix.png",
+        )
+        return super().form_valid(form)
+    # def delete(self, request, *args, **kwargs):
+    #     print("DELET")
+    #     print(kwargs)
+    #     raise Exception()
+    #     os.remove(
+    #         MEDIA_ROOT+"/models/"+f"{last_nme}.keras",
+    #     )
+    #     os.remove(
+    #         MEDIA_ROOT+"/models/"+f"{last_nme}_W.keras",
+    #     )
+    #     os.remove(
+    #         MEDIA_ROOT+"/models/"+f"{last_nme}",
+    #     )
+    #     os.remove(
+    #         MEDIA_ROOT+"/trains/"+f"{last_nme}_accuracy.png",
+    #     )
+    #     os.remove(
+    #         MEDIA_ROOT+"/trains/"+f"{last_nme}_loss.png",
+    #     )
+    #     os.remove(
+    #         MEDIA_ROOT+"/trains/"+f"{last_nme}_confusion_matrix.png",
+    #     )
+    #     return super().delete(request, *args, **kwargs)
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['title'] = "Eliminar Entrenamiento"
