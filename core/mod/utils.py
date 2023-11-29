@@ -20,8 +20,8 @@ def trin_model_thread(name,_list,optim_model):
             import tensorflow as tf
             from tensorflow import keras
             from keras import layers
-            import hexdump
-            from tinymlgen import port
+            #import hexdump
+            #from tinymlgen import port
             from sklearn.model_selection import train_test_split
             import kerastuner as kt
             from matplotlib import pyplot as plt
@@ -56,7 +56,7 @@ def trin_model_thread(name,_list,optim_model):
                 model.add(
                     layers.Dense(
                         units=hp.Int("units_0", min_value=32, max_value=512, step=32),
-                        activation=hp.Choice("activation", ["relu", "tanh"]),
+                        activation=hp.Choice("activation", ["relu", "tanh","sigmoid","linear"]),
                     )
                 )
                 
@@ -76,9 +76,8 @@ def trin_model_thread(name,_list,optim_model):
                 epochs_range=range(0,epochs)
                 
                 plt.clf()
+                plt.plot(epochs_range,history.history['val_accuracy'],'b',linestyle='--',label='Validate Accuracy')
                 plt.plot(epochs_range,history.history['accuracy'],'g',label='Training Accuracy')
-                plt.plot(epochs_range,history.history['val_accuracy'],'b',label='Validate Accuracy')
-                
                 plt.title("Training  Accuracy")
                 plt.xlabel("Epochs")
                 plt.ylabel("Accuracy")
@@ -86,8 +85,8 @@ def trin_model_thread(name,_list,optim_model):
                 plt.savefig(MEDIA_ROOT+"/trains/"+f"{name}_accuracy.png")
                 
                 plt.clf()
+                plt.plot(epochs_range,history.history['val_loss'],'b',linestyle='--',label='Validate Loss')
                 plt.plot(epochs_range,history.history['loss'],'r',label='Training Loss')
-                plt.plot(epochs_range,history.history['val_loss'],'b',label='Validate Loss')
                 plt.title("Training  Loss")
                 plt.xlabel("Epochs")
                 plt.ylabel("Loss")
@@ -161,7 +160,7 @@ def trin_model_thread(name,_list,optim_model):
             def get_static_model(name):     
                 model = keras.Sequential()
                 model.add(keras.layers.Input(shape=(18, )))
-                model.add(layers.Dense(448,activation="tanh",))
+                model.add(layers.Dense(448,activation="sigmoid",))
                 model.add(keras.layers.Dense(5,activation="softmax"))
 
                 model.compile(
@@ -170,7 +169,7 @@ def trin_model_thread(name,_list,optim_model):
                     metrics=['accuracy']
                 )
                 
-                epochs=270
+                epochs=500
                 t=time.time()
                 history=model.fit(
                     X_train,
