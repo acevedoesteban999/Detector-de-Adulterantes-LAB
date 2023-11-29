@@ -2,6 +2,7 @@
 
 {% block columns %}
         <th scope="col">Nombre</th>
+        <th scope="col">Modelo</th>
         <th scope="col">Hora y Fecha</th>
         <th scope="col">Estado</th>
         <th scope="col">Opciones</th>
@@ -10,6 +11,7 @@
     {% for prediction in object_list %}
         <tr class="text-center align-items-center">
             <td scope="row">{{prediction.name}}</td>
+            <td scope="row">{{prediction.model.name}}</td>
             <td scope="row">{{prediction.datetime}}</td>
             {% comment %} <td scope="row">
                 <div class="badge  bg-{% if prediction.predict == "C" %}indigo{% elif prediction.predict == "1" %}success{% elif prediction.predict == "7" %}olive{% elif prediction.predict == "5" %}warning{% elif prediction.predict == "2" %}orange{% elif prediction.predict == "0" %}danger{% elif prediction.predict == "P" %}purple{% else %}secondary{% endif %}">
