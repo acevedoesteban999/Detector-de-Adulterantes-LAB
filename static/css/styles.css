@@ -11,3 +11,6 @@
   font-size: 1em;
   text-align: center;
 }
+td[scope="row"] {
+  vertical-align: middle;
+}
