@@ -77,6 +77,8 @@ def trin_model_thread(name,_list,optim_model):
                 
                 plt.clf()
                 plt.plot(epochs_range,history.history['accuracy'],'g',label='Training Accuracy')
+                plt.plot(epochs_range,history.history['val_accuracy'],'b',label='Validate Accuracy')
+                
                 plt.title("Training  Accuracy")
                 plt.xlabel("Epochs")
                 plt.ylabel("Accuracy")
@@ -85,6 +87,7 @@ def trin_model_thread(name,_list,optim_model):
                 
                 plt.clf()
                 plt.plot(epochs_range,history.history['loss'],'r',label='Training Loss')
+                plt.plot(epochs_range,history.history['val_loss'],'b',label='Validate Loss')
                 plt.title("Training  Loss")
                 plt.xlabel("Epochs")
                 plt.ylabel("Loss")
