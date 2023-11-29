@@ -70,9 +70,9 @@
     <a href="" class="btn btn-success btn-flat">
         <i class="fas fa-sync-alt"></i> Actualizar
     </a>
-    <a href="{% url 'mod_load' %}" class="btn btn-warning btn-flat">
+    {% comment %} <a href="{% url 'mod_load' %}" class="btn btn-warning btn-flat">
         Importar Modelo
-    </a>
+    </a> {% endcomment %}
 {% endblock  %}
 {% block extra_extra_js %}
     {% if thread_alive %}
