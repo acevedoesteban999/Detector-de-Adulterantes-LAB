@@ -42,13 +42,15 @@ def prediction_thread(name,_model_pk):
     
 def prediction_thread1(name,_model_pk,_train_pk):
     try:
+        _m=Model.objects.get(pk=_model_pk)
         p=Prediction.objects.create(
             name=name,
+            model=_m,
         )    
         
         from tensorflow import keras
         import numpy as np
-        _name=Model.objects.get(pk=_model_pk).name.replace(' ','_')
+        _name=_m.name.replace(' ','_')
         model: keras.Sequential= keras.models.load_model(os.path.join(BASE_DIR,f"media/models/{_name}.keras"))
         model.load_weights(os.path.join(BASE_DIR,f"media/models/{_name}_W.keras"))
         
