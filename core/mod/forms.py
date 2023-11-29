@@ -17,9 +17,9 @@ class ModelForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class':'form-control','placeholder': 'Ingrese un nombre'}),
         }
-    def save(self,_list):
+    def save(self,_list,optim_model):
         if not thread_is_alive("ThreadModel"):
-            Thread(target=trin_model_thread,name="ThreadModel",args=(self.cleaned_data.get('name'),_list,)).start()
+            Thread(target=trin_model_thread,name="ThreadModel",args=(self.cleaned_data.get('name'),_list,optim_model,)).start()
             return True
         return False
 

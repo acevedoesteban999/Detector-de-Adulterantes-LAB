@@ -1,7 +1,8 @@
 {% extends '_list.html' %}
-
+{% load custom_filters %}
 {% block columns %}
         <th scope="col">Predicción</th>
+        <th scope="col">Confiabilidad</th>
         <th scope="col">Opciones</th>
 {% endblock %}
 
@@ -10,9 +11,14 @@
         <tr class="text-center align-items-center">
             <td scope="row">
                 <div class="badge  bg-{% if prediction_data.predict == "C" %}indigo{% elif prediction_data.predict == "1" %}success{% elif prediction_data.predict == "7" %}olive{% elif prediction_data.predict == "5" %}warning{% elif prediction_data.predict == "2" %}orange{% elif prediction_data.predict == "0" %}danger{% elif prediction_data.predict == "P" %}purple{% else %}secondary{% endif %}">
-                    <h5 class="m-0">{{prediction_data.get_predict_display}}</h5>
+                    <h5 class="m-1">{{prediction_data.get_predict_display}}</h5>
                 </div>
             </td>
+            <td scope="row ">
+                <div class="badge  bg-{% if prediction_data.prdict_value > 0.9 %}success{% elif prediction_data.prdict_value > 0.8 %}olive{% elif prediction_data.prdict_value > 0.7 %}warning{% elif prediction_data.prdict_value >  0.6 %}orange{% else%}danger{% endif %}">
+                    <h6 class="m-1 ">{{prediction_data.prdict_value|mul:100}}%</h6>
+                </div>
+                </td>
             <td scope="row">
                 
                 <a href="{% url 'meas_data' prediction_data.measuring.id %}?pd={{prediction_data.id}}" data-toggle="tooltip" title="Data" class="m-1 btn btn-primary btn-xs btn-flat">
