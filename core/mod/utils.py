@@ -191,12 +191,12 @@ def trin_model_thread(name,_list,optim_model,neurons,_epochs,_activation):
             else:
                 model=get_static_model()
             _name=name.replace(' ','_')
-            model.save(MEDIA_ROOT,f"/models/{_name}.keras")
-            model.save_weights(MEDIA_ROOT,f"/models/{_name}_W.keras")
+            model.save(MEDIA_ROOT+f"/models/{_name}.keras")
+            model.save_weights(MEDIA_ROOT+f"/models/{_name}_W.keras")
             converter = tf.lite.TFLiteConverter.from_keras_model(model)
             converter.optimizations = [tf.lite.Optimize.OPTIMIZE_FOR_SIZE]
             tflite_model = converter.convert()
-            with open(MEDIA_ROOT,f"/models/{_name}", "wb") as text_file:
+            with open(MEDIA_ROOT+f"/models/{_name}", "wb") as text_file:
                 text_file.write(tflite_model)
             
             
