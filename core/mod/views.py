@@ -7,7 +7,7 @@ from django.views.generic import TemplateView,FormView,ListView,UpdateView,Delet
 from core.log.utils import MyLoginRequiredMixin
 from .forms import *
 from config.utils import thread_is_alive
-from core.meas.models import Measuring,MeasuringData
+from core.binn.models import BinnacleMessages
 from core.tra.models import Training
 from django.contrib import messages
 from django.db.models import Q
@@ -130,26 +130,31 @@ class ModelDeleteView(MyLoginRequiredMixin,DeleteView):
     #permission_required="user.delete_user"
     success_url=reverse_lazy('mod_list')
     def form_valid(self, form):
-        name=self.get_object().name
-        os.remove(
-            MEDIA_ROOT+"/models/"+f"{name}.keras",
-        )
-        os.remove(
-            MEDIA_ROOT+"/models/"+f"{name}_W.keras",
-        )
-        os.remove(
-            MEDIA_ROOT+"/models/"+f"{name}",
-        )
-        os.remove(
-            MEDIA_ROOT+"/trains/"+f"{name}_accuracy.png",
-        )
-        os.remove(
-            MEDIA_ROOT+"/trains/"+f"{name}_loss.png",
-        )
-        os.remove(
-            MEDIA_ROOT+"/trains/"+f"{name}_confusion_matrix.png",
-        )
-        return super().form_valid(form)
+        try:
+            name=self.get_object().name
+            os.remove(
+                MEDIA_ROOT+"/models/"+f"{name}.keras",
+            )
+            os.remove(
+                MEDIA_ROOT+"/models/"+f"{name}_W.keras",
+            )
+            os.remove(
+                MEDIA_ROOT+"/models/"+f"{name}",
+            )
+            os.remove(
+                MEDIA_ROOT+"/trains/"+f"{name}_accuracy.png",
+            )
+            os.remove(
+                MEDIA_ROOT+"/trains/"+f"{name}_loss.png",
+            )
+            os.remove(
+                MEDIA_ROOT+"/trains/"+f"{name}_confusion_matrix.png",
+            )
+        
+            return super().form_valid(form)
+        except Exception as e:
+            BinnacleMessages.error(e)
+            return redirect("binn")
     # def delete(self, request, *args, **kwargs):
     #     print("DELET")
     #     print(kwargs)
