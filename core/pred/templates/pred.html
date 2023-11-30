@@ -8,15 +8,28 @@
                 Predicción
             </div>
         </div>
-        <div class="col-auto m-4">
-            <a href="{% url 'pred_add_real' %}" class="p-3 btn bor-shad btn-info btn-big">
-                <h3>Tiempo real</h3>
+        <div class="col-auto m-4">    
+            <a href="{% url 'pred_add_real' %}">
+                <div class="info-box bg-info p-4  bor-shad">
+                    <span class="info-box-icon">
+                        <i class="fas fa-clock"></i>
+                    </span>
+                    <div class="info-box-content">
+                        <h3>Tiempo real</h3>
+                    </div>
+                </div>      
             </a>
         </div>
-        
-        <div class="col-auto m-4">
-            <a href="{% url 'pred_add_data' %}" class="p-3 btn bor-shad btn-warning btn-big">
-                <h3>Datos previos</h3>
+        <div class="col-auto m-4">    
+            <a href="{% url 'pred_add_data' %}">
+                <div class="zoom-effect info-box bg-warning p-4  bor-shad">
+                    <span class="info-box-icon">
+                        <i class="fas fa-history"></i>    
+                    </span>
+                    <div class="info-box-content">
+                        <h3>Datos previos</h3>
+                    </div>
+                </div>      
             </a>
         </div>
     </div>
