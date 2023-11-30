@@ -151,10 +151,9 @@ class ModelDeleteView(MyLoginRequiredMixin,DeleteView):
                 MEDIA_ROOT+"/trains/"+f"{name}_confusion_matrix.png",
             )
         
-            return super().form_valid(form)
         except Exception as e:
-            BinnacleMessages.error(e)
-            return redirect("binn")
+            BinnacleMessages.warning(f"Delete:{name}",e)
+        return super().form_valid(form)
     # def delete(self, request, *args, **kwargs):
     #     print("DELET")
     #     print(kwargs)
