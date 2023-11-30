@@ -60,6 +60,7 @@ class PredictionCreateDataView(MyLoginRequiredMixin,FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['title'] = "Nueva Predicción"
+        context['back_url']=reverse_lazy('pred_add')
         return context
 
 class PredictionCreateRealTimeView(MyLoginRequiredMixin,FormView):
@@ -102,6 +103,7 @@ class PredictionCreateRealTimeView(MyLoginRequiredMixin,FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['title'] = "Nueva Predicción"
+        context['back_url']=reverse_lazy('pred_add')
         return context
 
 class PredictionListView(MyLoginRequiredMixin,ListView):
