@@ -1,10 +1,12 @@
 from django import forms
 from .models import Model
+from django.shortcuts import redirect
 from threading import Thread
 from config.utils import thread_is_alive
 from .utils import trin_model_thread
 import os
 from config.settings import MEDIA_ROOT
+from core.binn.models import BinnacleMessages
 class ModelForm(forms.ModelForm):
     neurons=forms.IntegerField(initial=448,min_value=1,max_value=1024,label="Neuronas",widget=forms.NumberInput(attrs={'class':'form-control','placeholder': 'Cantidad de neuronas'}))
     epochs=forms.IntegerField(initial=500,min_value=1,max_value=9999,label="Épocas",widget=forms.NumberInput(attrs={'class':'form-control','placeholder': 'Cantidad de épocas'}))
@@ -62,34 +64,38 @@ class ModelUpdateForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class':'form-control','placeholder': 'Ingrese un nombre'}),
         }
     def update(self,pk):
-        obj=Model.objects.get(pk=pk)
-        new_name=self.cleaned_data['name']
-        last_nme=obj.name
-        os.rename(
-            MEDIA_ROOT+"/models/"+f"{last_nme}.keras",
-            MEDIA_ROOT+"/models/"+f"{new_name}.keras",
-        )
-        os.rename(
-            MEDIA_ROOT+"/models/"+f"{last_nme}_W.keras",
-            MEDIA_ROOT+"/models/"+f"{new_name}_W.keras",
-        )
-        os.rename(
-            MEDIA_ROOT+"/models/"+f"{last_nme}",
-            MEDIA_ROOT+"/models/"+f"{new_name}",
-        )
-        os.rename(
-            MEDIA_ROOT+"/trains/"+f"{last_nme}_accuracy.png",
-            MEDIA_ROOT+"/trains/"+f"{new_name}_accuracy.png",
-        )
-        os.rename(
-            MEDIA_ROOT+"/trains/"+f"{last_nme}_loss.png",
-            MEDIA_ROOT+"/trains/"+f"{new_name}_loss.png"
-        )
-        os.rename(
-            MEDIA_ROOT+"/trains/"+f"{last_nme}_confusion_matrix.png",
-            MEDIA_ROOT+"/trains/"+f"{new_name}_confusion_matrix.png"
-        )
-        obj.name=new_name
-        obj.save()
+        try:
+            obj=Model.objects.get(pk=pk)
+            new_name=self.cleaned_data['name']
+            last_nme=obj.name
+            os.rename(
+                MEDIA_ROOT+"/models/"+f"{last_nme}.keras",
+                MEDIA_ROOT+"/models/"+f"{new_name}.keras",
+            )
+            os.rename(
+                MEDIA_ROOT+"/models/"+f"{last_nme}_W.keras",
+                MEDIA_ROOT+"/models/"+f"{new_name}_W.keras",
+            )
+            os.rename(
+                MEDIA_ROOT+"/models/"+f"{last_nme}",
+                MEDIA_ROOT+"/models/"+f"{new_name}",
+            )
+            os.rename(
+                MEDIA_ROOT+"/trains/"+f"{last_nme}_accuracy.png",
+                MEDIA_ROOT+"/trains/"+f"{new_name}_accuracy.png",
+            )
+            os.rename(
+                MEDIA_ROOT+"/trains/"+f"{last_nme}_loss.png",
+                MEDIA_ROOT+"/trains/"+f"{new_name}_loss.png"
+            )
+            os.rename(
+                MEDIA_ROOT+"/trains/"+f"{last_nme}_confusion_matrix.png",
+                MEDIA_ROOT+"/trains/"+f"{new_name}_confusion_matrix.png"
+            )
+            obj.name=new_name
+            obj.save()
+        except Exception as e:
+            BinnacleMessages.error(e)
+            return redirect("binn")
         
     
