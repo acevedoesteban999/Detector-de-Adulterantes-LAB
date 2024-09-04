@@ -5,17 +5,25 @@
 >  Desplegar en la Raspberry Pi un servidor en Python para crear una red neuronal capaz de detectar cambios en los sistemas, utilizando Django como framework y TensorFlow como librería de aprendizaje automático
 >  Utilizar esta red neuronal en dispositivos de bajo costo, específicamente en un ESP32
 
-> [Docuemtno de Tesis](https://drive.google.com/drive/folders/1xj-vwUddcT_fEKV6P6z_GX1HAFPx-lOL?usp=sharing) 
+> [Docuemtno de Tesis](https://drive.google.com/drive/folders/1xj-vwUddcT_fEKV6P6z_GX1HAFPx-lOL?usp=sharing)
 
-# ![imagen](https://github.com/user-attachments/assets/4993c8ee-dfe1-4580-b3fd-26097c63f596)
-# ![imagen](https://github.com/user-attachments/assets/800d3536-b1eb-4344-ae1d-cc91dd664812)
-# 
+![imagen](https://github.com/user-attachments/assets/4993c8ee-dfe1-4580-b3fd-26097c63f596)
 
-# ![imagen](https://github.com/user-attachments/assets/7223c793-f344-458f-aea8-e69f456a3451)
+![imagen](https://github.com/user-attachments/assets/800d3536-b1eb-4344-ae1d-cc91dd664812)
 
+![imagen](https://github.com/user-attachments/assets/49965bc3-3136-47ce-aac8-478ca936a058)
 
+![imagen](https://github.com/user-attachments/assets/7223c793-f344-458f-aea8-e69f456a3451)
 
+![imagen](https://github.com/user-attachments/assets/c320db96-2461-4120-958b-3fced5f54e86)
 
+![imagen](https://github.com/user-attachments/assets/54271493-ea00-47d7-9343-a9df45128afa)
+
+![imagen](https://github.com/user-attachments/assets/5ad2967f-959b-4dcd-9443-c500e33226f7) ![imagen](https://github.com/user-attachments/assets/8bcfa885-9e39-4fe6-88c6-bf21f7f6bf8d)
+
+![imagen](https://github.com/user-attachments/assets/853347da-b76c-4b24-b587-715a670560d5)
+
+![imagen](https://github.com/user-attachments/assets/3efd919c-2a86-405f-9cd0-c19f47b78b84)
 
 # Configuraciones para los sistemas enbebido
 
