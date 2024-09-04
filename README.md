@@ -5,7 +5,7 @@
 >  Desplegar en la Raspberry Pi un servidor en Python para crear una red neuronal capaz de detectar cambios en los sistemas, utilizando Django como framework y TensorFlow como librería de aprendizaje automático
 >  Utilizar esta red neuronal en dispositivos de bajo costo, específicamente en un ESP32
 
-> [Docuemtno de Tesis](https://drive.google.com/drive/folders/1xj-vwUddcT_fEKV6P6z_GX1HAFPx-lOL?usp=sharing)
+> [Documento de Tesis](https://drive.google.com/drive/folders/1xj-vwUddcT_fEKV6P6z_GX1HAFPx-lOL?usp=sharing)
 
 ![imagen](https://github.com/user-attachments/assets/4993c8ee-dfe1-4580-b3fd-26097c63f596)
 
