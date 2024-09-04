@@ -17,7 +17,7 @@
 
 
 
-# Configuraciones para los sistemas enbebidos 
+# Configuraciones para los sistemas enbebido
 
 ## Configuraciones de raspberry para desplegar django-adaminlte-3 en apache2
 * `sudo apt-get update`
