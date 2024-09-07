@@ -7,6 +7,7 @@
 >  Utilizar esta red neuronal en dispositivos de bajo costo, específicamente en un ESP32
 
 > [Documento de Tesis](https://drive.google.com/drive/folders/1xj-vwUddcT_fEKV6P6z_GX1HAFPx-lOL?usp=sharing)
+> [ESP32 Code](https://github.com/acevedoesteban999/Detector-de-Adulterantes-CAMP)
 
 ![imagen](https://github.com/user-attachments/assets/4993c8ee-dfe1-4580-b3fd-26097c63f596)
 
