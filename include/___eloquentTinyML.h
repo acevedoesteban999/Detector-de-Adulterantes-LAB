@@ -2,10 +2,10 @@
 
 #include <Arduino.h>
 #include <math.h>
-#include "tensorflow/lite/version.h"
-#include "tensorflow/lite/micro/kernels/all_ops_resolver.h"
-#include "tensorflow/lite/micro/micro_error_reporter.h"
+#include "tensorflow/lite/micro/micro_mutable_op_resolver.h"
 #include "tensorflow/lite/micro/micro_interpreter.h"
+#include "tensorflow/lite/micro/system_setup.h"
+#include "tensorflow/lite/schema/schema_generated.h"
 
 namespace _Eloquent {
     namespace _TinyML {
@@ -31,9 +31,8 @@ namespace _Eloquent {
             bool failed,active;
             _TfLiteError error;
             uint8_t tensorArena[tensorArenaSize];
-            tflite::ErrorReporter *reporter;
             tflite::MicroInterpreter *interpreter;
-            tflite::ops::micro::AllOpsResolver *resolver;
+            tflite::MicroMutableOpResolver<5>*resolver;
             TfLiteTensor *input;
             TfLiteTensor *output;
             const tflite::Model *model;
@@ -46,7 +45,11 @@ namespace _Eloquent {
                 failed(false) {
                     active=false;
             }
-
+            ~_TfLite()
+            {
+                clear();
+            }
+            
             /**
              * Inizialize NN
              *
@@ -55,7 +58,7 @@ namespace _Eloquent {
              */
             void clear()
             {
-                delete reporter;
+                //delete reporter;
                 delete interpreter;
                 delete resolver;
                 active=false;
@@ -64,11 +67,10 @@ namespace _Eloquent {
                 
                 if (active)
                     return false;
-                //tflite::MicroErrorReporter microReporter;
-                //tflite::ops::micro::AllOpsResolver resolver;
-
-                this->reporter = new tflite::MicroErrorReporter;
-                this->resolver = new tflite::ops::micro::AllOpsResolver;
+                
+                model = tflite::GetModel(modelData);
+                
+                this->resolver=new tflite::MicroMutableOpResolver<5>();
                 if (resolver->AddFullyConnected() != kTfLiteOk) {
                     MicroPrintf("AddFullyConnected failed");
                     return false;
@@ -77,34 +79,28 @@ namespace _Eloquent {
                     MicroPrintf("AddSoftmax failed");
                     return false;
                 }
-                
-                //reporter = &microReporter;
-                model = tflite::GetModel(modelData);
-                
                 // assert model version and runtime version match
                 if (model->version() != TFLITE_SCHEMA_VERSION) {
                     failed = true;
                     error = VERSION_MISMATCH;
 
-                    reporter->Report(
-                            "Model provided is schema version %d not equal "
-                            "to supported version %d.",
-                            model->version(), TFLITE_SCHEMA_VERSION);
-
+                    MicroPrintf("Model provided is schema version %d not equal to supported "
+                        "version %d.", model->version(), TFLITE_SCHEMA_VERSION);
                     return false;
                 }
                 
 
                 //tflite::MicroInterpreter interpreter(model, resolver, tensorArena, tensorArenaSize, reporter);
                 
-                this->interpreter=new tflite::MicroInterpreter(model, *resolver, tensorArena, tensorArenaSize, reporter);
+                this->interpreter=new tflite::MicroInterpreter(model, *resolver, tensorArena, tensorArenaSize);
                 if (interpreter->AllocateTensors() != kTfLiteOk) {
                     failed = true;
                     error = CANNOT_ALLOCATE_TENSORS;
-
+                    MicroPrintf("AllocateTensors() failed");
                     return false;
                 }
-                
+            
+
                 input = interpreter->input(0);
                 output = interpreter->output(0);
                 error = OK;
@@ -139,7 +135,7 @@ namespace _Eloquent {
                 memcpy(this->input->data.uint8, input, sizeof(uint8_t) * inputSize);
 
                 if (interpreter->Invoke() != kTfLiteOk) {
-                    reporter->Report("Inference failed");
+                    MicroPrintf("Inference failed");
 
                     return sqrt(-1);
                 }
@@ -171,7 +167,7 @@ namespace _Eloquent {
 
                 if (interpreter->Invoke() != kTfLiteOk) {
                     error = INVOKE_ERROR;
-                    reporter->Report("Inference failed");
+                    MicroPrintf("Inference failed");
 
                     return sqrt(-1);
                 }

@@ -61,7 +61,11 @@ class Web
                             </span>
                         )rawliteral");
             }
-
+            else if(var=="DISABLED")
+            {
+                if(! _as7265x->get_active())
+                    return "disabled";
+            }
             else if(var=="SENSOR_ICON")
             {
                 if(_as7265x->get_active())

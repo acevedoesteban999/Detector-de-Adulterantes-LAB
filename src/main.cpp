@@ -2,7 +2,7 @@
 #include "_web.h"
 #include <ESP.h>
 #include <esp_task_wdt.h>
-#include <esp_heap_caps.h>
+//#include <esp_heap_caps.h>
 #include "_wifi.h"
 #include "_download.h"
 #include"_as7265x.h"
@@ -20,9 +20,11 @@ Wifi wifi;
 Spiffs spiffs;
 Object obj;
 void setup() {
+    
     Serial.begin(115200);
+
     esp_task_wdt_init(100, true);
-    esp_get_free_heap_size();
+    //esp_get_free_heap_size();
     pinMode(LED_PIN, OUTPUT);
     spiffs.start();
     as7265x.start();
@@ -62,12 +64,6 @@ void setup() {
 
 
 void loop() {
-    // unsigned int freeRAM = ESP.getFreeHeap();
-
-    // Serial.print("Memoria RAM libre: ");
-    // Serial.print(freeRAM);
-    // Serial.println(" bytes");
-
     if(wifi.get_flag_download())
         web._download_model();
     digitalWrite(LED_PIN,HIGH);
