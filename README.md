@@ -1,4 +1,5 @@
 # Trabajo de Diploma para Esteban Acevedo Santana como Ingeniero en Automática
+> Codigo de Raspberry
 
 > ## Objetivo
 >  Desarrollar un sistema de medición de bajo costo con un sensor espectroscópico basado en Raspberry Pi y ESP32
